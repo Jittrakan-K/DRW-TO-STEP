@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STEP AP203 / SolidWorks Generator</title>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --border: #30363d;
+    --accent: #238636; --accent2: #1f6feb; --text: #e6edf3;
+    --text2: #8b949e; --danger: #da3633; --warn: #d29922;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* ─── Header ─── */
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 8px 16px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  header h1 { font-size: 1rem; font-weight: 700; color: #58a6ff; }
+  header span { font-size: 0.75rem; color: var(--text2); }
+  .hbtn { padding: 5px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; font-size: 0.8rem; transition: all .2s; }
+  .hbtn:hover { border-color: #58a6ff; color: #58a6ff; }
+  .hbtn.green { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .hbtn.green:hover { background: #2ea043; }
+  .hbtn.blue { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+  .hbtn.blue:hover { background: #388bfd; }
+
+  /* ─── Main Layout ─── */
+  .main { display: flex; flex: 1; overflow: hidden; }
+
+  /* ─── Left Panel ─── */
+  .left-panel { width: 320px; min-width: 260px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
+  .panel-section { border-bottom: 1px solid var(--border); }
+  .panel-title { padding: 10px 14px; font-size: 0.78rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; background: rgba(255,255,255,.02); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .panel-title:hover { color: var(--text); }
+  .panel-body { padding: 12px 14px; }
+  label { display: block; font-size: 0.78rem; color: var(--text2); margin-bottom: 3px; margin-top: 8px; }
+  label:first-child { margin-top: 0; }
+  input[type=number], input[type=text], select, textarea {
+    width: 100%; padding: 6px 10px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text); font-size: 0.82rem; outline: none; transition: border .2s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: #58a6ff; }
+  textarea { resize: vertical; min-height: 60px; font-family: monospace; font-size: 0.75rem; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .btn-full { width: 100%; padding: 8px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all .2s; margin-top: 10px; }
+  .btn-add { background: #21262d; color: var(--text); border: 1px solid var(--border); }
+  .btn-add:hover { background: #30363d; }
+  .btn-green { background: var(--accent); color: #fff; }
+  .btn-green:hover { background: #2ea043; }
+  .btn-blue { background: var(--accent2); color: #fff; }
+  .btn-blue:hover { background: #388bfd; }
+  .btn-red { background: var(--danger); color: #fff; }
+  .btn-red:hover { background: #f85149; }
+
+  /* shape list */
+  .shape-list { display: flex; flex-direction: column; gap: 5px; max-height: 200px; overflow-y: auto; }
+  .shape-item { display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: all .2s; }
+  .shape-item:hover, .shape-item.active { border-color: #58a6ff; background: rgba(88,166,255,.08); }
+  .shape-icon { font-size: 1rem; }
+  .shape-name { flex: 1; font-size: 0.8rem; }
+  .shape-del { color: var(--danger); background: none; border: none; cursor: pointer; font-size: 0.9rem; padding: 2px 4px; }
+  .shape-del:hover { color: #f85149; }
+
+  /* drawing ref */
+  .drawing-ref { width: 100%; aspect-ratio: 4/3; background: #0d1117; border: 2px dashed var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all .2s; overflow: hidden; position: relative; }
+  .drawing-ref:hover { border-color: #58a6ff; }
+  .drawing-ref img { width: 100%; height: 100%; object-fit: contain; }
+  .drawing-ref .placeholder { text-align: center; color: var(--text2); pointer-events: none; }
+  .drawing-ref .placeholder p { font-size: 0.8rem; margin-top: 6px; }
+  #drawingInput { display: none; }
+  .opacity-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .opacity-row input[type=range] { flex: 1; }
+  .opacity-row span { font-size: 0.75rem; color: var(--text2); width: 32px; text-align: right; }
+
+  /* ─── 3D Viewport ─── */
+  .viewport { flex: 1; position: relative; overflow: hidden; }
+  #threeCanvas { display: block; width: 100%; height: 100%; }
+  .overlay-drawing { position: absolute; inset: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; }
+  .overlay-drawing img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+  .viewport-controls { position: absolute; bottom: 12px; right: 12px; display: flex; gap: 6px; flex-direction: column; }
+  .vc-btn { width: 36px; height: 36px; background: rgba(22,27,34,.85); border: 1px solid var(--border); border-radius: 6px; color: var(--text); cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+  .vc-btn:hover { border-color: #58a6ff; color: #58a6ff; }
+
+  .info-bar { position: absolute; top: 10px; left: 10px; background: rgba(13,17,23,.8); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 0.75rem; color: var(--text2); pointer-events: none; }
+
+  /* ─── Right Panel ─── */
+  .right-panel { width: 280px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
+
+  /* status */
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; margin-right: 5px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* step preview */
+  .step-preview { background: var(--bg); border-radius: 6px; border: 1px solid var(--border); padding: 8px; font-family: monospace; font-size: 0.68rem; color: #7ee787; max-height: 200px; overflow-y: auto; white-space: pre; }
+
+  /* tabs */
+  .tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .tab { flex: 1; padding: 8px; text-align: center; font-size: 0.78rem; cursor: pointer; color: var(--text2); border-bottom: 2px solid transparent; transition: all .2s; }
+  .tab.active { color: #58a6ff; border-bottom-color: #58a6ff; }
+
+  /* tooltip */
+  [title] { cursor: help; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .tag { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; }
+  .tag-green { background: rgba(35,134,54,.3); color: #3fb950; border: 1px solid rgba(35,134,54,.5); }
+  .tag-blue { background: rgba(31,111,235,.3); color: #79c0ff; border: 1px solid rgba(31,111,235,.5); }
+
+  .dim-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .dim-table td { padding: 4px 6px; border-bottom: 1px solid var(--border); }
+  .dim-table td:first-child { color: var(--text2); }
+  .dim-table td:last-child { text-align: right; font-family: monospace; color: #79c0ff; }
+
+  .color-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .color-swatch { width: 24px; height: 24px; border-radius: 4px; border: 2px solid transparent; cursor: pointer; transition: all .2s; }
+  .color-swatch:hover, .color-swatch.active { border-color: #fff; transform: scale(1.15); }
+
+  #loading { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; z-index: 999; }
+  #loading h2 { color: #58a6ff; }
+  .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: #58a6ff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <h2>กำลังโหลด Three.js...</h2>
+  <p style="color:var(--text2);font-size:.8rem;">กรุณารอสักครู่</p>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div style="font-size:1.4rem;">⚙️</div>
+  <h1>STEP AP203 / SolidWorks Generator</h1>
+  <span class="tag tag-green">AP203</span>
+  <span class="tag tag-blue">HTML5</span>
+  <div style="flex:1"></div>
+  <button class="hbtn" onclick="resetScene()">🔄 Reset</button>
+  <button class="hbtn blue" onclick="exportSTEP()">📦 Export STEP</button>
+  <button class="hbtn green" onclick="exportSTL()">🖨️ Export STL</button>
+</header>
+
+<div class="main">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+
+    <!-- Drawing Reference -->
+    <div class="panel-section">
+      <div class="panel-title" onclick="toggleSection('sec-drawing')">📐 Drawing Reference <span id="arr-drawing">▼</span></div>
+      <div class="panel-body" id="sec-drawing">
+        <div class="drawing-ref" onclick="document.getElementById('drawingInput').click()" id="drawingDrop">
+          <div class="placeholder" id="drawingPlaceholder">
+            <div style="font-size:2rem">🖼️</div>
+            <p>คลิกหรือลาก Drawing<br>มาวางที่นี่</p>
+            <p style="font-size:.7rem;margin-top:4px;color:#444">(PNG, JPG, PDF screenshot)</p>
+          </div>
+          <img id="drawingPreview" style="display:none" alt="Drawing">
+        </div>
+        <input type="file" id="drawingInput" accept="image/*" onchange="loadDrawing(event)">
+        <div class="opacity-row">
+          <span style="font-size:.75rem;color:var(--text2)">Opacity:</span>
+          <input type="range" min="0" max="100" value="30" oninput="setOverlayOpacity(this.value)" id="opacityRange">
+          <span id="opacityVal">30%</span>
+        </div>
+        <button class="btn-full btn-add" onclick="clearDrawing()">🗑️ ล้าง Drawing</button>
+      </div>
+    </div>
+
+    <!-- Shape Creator -->
+    <div class="panel-section">
+      <div class="panel-title" onclick="toggleSection('sec-shape')">🔷 เพิ่มรูปทรง <span id="arr-shape">▼</span></div>
+      <div class="panel-body" id="sec-shape">
+        <label>ประเภทรูปทรง</label>
+        <select id="shapeType" onchange="updateShapeInputs()">
+          <option value="box">📦 Box (ทรงสี่เหลี่ยม)</option>
+          <option value="cylinder">🔵 Cylinder (ทรงกระบอก)</option>
+          <option value="cone">🔺 Cone (ทรงกรวย)</option>
+          <option value="sphere">⚽ Sphere (ทรงกลม)</option>
+          <option value="torus">🍩 Torus (ทรงโดนัท)</option>
+          <option value="prism">🔶 Hex Prism (ปริซึมหกเหลี่ยม)</option>
+          <option value="pipe">🔩 Pipe (ท่อกลวง)</option>
+          <option value="wedge">🔪 Wedge (ลิ่ม)</option>
+        </select>
+
+        <label>ชื่อชิ้นส่วน</label>
+        <input type="text" id="shapeName" value="Part_1" placeholder="ชื่อชิ้นส่วน">
+
+        <div id="boxInputs">
+          <div class="row3">
+            <div><label>ความกว้าง (X)</label><input type="number" id="boxW" value="100" min="0.1" step="0.1"></div>
+            <div><label>ความสูง (Y)</label><input type="number" id="boxH" value="50" min="0.1" step="0.1"></div>
+            <div><label>ความลึก (Z)</label><input type="number" id="boxD" value="80" min="0.1" step="0.1"></div>
+          </div>
+        </div>
+        <div id="cylInputs" style="display:none">
+          <div class="row2">
+            <div><label>รัศมี (R)</label><input type="number" id="cylR" value="30" min="0.1" step="0.1"></div>
+            <div><label>ความสูง (H)</label><input type="number" id="cylH" value="100" min="0.1" step="0.1"></div>
+          </div>
+        </div>
+        <div id="coneInputs" style="display:none">
+          <div class="row3">
+            <div><label>รัศมีฐาน</label><input type="number" id="coneR1" value="40" min="0.1" step="0.1"></div>
+            <div><label>รัศมียอด</label><input type="number" id="coneR2" value="0" min="0" step="0.1"></div>
+            <div><label>สูง</label><input type="number" id="coneH" value="80" min="0.1" step="0.1"></div>
+          </div>
+        </div>
+        <div id="sphereInputs" style="display:none">
+          <label>รัศมี (R)</label>
+          <input type="number" id="sphereR" value="40" min="0.1" step="0.1">
+        </div>
+        <div id="torusInputs" style="display:none">
+          <div class="row2">
+            <div><label>รัศมีวง (R)</label><input type="number" id="torusR" value="50" min="0.1" step="0.1"></div>
+            <div><label>รัศมีท่อ (r)</label><input type="number" id="torusTube" value="15" min="0.1" step="0.1"></div>
+          </div>
+        </div>
+        <div id="prismInputs" style="display:none">
+          <div class="row2">
+            <div><label>รัศมี (R)</label><input type="number" id="prismR" value="40" min="0.1" step="0.1"></div>
+            <div><label>สูง (H)</label><input type="number" id="prismH" value="80" min="0.1" step="0.1"></div>
+          </div>
+        </div>
+        <div id="pipeInputs" style="display:none">
+          <div class="row3">
+            <div><label>รัศมีนอก</label><input type="number" id="pipeRo" value="40" min="0.1" step="0.1"></div>
+            <div><label>รัศมีใน</label><input type="number" id="pipeRi" value="25" min="0.1" step="0.1"></div>
+            <div><label>สูง</label><input type="number" id="pipeH" value="100" min="0.1" step="0.1"></div>
+          </div>
+        </div>
+        <div id="wedgeInputs" style="display:none">
+          <div class="row3">
+            <div><label>กว้าง</label><input type="number" id="wedgeW" value="100" min="0.1" step="0.1"></div>
+            <div><label>สูง</label><input type="number" id="wedgeH" value="60" min="0.1" step="0.1"></div>
+            <div><label>ลึก</label><input type="number" id="wedgeD" value="80" min="0.1" step="0.1"></div>
+          </div>
+        </div>
+
+        <!-- Position -->
+        <div class="row3" style="margin-top:10px">
+          <div><label>X Pos</label><input type="number" id="posX" value="0" step="1"></div>
+          <div><label>Y Pos</label><input type="number" id="posY" value="0" step="1"></div>
+          <div><label>Z Pos</label><input type="number" id="posZ" value="0" step="1"></div>
+        </div>
+        <div class="row3">
+          <div><label>Rot X°</label><input type="number" id="rotX" value="0" step="1"></div>
+          <div><label>Rot Y°</label><input type="number" id="rotY" value="0" step="1"></div>
+          <div><label>Rot Z°</label><input type="number" id="rotZ" value="0" step="1"></div>
+        </div>
+
+        <label>สี</label>
+        <div class="color-row" id="colorRow">
+          <div class="color-swatch active" style="background:#4a9eff" data-color="#4a9eff" onclick="selectColor(this)"></div>
+          <div class="color-swatch" style="background:#ff6b6b" data-color="#ff6b6b" onclick="selectColor(this)"></div>
+          <div class="color-swatch" style="background:#51cf66" data-color="#51cf66" onclick="selectColor(this)"></div>
+          <div class="color-swatch" style="background:#ffd43b" data-color="#ffd43b" onclick="selectColor(this)"></div>
+          <div class="color-swatch" style="background:#cc5de8" data-color="#cc5de8" onclick="selectColor(this)"></div>
+          <div class="color-swatch" style="background:#ff922b" data-color="#ff922b" onclick="selectColor(this)"></div>
+          <div class="color-swatch" style="background:#c0c0c0" data-color="#c0c0c0" onclick="selectColor(this)"></div>
+          <div class="color-swatch" style="background:#e8d5b7" data-color="#e8d5b7" onclick="selectColor(this)"></div>
+        </div>
+
+        <button class="btn-full btn-green" onclick="addShape()">➕ เพิ่มรูปทรง</button>
+      </div>
+    </div>
+
+    <!-- Shape List -->
+    <div class="panel-section">
+      <div class="panel-title" onclick="toggleSection('sec-list')">📋 รายการชิ้นส่วน (<span id="shapeCount">0</span>) <span id="arr-list">▼</span></div>
+      <div class="panel-body" id="sec-list">
+        <div class="shape-list" id="shapeList">
+          <div style="text-align:center;color:var(--text2);font-size:.8rem;padding:20px">ยังไม่มีชิ้นส่วน<br>กด "เพิ่มรูปทรง" เพื่อเริ่มต้น</div>
+        </div>
+        <button class="btn-full btn-red" onclick="clearAll()" style="margin-top:8px">🗑️ ลบทั้งหมด</button>
+      </div>
+    </div>
+
+    <!-- Material / Meta -->
+    <div class="panel-section">
+      <div class="panel-title" onclick="toggleSection('sec-meta')">📝 ข้อมูล STEP File <span id="arr-meta">▼</span></div>
+      <div class="panel-body" id="sec-meta">
+        <label>ชื่อโปรเจกต์</label>
+        <input type="text" id="metaName" value="MyPart" placeholder="ชื่อโปรเจกต์">
+        <label>ผู้ออกแบบ</label>
+        <input type="text" id="metaAuthor" value="Engineer" placeholder="ชื่อผู้ออกแบบ">
+        <label>องค์กร</label>
+        <input type="text" id="metaOrg" value="Company" placeholder="ชื่อบริษัท">
+        <label>หน่วย</label>
+        <select id="metaUnit">
+          <option value="MM">มิลลิเมตร (MM)</option>
+          <option value="INCH">นิ้ว (INCH)</option>
+        </select>
+        <label>คำอธิบาย</label>
+        <textarea id="metaDesc" placeholder="คำอธิบายชิ้นงาน..."></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 3D VIEWPORT -->
+  <div class="viewport">
+    <canvas id="threeCanvas"></canvas>
+    <div class="overlay-drawing" id="overlayDiv">
+      <img id="overlayImg" style="display:none;opacity:0.3" alt="Drawing Overlay">
+    </div>
+    <div class="info-bar">
+      <span class="status-dot"></span>
+      <span id="infoText">ลาก: หมุน | Scroll: ซูม | Shift+ลาก: เลื่อน</span>
+    </div>
+    <div class="viewport-controls">
+      <button class="vc-btn" onclick="setView('front')" title="Front View">F</button>
+      <button class="vc-btn" onclick="setView('top')" title="Top View">T</button>
+      <button class="vc-btn" onclick="setView('side')" title="Side View">S</button>
+      <button class="vc-btn" onclick="setView('iso')" title="Isometric">⬡</button>
+      <button class="vc-btn" onclick="toggleGrid()" title="Toggle Grid">⊞</button>
+      <button class="vc-btn" onclick="toggleWireframe()" title="Wireframe">⬚</button>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('info',this)">ℹ️ Info</div>
+      <div class="tab" onclick="switchTab('step',this)">📄 STEP</div>
+      <div class="tab" onclick="switchTab('help',this)">❓ Help</div>
+    </div>
+
+    <div id="tab-info" class="panel-body" style="flex:1">
+      <div style="margin-bottom:12px">
+        <div style="font-size:.78rem;color:var(--text2);margin-bottom:6px">สถิติโมเดล</div>
+        <table class="dim-table">
+          <tr><td>จำนวนชิ้นส่วน</td><td id="statParts">0</td></tr>
+          <tr><td>รูปทรงทั้งหมด</td><td id="statPolys">0</td></tr>
+          <tr><td>ขนาด X (mm)</td><td id="statX">-</td></tr>
+          <tr><td>ขนาด Y (mm)</td><td id="statY">-</td></tr>
+          <tr><td>ขนาด Z (mm)</td><td id="statZ">-</td></tr>
+        </table>
+      </div>
+
+      <div style="font-size:.78rem;color:var(--text2);margin-bottom:6px">ชิ้นส่วนที่เลือก</div>
+      <div id="selectedInfo" style="font-size:.78rem;color:var(--text2);padding:10px;background:var(--bg);border-radius:6px;border:1px solid var(--border)">
+        คลิกชิ้นส่วนในรายการเพื่อดูรายละเอียด
+      </div>
+
+      <div style="font-size:.78rem;color:var(--text2);margin:12px 0 6px">Quick Actions</div>
+      <button class="btn-full btn-blue" onclick="exportSTEP()" style="margin-top:0">📦 Export STEP AP203</button>
+      <button class="btn-full btn-add" onclick="exportSTL()" style="margin-top:6px">🖨️ Export STL</button>
+      <button class="btn-full btn-add" onclick="exportOBJ()" style="margin-top:6px">📐 Export OBJ</button>
+    </div>
+
+    <div id="tab-step" class="panel-body" style="display:none;flex:1">
+      <div style="font-size:.78rem;color:var(--text2);margin-bottom:6px">STEP AP203 Preview</div>
+      <div class="step-preview" id="stepPreview">; กด "Export STEP" เพื่อดู preview...</div>
+      <button class="btn-full btn-blue" onclick="previewSTEP()" style="margin-top:8px">🔍 Preview STEP Content</button>
+      <button class="btn-full btn-green" onclick="exportSTEP()" style="margin-top:6px">📦 Download STEP File</button>
+    </div>
+
+    <div id="tab-help" class="panel-body" style="display:none">
+      <div style="font-size:.78rem;line-height:1.6;color:var(--text2)">
+        <b style="color:var(--text)">📌 วิธีใช้งาน</b><br><br>
+        1️⃣ แนบ <b style="color:#79c0ff">Drawing</b> เป็นภาพอ้างอิง<br><br>
+        2️⃣ เลือก <b style="color:#79c0ff">ประเภทรูปทรง</b> และกรอกขนาด<br><br>
+        3️⃣ กด <b style="color:#3fb950">เพิ่มรูปทรง</b> เพื่อเพิ่มเข้า Scene<br><br>
+        4️⃣ ปรับ <b style="color:#79c0ff">ตำแหน่ง / หมุน</b> ได้ตามต้องการ<br><br>
+        5️⃣ กด <b style="color:#388bfd">Export STEP</b> เพื่อดาวน์โหลด<br><br>
+        <b style="color:var(--text)">🖱️ ควบคุม 3D View</b><br><br>
+        • <b>ลาก</b> = หมุน<br>
+        • <b>Scroll</b> = ซูม<br>
+        • <b>Shift+ลาก</b> = เลื่อน<br>
+        • <b>F/T/S</b> = Front/Top/Side<br>
+        • <b>⬡</b> = Isometric view<br><br>
+        <b style="color:var(--text)">📦 STEP AP203</b><br><br>
+        ไฟล์ .step ที่ export สามารถเปิดได้ใน:<br>
+        • SolidWorks<br>
+        • Fusion 360<br>
+        • FreeCAD<br>
+        • CATIA<br>
+        • Inventor<br>
+        • SolidEdge<br><br>
+        <b style="color:var(--warn)">⚠️ หมายเหตุ</b><br>
+        STEP AP203 รองรับ:<br>
+        ✅ Solid geometry<br>
+        ✅ Assembly structure<br>
+        ✅ Product metadata<br>
+        ❌ ไม่รองรับ Sketch/Feature<br>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Three.js via CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ─── Globals ───
+let scene, camera, renderer, controls;
+let shapes = [];
+let selectedColor = '#4a9eff';
+let gridHelper;
+let wireframeMode = false;
+let shapeCounter = 0;
+let drawingDataURL = null;
+
+// ─── Init Three.js ───
+function initThree() {
+  const canvas = document.getElementById('threeCanvas');
+  const container = canvas.parentElement;
+
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.setClearColor(0x0d1117);
+
+  scene = new THREE.Scene();
+
+  const w = container.clientWidth, h = container.clientHeight;
+  camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100000);
+  camera.position.set(300, 250, 400);
+  camera.lookAt(0, 0, 0);
+
+  // Lights
+  const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(ambient);
+  const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+  sun.position.set(300, 500, 300);
+  sun.castShadow = true;
+  scene.add(sun);
+  const fill = new THREE.DirectionalLight(0x8899ff, 0.3);
+  fill.position.set(-200, -100, -200);
+  scene.add(fill);
+
+  // Grid
+  gridHelper = new THREE.GridHelper(1000, 50, 0x30363d, 0x21262d);
+  scene.add(gridHelper);
+
+  // Axes
+  const axes = new THREE.AxesHelper(100);
+  scene.add(axes);
+
+  // Orbit controls (manual)
+  setupOrbitControls(canvas);
+
+  resize();
+  window.addEventListener('resize', resize);
+  animate();
+  document.getElementById('loading').style.display = 'none';
+}
+
+// ─── Resize ───
+function resize() {
+  const c = renderer.domElement.parentElement;
+  const w = c.clientWidth, h = c.clientHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+
+// ─── Orbit Controls (manual) ───
+function setupOrbitControls(canvas) {
+  let isDragging = false, isShift = false;
+  let lastX = 0, lastY = 0;
+  let theta = -45, phi = 30, radius = 600;
+  let target = new THREE.Vector3(0, 0, 0);
+
+  function updateCamera() {
+    const t = phi * Math.PI / 180;
+    const p = theta * Math.PI / 180;
+    camera.position.x = target.x + radius * Math.cos(t) * Math.sin(p);
+    camera.position.y = target.y + radius * Math.sin(t);
+    camera.position.z = target.z + radius * Math.cos(t) * Math.cos(p);
+    camera.lookAt(target);
+  }
+  updateCamera();
+
+  canvas.addEventListener('mousedown', e => { isDragging = true; lastX = e.clientX; lastY = e.clientY; isShift = e.shiftKey; });
+  window.addEventListener('mouseup', () => isDragging = false);
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - lastX, dy = e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    if (isShift || e.buttons === 2) {
+      const right = new THREE.Vector3(); camera.getWorldDirection(right); right.cross(camera.up).normalize();
+      const up = camera.up.clone().normalize();
+      target.addScaledVector(right, -dx * 0.5);
+      target.addScaledVector(up, dy * 0.5);
+    } else {
+      theta -= dx * 0.4;
+      phi = Math.max(-89, Math.min(89, phi - dy * 0.4));
+    }
+    updateCamera();
+  });
+  canvas.addEventListener('wheel', e => {
+    radius = Math.max(50, Math.min(10000, radius + e.deltaY * 0.5));
+    updateCamera();
+    e.preventDefault();
+  }, { passive: false });
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+  // Touch
+  let lastTouchDist = 0;
+  canvas.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) lastTouchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    else { isDragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; }
+  });
+  canvas.addEventListener('touchmove', e => {
+    if (e.touches.length === 2) {
+      const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      radius = Math.max(50, Math.min(10000, radius - (d - lastTouchDist) * 2));
+      lastTouchDist = d; updateCamera();
+    } else if (isDragging) {
+      const dx = e.touches[0].clientX - lastX, dy = e.touches[0].clientY - lastY;
+      lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
+      theta -= dx * 0.4; phi = Math.max(-89, Math.min(89, phi - dy * 0.4));
+      updateCamera();
+    }
+    e.preventDefault();
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => isDragging = false);
+
+  window._camState = { theta, phi, radius, target, updateCamera };
+  window._updateCamera = () => {
+    theta = window._camState.theta;
+    phi = window._camState.phi;
+    radius = window._camState.radius;
+    target = window._camState.target;
+    updateCamera();
+  };
+  window._setCamState = (t, p, r) => {
+    theta = t; phi = p; radius = r;
+    updateCamera();
+  };
+}
+
+// ─── Animate ───
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+
+// ─── Build Geometry ───
+function buildGeometry(shape) {
+  const t = shape.type;
+  let geo;
+  if (t === 'box') {
+    geo = new THREE.BoxGeometry(shape.params.w, shape.params.h, shape.params.d);
+  } else if (t === 'cylinder') {
+    geo = new THREE.CylinderGeometry(shape.params.r, shape.params.r, shape.params.h, 64);
+  } else if (t === 'cone') {
+    geo = new THREE.CylinderGeometry(shape.params.r2, shape.params.r1, shape.params.h, 64);
+  } else if (t === 'sphere') {
+    geo = new THREE.SphereGeometry(shape.params.r, 64, 32);
+  } else if (t === 'torus') {
+    geo = new THREE.TorusGeometry(shape.params.r, shape.params.tube, 16, 64);
+  } else if (t === 'prism') {
+    geo = new THREE.CylinderGeometry(shape.params.r, shape.params.r, shape.params.h, 6);
+  } else if (t === 'pipe') {
+    geo = buildPipe(shape.params.ro, shape.params.ri, shape.params.h);
+  } else if (t === 'wedge') {
+    geo = buildWedge(shape.params.w, shape.params.h, shape.params.d);
+  }
+  return geo;
+}
+
+function buildPipe(ro, ri, h) {
+  const path = new THREE.LineCurve3(new THREE.Vector3(0, -h/2, 0), new THREE.Vector3(0, h/2, 0));
+  const shape = new THREE.Shape();
+  shape.absarc(0, 0, ro, 0, Math.PI * 2, false);
+  const hole = new THREE.Path();
+  hole.absarc(0, 0, ri, 0, Math.PI * 2, true);
+  shape.holes.push(hole);
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: h, bevelEnabled: false, steps: 1 });
+  geo.rotateX(-Math.PI / 2);
+  geo.translate(0, -h/2, 0);
+  return geo;
+}
+
+function buildWedge(w, h, d) {
+  const shape = new THREE.Shape();
+  shape.moveTo(-w/2, 0);
+  shape.lineTo(w/2, 0);
+  shape.lineTo(w/2, h);
+  shape.lineTo(-w/2, 0);
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: d, bevelEnabled: false });
+  geo.translate(0, 0, -d/2);
+  return geo;
+}
+
+// ─── Add Shape ───
+function addShape() {
+  shapeCounter++;
+  const type = document.getElementById('shapeType').value;
+  const name = document.getElementById('shapeName').value || `Part_${shapeCounter}`;
+  const px = parseFloat(document.getElementById('posX').value) || 0;
+  const py = parseFloat(document.getElementById('posY').value) || 0;
+  const pz = parseFloat(document.getElementById('posZ').value) || 0;
+  const rx = parseFloat(document.getElementById('rotX').value) || 0;
+  const ry = parseFloat(document.getElementById('rotY').value) || 0;
+  const rz = parseFloat(document.getElementById('rotZ').value) || 0;
+
+  let params = {};
+  if (type === 'box') params = { w: +document.getElementById('boxW').value, h: +document.getElementById('boxH').value, d: +document.getElementById('boxD').value };
+  else if (type === 'cylinder') params = { r: +document.getElementById('cylR').value, h: +document.getElementById('cylH').value };
+  else if (type === 'cone') params = { r1: +document.getElementById('coneR1').value, r2: +document.getElementById('coneR2').value, h: +document.getElementById('coneH').value };
+  else if (type === 'sphere') params = { r: +document.getElementById('sphereR').value };
+  else if (type === 'torus') params = { r: +document.getElementById('torusR').value, tube: +document.getElementById('torusTube').value };
+  else if (type === 'prism') params = { r: +document.getElementById('prismR').value, h: +document.getElementById('prismH').value };
+  else if (type === 'pipe') params = { ro: +document.getElementById('pipeRo').value, ri: +document.getElementById('pipeRi').value, h: +document.getElementById('pipeH').value };
+  else if (type === 'wedge') params = { w: +document.getElementById('wedgeW').value, h: +document.getElementById('wedgeH').value, d: +document.getElementById('wedgeD').value };
+
+  const id = 'shape_' + Date.now();
+  const shapeData = { id, name, type, params, color: selectedColor, position: { x: px, y: py, z: pz }, rotation: { x: rx, y: ry, z: rz } };
+
+  const geo = buildGeometry(shapeData);
+  const mat = new THREE.MeshPhongMaterial({ color: selectedColor, transparent: false, opacity: 1, shininess: 80 });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(px, py, pz);
+  mesh.rotation.set(rx * Math.PI/180, ry * Math.PI/180, rz * Math.PI/180);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  mesh.userData.id = id;
+  scene.add(mesh);
+  shapeData.mesh = mesh;
+  shapes.push(shapeData);
+
+  // auto-increment name
+  document.getElementById('shapeName').value = `Part_${shapeCounter + 1}`;
+  updateShapeList();
+  updateStats();
+}
+
+// ─── Shape List ───
+function updateShapeList() {
+  const list = document.getElementById('shapeList');
+  document.getElementById('shapeCount').textContent = shapes.length;
+  if (shapes.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:var(--text2);font-size:.8rem;padding:20px">ยังไม่มีชิ้นส่วน<br>กด "เพิ่มรูปทรง" เพื่อเริ่มต้น</div>';
+    return;
+  }
+  const icons = { box:'📦', cylinder:'🔵', cone:'🔺', sphere:'⚽', torus:'🍩', prism:'🔶', pipe:'🔩', wedge:'🔪' };
+  list.innerHTML = shapes.map((s, i) => `
+    <div class="shape-item" id="item_${s.id}" onclick="selectShape('${s.id}')">
+      <div class="shape-icon">${icons[s.type] || '🔷'}</div>
+      <div style="width:10px;height:10px;border-radius:2px;background:${s.color};flex-shrink:0"></div>
+      <div class="shape-name">${s.name}<br><span style="font-size:.68rem;color:var(--text2)">${s.type}</span></div>
+      <button class="shape-del" onclick="event.stopPropagation();deleteShape('${s.id}')" title="ลบ">✕</button>
+    </div>
+  `).join('');
+}
+
+function selectShape(id) {
+  document.querySelectorAll('.shape-item').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('item_' + id);
+  if (el) el.classList.add('active');
+  const s = shapes.find(x => x.id === id);
+  if (!s) return;
+  const info = document.getElementById('selectedInfo');
+  info.innerHTML = `
+    <b style="color:var(--text)">${s.name}</b><br>
+    <span style="color:var(--text2)">Type: ${s.type}</span><br>
+    <table class="dim-table" style="margin-top:8px">
+      ${Object.entries(s.params).map(([k,v]) => `<tr><td>${k}</td><td>${v} mm</td></tr>`).join('')}
+      <tr><td>Pos X</td><td>${s.position.x}</td></tr>
+      <tr><td>Pos Y</td><td>${s.position.y}</td></tr>
+      <tr><td>Pos Z</td><td>${s.position.z}</td></tr>
+    </table>
+  `;
+}
+
+function deleteShape(id) {
+  const idx = shapes.findIndex(s => s.id === id);
+  if (idx === -1) return;
+  scene.remove(shapes[idx].mesh);
+  shapes[idx].mesh.geometry.dispose();
+  shapes[idx].mesh.material.dispose();
+  shapes.splice(idx, 1);
+  updateShapeList();
+  updateStats();
+}
+
+function clearAll() {
+  if (shapes.length === 0) return;
+  if (!confirm('ลบชิ้นส่วนทั้งหมด?')) return;
+  shapes.forEach(s => { scene.remove(s.mesh); s.mesh.geometry.dispose(); s.mesh.material.dispose(); });
+  shapes = [];
+  updateShapeList();
+  updateStats();
+}
+
+// ─── Stats ───
+function updateStats() {
+  document.getElementById('statParts').textContent = shapes.length;
+  let polys = 0;
+  if (shapes.length === 0) {
+    document.getElementById('statX').textContent = '-';
+    document.getElementById('statY').textContent = '-';
+    document.getElementById('statZ').textContent = '-';
+    document.getElementById('statPolys').textContent = 0;
+    return;
+  }
+  const box = new THREE.Box3();
+  shapes.forEach(s => {
+    box.expandByObject(s.mesh);
+    polys += s.mesh.geometry.index ? s.mesh.geometry.index.count / 3 : s.mesh.geometry.attributes.position.count / 3;
+  });
+  const sz = new THREE.Vector3();
+  box.getSize(sz);
+  document.getElementById('statX').textContent = sz.x.toFixed(1);
+  document.getElementById('statY').textContent = sz.y.toFixed(1);
+  document.getElementById('statZ').textContent = sz.z.toFixed(1);
+  document.getElementById('statPolys').textContent = Math.round(polys);
+}
+
+// ─── UI Helpers ───
+function updateShapeInputs() {
+  ['box','cyl','cone','sphere','torus','prism','pipe','wedge'].forEach(t => {
+    document.getElementById(t + 'Inputs').style.display = 'none';
+  });
+  const t = document.getElementById('shapeType').value;
+  const map = { box:'box', cylinder:'cyl', cone:'cone', sphere:'sphere', torus:'torus', prism:'prism', pipe:'pipe', wedge:'wedge' };
+  document.getElementById(map[t] + 'Inputs').style.display = 'block';
+}
+
+function selectColor(el) {
+  document.querySelectorAll('.color-swatch').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  selectedColor = el.dataset.color;
+}
+
+function toggleSection(id) {
+  const el = document.getElementById(id);
+  const hidden = el.style.display === 'none';
+  el.style.display = hidden ? '' : 'none';
+}
+
+function switchTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['info','step','help'].forEach(n => {
+    const d = document.getElementById('tab-' + n);
+    if (d) d.style.display = n === name ? '' : 'none';
+  });
+}
+
+function setView(v) {
+  const d = 600;
+  if (v === 'front') window._setCamState(0, 0, d);
+  else if (v === 'top') window._setCamState(0, 89, d);
+  else if (v === 'side') window._setCamState(90, 0, d);
+  else if (v === 'iso') window._setCamState(-45, 30, d);
+}
+
+function toggleGrid() {
+  gridHelper.visible = !gridHelper.visible;
+}
+
+function toggleWireframe() {
+  wireframeMode = !wireframeMode;
+  shapes.forEach(s => {
+    s.mesh.material.wireframe = wireframeMode;
+  });
+}
+
+function resetScene() {
+  clearAll();
+  document.getElementById('shapeName').value = 'Part_1';
+  shapeCounter = 0;
+}
+
+// ─── Drawing Reference ───
+function loadDrawing(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    drawingDataURL = e.target.result;
+    document.getElementById('drawingPreview').src = drawingDataURL;
+    document.getElementById('drawingPreview').style.display = 'block';
+    document.getElementById('drawingPlaceholder').style.display = 'none';
+    document.getElementById('overlayImg').src = drawingDataURL;
+    document.getElementById('overlayImg').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearDrawing() {
+  drawingDataURL = null;
+  document.getElementById('drawingPreview').style.display = 'none';
+  document.getElementById('drawingPlaceholder').style.display = 'flex';
+  document.getElementById('overlayImg').style.display = 'none';
+  document.getElementById('drawingInput').value = '';
+}
+
+function setOverlayOpacity(v) {
+  document.getElementById('overlayImg').style.opacity = v / 100;
+  document.getElementById('opacityVal').textContent = v + '%';
+}
+
+// Drag & Drop
+function setupDrag() {
+  const drop = document.getElementById('drawingDrop');
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.style.borderColor = '#58a6ff'; });
+  drop.addEventListener('dragleave', () => drop.style.borderColor = '');
+  drop.addEventListener('drop', e => {
+    e.preventDefault();
+    drop.style.borderColor = '';
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        drawingDataURL = ev.target.result;
+        document.getElementById('drawingPreview').src = drawingDataURL;
+        document.getElementById('drawingPreview').style.display = 'block';
+        document.getElementById('drawingPlaceholder').style.display = 'none';
+        document.getElementById('overlayImg').src = drawingDataURL;
+        document.getElementById('overlayImg').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+
+// ─── STEP AP203 Generator ───
+function generateSTEP() {
+  const name = document.getElementById('metaName').value || 'MyPart';
+  const author = document.getElementById('metaAuthor').value || 'Engineer';
+  const org = document.getElementById('metaOrg').value || 'Company';
+  const unit = document.getElementById('metaUnit').value || 'MM';
+  const desc = document.getElementById('metaDesc').value || '';
+  const now = new Date();
+  const dateStr = now.toISOString().replace('T', 'T').split('.')[0];
+
+  let id = 1;
+  const next = () => id++;
+  const lines = [];
+
+  lines.push('ISO-10303-21;');
+  lines.push('HEADER;');
+  lines.push(`FILE_DESCRIPTION(('${desc || name} - Created by STEP AP203 Generator'),'2;1');`);
+  lines.push(`FILE_NAME('${name}.STEP','${dateStr}',('${author}'),('${org}'),'STEP AP203 Generator v1.0','HTML5 STEP Generator','');`);
+  lines.push("FILE_SCHEMA(('CONFIG_CONTROL_DESIGN'));");
+  lines.push('ENDSEC;');
+  lines.push('DATA;');
+
+  // Application Context
+  const appCtxId = next();
+  lines.push(`#${appCtxId}=APPLICATION_CONTEXT('core data for automotive mechanical design processes');`);
+  const appProtId = next();
+  lines.push(`#${appProtId}=APPLICATION_PROTOCOL_DEFINITION('international standard','automotive_design',2000,#${appCtxId});`);
+
+  // Units
+  const mmId = next(); lines.push(`#${mmId}=LENGTH_MEASURE_WITH_UNIT(LENGTH_MEASURE(1.0),#${next()});`);
+  const mmUnitId = id - 1;
+  lines.push(`#${mmUnitId}=(LENGTH_UNIT()NAMED_UNIT(*)SI_UNIT(.MILLI.,.METRE.));`);
+  id++; // realign
+
+  // Rebuild with proper id tracking
+  id = 1;
+  const entities = [];
+
+  const ent = (def) => {
+    const eid = id++;
+    entities.push(`#${eid}=${def}`);
+    return eid;
+  };
+
+  // Headers again
+  const appCtx = ent(`APPLICATION_CONTEXT('core data for automotive mechanical design processes');`);
+  const appProt = ent(`APPLICATION_PROTOCOL_DEFINITION('international standard','automotive_design',2000,#${appCtx});`);
+
+  // Unit system
+  const lenSI = ent(`(LENGTH_UNIT()NAMED_UNIT(*)SI_UNIT(.MILLI.,.METRE.));`);
+  const angSI = ent(`(NAMED_UNIT(*)PLANE_ANGLE_UNIT()SI_UNIT($,.RADIAN.));`);
+  const solidSI = ent(`(NAMED_UNIT(*)SI_UNIT($,.STERADIAN.)SOLID_ANGLE_UNIT());`);
+  const uncert = ent(`UNCERTAINTY_MEASURE_WITH_UNIT(LENGTH_MEASURE(0.001),#${lenSI},'distance_accuracy_value','maximum acceptable uncertainty');`);
+  const geoCtx = ent(`(GEOMETRIC_REPRESENTATION_CONTEXT(3)GLOBAL_UNCERTAINTY_ASSIGNED_CONTEXT((#${uncert}))GLOBAL_UNIT_ASSIGNED_CONTEXT((#${lenSI},#${angSI},#${solidSI}))REPRESENTATION_CONTEXT('Context #1','3D Context with UNIT and UNCERTAINTY'));`);
+
+  const prodCtx = ent(`PRODUCT_CONTEXT('',#${appCtx},'mechanical');`);
+
+  // Product / Assembly
+  const productDefs = [];
+  const shapeDefs = [];
+  const srIds = [];
+
+  shapes.forEach((s, idx) => {
+    const prod = ent(`PRODUCT('${s.name}','${s.name}','',(#${prodCtx}));`);
+    const prodDef = ent(`PRODUCT_DEFINITION('design','',#${ent(`PRODUCT_DEFINITION_FORMATION_WITH_SPECIFIED_SOURCE('','',#${prod},.NOT_KNOWN.);`)},#${ent(`PRODUCT_DEFINITION_CONTEXT('part definition',#${appCtx},'design');`)});`);
+    const shapeDef = ent(`PRODUCT_DEFINITION_SHAPE('','Shape for ${s.name}',#${prodDef});`);
+    productDefs.push(prodDef);
+    shapeDefs.push(shapeDef);
+
+    // Build geometric entities based on shape type
+    const brep = buildSTEPBrep(s, ent, geoCtx);
+    const sr = ent(`SHAPE_DEFINITION_REPRESENTATION(#${shapeDef},#${brep});`);
+    srIds.push(sr);
+  });
+
+  // Close
+  const stepContent = 'ISO-10303-21;\nHEADER;\n' +
+    `FILE_DESCRIPTION(('${name}'),'2;1');\n` +
+    `FILE_NAME('${name}.STEP','${dateStr}',('${author}'),('${org}'),'STEP AP203 HTML5 Generator','','');\n` +
+    "FILE_SCHEMA(('CONFIG_CONTROL_DESIGN'));\n" +
+    'ENDSEC;\n' +
+    'DATA;\n' +
+    entities.join('\n') + '\n' +
+    'ENDSEC;\nEND-ISO-10303-21;\n';
+
+  return stepContent;
+}
+
+function buildSTEPBrep(shape, ent, geoCtxId) {
+  const p = shape.params;
+  const px = shape.position.x, py = shape.position.y, pz = shape.position.z;
+
+  // For all shapes: create an Advanced Brep Shape Representation using tessellated geometry
+  // This approach uses coordinate mesh representation for maximum SolidWorks compatibility
+
+  if (shape.type === 'box') {
+    return buildBoxSTEP(p.w, p.h, p.d, px, py, pz, shape.rotation, ent, geoCtxId);
+  } else if (shape.type === 'cylinder') {
+    return buildCylinderSTEP(p.r, p.h, px, py, pz, shape.rotation, ent, geoCtxId);
+  } else if (shape.type === 'sphere') {
+    return buildSphereSTEP(p.r, px, py, pz, shape.rotation, ent, geoCtxId);
+  } else {
+    // Generic: use cylindrical approximation
+    const r = p.r || p.ro || (p.w ? Math.min(p.w,p.d)/2 : 30);
+    const h = p.h || 50;
+    return buildCylinderSTEP(r, h, px, py, pz, shape.rotation, ent, geoCtxId);
+  }
+}
+
+function buildBoxSTEP(w, h, d, px, py, pz, rot, ent, geoCtxId) {
+  // 8 vertices of box
+  const hW = w/2, hH = h/2, hD = d/2;
+  const verts = [
+    [-hW+px,-hH+py,-hD+pz], [hW+px,-hH+py,-hD+pz], [hW+px,hH+py,-hD+pz], [-hW+px,hH+py,-hD+pz],
+    [-hW+px,-hH+py,hD+pz],  [hW+px,-hH+py,hD+pz],  [hW+px,hH+py,hD+pz],  [-hW+px,hH+py,hD+pz]
+  ];
+
+  const vIds = verts.map(v => ent(`CARTESIAN_POINT('',(${v[0].toFixed(4)},${v[1].toFixed(4)},${v[2].toFixed(4)}));`));
+
+  // Directions
+  const xDir = ent(`DIRECTION('',(1.,0.,0.));`);
+  const yDir = ent(`DIRECTION('',(0.,1.,0.));`);
+  const zDir = ent(`DIRECTION('',(0.,0.,1.));`);
+  const nxDir = ent(`DIRECTION('',(-1.,0.,0.));`);
+  const nyDir = ent(`DIRECTION('',(0.,-1.,0.));`);
+  const nzDir = ent(`DIRECTION('',(0.,0.,-1.));`);
+
+  // Axis placements for each face
+  const mkAP = (ox,oy,oz, zx,zy,zz, ax,ay,az) => {
+    const o = ent(`CARTESIAN_POINT('',(${ox.toFixed(4)},${oy.toFixed(4)},${oz.toFixed(4)}));`);
+    const z = ent(`DIRECTION('',(${zx.toFixed(4)},${zy.toFixed(4)},${zz.toFixed(4)}));`);
+    const a = ent(`DIRECTION('',(${ax.toFixed(4)},${ay.toFixed(4)},${az.toFixed(4)}));`);
+    return ent(`AXIS2_PLACEMENT_3D('',#${o},#${z},#${a});`);
+  };
+
+  // 6 faces as planes
+  const planes = [
+    { cx: px,    cy: py-hH, cz: pz, nz:[0,-1,0], na:[1,0,0] },
+    { cx: px,    cy: py+hH, cz: pz, nz:[0,1,0],  na:[1,0,0] },
+    { cx: px-hW, cy: py,    cz: pz, nz:[-1,0,0], na:[0,1,0] },
+    { cx: px+hW, cy: py,    cz: pz, nz:[1,0,0],  na:[0,1,0] },
+    { cx: px,    cy: py,    cz: pz-hD, nz:[0,0,-1], na:[1,0,0] },
+    { cx: px,    cy: py,    cz: pz+hD, nz:[0,0,1],  na:[1,0,0] },
+  ];
+
+  const faceIds = planes.map(pl => {
+    const ap = mkAP(pl.cx, pl.cy, pl.cz, pl.nz[0],pl.nz[1],pl.nz[2], pl.na[0],pl.na[1],pl.na[2]);
+    const plane = ent(`PLANE('',#${ap});`);
+    const faceOuter = ent(`FACE_OUTER_BOUND('',#${ent(`VERTEX_LOOP('',#${ent(`VERTEX_POINT('',#${vIds[0]})`)})`)},.T.);`);
+    return ent(`ADVANCED_FACE('',(#${faceOuter}),#${plane},.T.);`);
+  });
+
+  const shell = ent(`CLOSED_SHELL('',(${faceIds.map(f=>'#'+f).join(',')}));`);
+  const brep = ent(`MANIFOLD_SOLID_BREP('${shape ? shape.name : 'Box'}',#${shell});`);
+
+  const ap = mkAP(px,py,pz, 0,1,0, 1,0,0);
+  const sr = ent(`ADVANCED_BREP_SHAPE_REPRESENTATION('',(#${brep},#${ap}),#${geoCtxId});`);
+  return sr;
+}
+
+// Shortcut variable for buildBoxSTEP to access shape
+let _currentShape = null;
+
+function buildCylinderSTEP(r, h, px, py, pz, rot, ent, geoCtxId) {
+  const hH = h/2;
+  const mkAP3 = (ox,oy,oz, zx,zy,zz, ax,ay,az) => {
+    const o = ent(`CARTESIAN_POINT('',(${ox.toFixed(4)},${oy.toFixed(4)},${oz.toFixed(4)}));`);
+    const z = ent(`DIRECTION('',(${zx.toFixed(4)},${zy.toFixed(4)},${zz.toFixed(4)}));`);
+    const a = ent(`DIRECTION('',(${ax.toFixed(4)},${ay.toFixed(4)},${az.toFixed(4)}));`);
+    return ent(`AXIS2_PLACEMENT_3D('',#${o},#${z},#${a});`);
+  };
+
+  const topAP = mkAP3(px, py+hH, pz, 0,1,0, 1,0,0);
+  const botAP = mkAP3(px, py-hH, pz, 0,-1,0, 1,0,0);
+  const cylAP = mkAP3(px, py-hH, pz, 0,1,0, 1,0,0);
+
+  const topCircle = ent(`CIRCLE('',#${topAP},${r.toFixed(4)});`);
+  const botCircle = ent(`CIRCLE('',#${botAP},${r.toFixed(4)});`);
+
+  const topPt = ent(`CARTESIAN_POINT('',(${(px+r).toFixed(4)},${(py+hH).toFixed(4)},${pz.toFixed(4)}));`);
+  const botPt = ent(`CARTESIAN_POINT('',(${(px+r).toFixed(4)},${(py-hH).toFixed(4)},${pz.toFixed(4)}));`);
+
+  const topVP = ent(`VERTEX_POINT('',#${topPt});`);
+  const botVP = ent(`VERTEX_POINT('',#${botPt});`);
+
+  const topEdge = ent(`EDGE_CURVE('',#${topVP},#${topVP},#${topCircle},.T.);`);
+  const botEdge = ent(`EDGE_CURVE('',#${botVP},#${botVP},#${botCircle},.T.);`);
+
+  const topOrient = ent(`ORIENTED_EDGE('',*,*,#${topEdge},.T.);`);
+  const botOrient = ent(`ORIENTED_EDGE('',*,*,#${botEdge},.F.);`);
+
+  const topLoop = ent(`EDGE_LOOP('',(#${topOrient}));`);
+  const botLoop = ent(`EDGE_LOOP('',(#${botOrient}));`);
+
+  // Cylinder surface
+  const cylSurf = ent(`CYLINDRICAL_SURFACE('',#${cylAP},${r.toFixed(4)});`);
+
+  // Line for cylinder body
+  const linePt = ent(`CARTESIAN_POINT('',(${(px+r).toFixed(4)},${(py-hH).toFixed(4)},${pz.toFixed(4)}));`);
+  const lineDir = ent(`DIRECTION('',(0.,1.,0.));`);
+  const lineVec = ent(`VECTOR('',#${lineDir},1.);`);
+  const seam = ent(`LINE('',#${linePt},#${lineVec});`);
+  const seamE = ent(`EDGE_CURVE('',#${botVP},#${topVP},#${seam},.T.);`);
+  const seamO1 = ent(`ORIENTED_EDGE('',*,*,#${seamE},.T.);`);
+  const seamO2 = ent(`ORIENTED_EDGE('',*,*,#${seamE},.F.);`);
+  const cylLoop = ent(`EDGE_LOOP('',(#${seamO1},#${topOrient},#${seamO2},#${botOrient}));`);
+
+  // Planes for top/bottom
+  const topPlaneAP = mkAP3(px, py+hH, pz, 0,1,0, 1,0,0);
+  const botPlaneAP = mkAP3(px, py-hH, pz, 0,-1,0, 1,0,0);
+  const topPlane = ent(`PLANE('',#${topPlaneAP});`);
+  const botPlane = ent(`PLANE('',#${botPlaneAP});`);
+
+  const topBound = ent(`FACE_OUTER_BOUND('',#${topLoop},.T.);`);
+  const botBound = ent(`FACE_OUTER_BOUND('',#${botLoop},.T.);`);
+  const cylBound = ent(`FACE_OUTER_BOUND('',#${cylLoop},.T.);`);
+
+  const topFace = ent(`ADVANCED_FACE('',(#${topBound}),#${topPlane},.T.);`);
+  const botFace = ent(`ADVANCED_FACE('',(#${botBound}),#${botPlane},.T.);`);
+  const cylFace = ent(`ADVANCED_FACE('',(#${cylBound}),#${cylSurf},.T.);`);
+
+  const shell = ent(`CLOSED_SHELL('',(#${topFace},#${botFace},#${cylFace}));`);
+  const brep = ent(`MANIFOLD_SOLID_BREP('Cylinder',#${shell});`);
+
+  const repAP = mkAP3(px, py, pz, 0,1,0, 1,0,0);
+  return ent(`ADVANCED_BREP_SHAPE_REPRESENTATION('',(#${brep},#${repAP}),#${geoCtxId});`);
+}
+
+function buildSphereSTEP(r, px, py, pz, rot, ent, geoCtxId) {
+  const mkAP3 = (ox,oy,oz, zx,zy,zz, ax,ay,az) => {
+    const o = ent(`CARTESIAN_POINT('',(${ox.toFixed(4)},${oy.toFixed(4)},${oz.toFixed(4)}));`);
+    const z = ent(`DIRECTION('',(${zx.toFixed(4)},${zy.toFixed(4)},${zz.toFixed(4)}));`);
+    const a = ent(`DIRECTION('',(${ax.toFixed(4)},${ay.toFixed(4)},${az.toFixed(4)}));`);
+    return ent(`AXIS2_PLACEMENT_3D('',#${o},#${z},#${a});`);
+  };
+
+  const ap = mkAP3(px, py, pz, 0,1,0, 1,0,0);
+  const sphSurf = ent(`SPHERICAL_SURFACE('',#${ap},${r.toFixed(4)});`);
+
+  const topPt = ent(`CARTESIAN_POINT('',(${px.toFixed(4)},${(py+r).toFixed(4)},${pz.toFixed(4)}));`);
+  const botPt = ent(`CARTESIAN_POINT('',(${px.toFixed(4)},${(py-r).toFixed(4)},${pz.toFixed(4)}));`);
+  const eqPt  = ent(`CARTESIAN_POINT('',(${(px+r).toFixed(4)},${py.toFixed(4)},${pz.toFixed(4)}));`);
+
+  const topVP = ent(`VERTEX_POINT('',#${topPt});`);
+  const botVP = ent(`VERTEX_POINT('',#${botPt});`);
+  const eqVP  = ent(`VERTEX_POINT('',#${eqPt});`);
+
+  const eqAP  = mkAP3(px, py, pz, 0,1,0, 1,0,0);
+  const eqCirc = ent(`CIRCLE('',#${eqAP},${r.toFixed(4)});`);
+  const eqEdge = ent(`EDGE_CURVE('',#${eqVP},#${eqVP},#${eqCirc},.T.);`);
+  const eqO1   = ent(`ORIENTED_EDGE('',*,*,#${eqEdge},.T.);`);
+  const eqO2   = ent(`ORIENTED_EDGE('',*,*,#${eqEdge},.F.);`);
+  const eqLoop1 = ent(`EDGE_LOOP('',(#${eqO1}));`);
+  const eqLoop2 = ent(`EDGE_LOOP('',(#${eqO2}));`);
+
+  const topBound = ent(`FACE_OUTER_BOUND('',#${eqLoop1},.T.);`);
+  const botBound = ent(`FACE_OUTER_BOUND('',#${eqLoop2},.T.);`);
+
+  const topFace = ent(`ADVANCED_FACE('',(#${topBound}),#${sphSurf},.T.);`);
+  const botFace = ent(`ADVANCED_FACE('',(#${botBound}),#${sphSurf},.F.);`);
+
+  const shell = ent(`CLOSED_SHELL('',(#${topFace},#${botFace}));`);
+  const brep  = ent(`MANIFOLD_SOLID_BREP('Sphere',#${shell});`);
+  const repAP = mkAP3(px, py, pz, 0,1,0, 1,0,0);
+  return ent(`ADVANCED_BREP_SHAPE_REPRESENTATION('',(#${brep},#${repAP}),#${geoCtxId});`);
+}
+
+// ─── Full STEP Generator (Complete) ───
+function generateFullSTEP() {
+  const name = document.getElementById('metaName').value || 'MyPart';
+  const author = document.getElementById('metaAuthor').value || 'Engineer';
+  const org = document.getElementById('metaOrg').value || 'Company';
+  const desc = document.getElementById('metaDesc').value || '';
+  const now = new Date();
+  const dateStr = now.toISOString().split('.')[0];
+
+  if (shapes.length === 0) {
+    alert('กรุณาเพิ่มรูปทรงก่อน Export!');
+    return null;
+  }
+
+  let eid = 1;
+  const lines = [];
+  const e = (def) => { const id = eid++; lines.push(`#${id}=${def}`); return id; };
+
+  // Context
+  const appCtx = e(`APPLICATION_CONTEXT('core data for automotive mechanical design processes');`);
+  e(`APPLICATION_PROTOCOL_DEFINITION('international standard','automotive_design',2000,#${appCtx});`);
+
+  // Units
+  const lenUnit = e(`(LENGTH_UNIT()NAMED_UNIT(*)SI_UNIT(.MILLI.,.METRE.));`);
+  const angUnit = e(`(NAMED_UNIT(*)PLANE_ANGLE_UNIT()SI_UNIT($,.RADIAN.));`);
+  const solUnit = e(`(NAMED_UNIT(*)SI_UNIT($,.STERADIAN.)SOLID_ANGLE_UNIT());`);
+  const uncert  = e(`UNCERTAINTY_MEASURE_WITH_UNIT(LENGTH_MEASURE(0.001),#${lenUnit},'distance_accuracy_value','maximum acceptable uncertainty');`);
+  const geoCtx  = e(`(GEOMETRIC_REPRESENTATION_CONTEXT(3)GLOBAL_UNCERTAINTY_ASSIGNED_CONTEXT((#${uncert}))GLOBAL_UNIT_ASSIGNED_CONTEXT((#${lenUnit},#${angUnit},#${solUnit}))REPRESENTATION_CONTEXT('Context #1','3D Context with UNIT and UNCERTAINTY'));`);
+  const prodCtx = e(`PRODUCT_CONTEXT('',#${appCtx},'mechanical');`);
+
+  const mkAP3 = (ox,oy,oz, zx,zy,zz, ax,ay,az) => {
+    const o = e(`CARTESIAN_POINT('',(${ox.toFixed(6)},${oy.toFixed(6)},${oz.toFixed(6)}));`);
+    const z = e(`DIRECTION('',(${zx.toFixed(6)},${zy.toFixed(6)},${zz.toFixed(6)}));`);
+    const a = e(`DIRECTION('',(${ax.toFixed(6)},${ay.toFixed(6)},${az.toFixed(6)}));`);
+    return e(`AXIS2_PLACEMENT_3D('',#${o},#${z},#${a});`);
+  };
+
+  const allSrIds = [];
+
+  shapes.forEach((s) => {
+    const prod    = e(`PRODUCT('${s.name}','${s.name}','',(#${prodCtx}));`);
+    const prodForm = e(`PRODUCT_DEFINITION_FORMATION_WITH_SPECIFIED_SOURCE('','',#${prod},.NOT_KNOWN.);`);
+    const pdCtx   = e(`PRODUCT_DEFINITION_CONTEXT('part definition',#${appCtx},'design');`);
+    const prodDef = e(`PRODUCT_DEFINITION('design','',#${prodForm},#${pdCtx});`);
+    const shapeDef = e(`PRODUCT_DEFINITION_SHAPE('','Shape for ${s.name}',#${prodDef});`);
+
+    let brep;
+    const px = s.position.x, py = s.position.y, pz = s.position.z;
+    const p = s.params;
+
+    if (s.type === 'box') {
+      const hW = p.w/2, hH = p.h/2, hD = p.d/2;
+
+      // 8 Vertices
+      const vp = (x,y,z) => e(`CARTESIAN_POINT('',(${(px+x).toFixed(6)},${(py+y).toFixed(6)},${(pz+z).toFixed(6)}));`);
+      const v = [
+        vp(-hW,-hH,-hD), vp(hW,-hH,-hD), vp(hW,hH,-hD), vp(-hW,hH,-hD),
+        vp(-hW,-hH,hD),  vp(hW,-hH,hD),  vp(hW,hH,hD),  vp(-hW,hH,hD)
+      ];
+      const vv = v.map(vi => e(`VERTEX_POINT('',#${vi});`));
+
+      // 12 Edges
+      const mkLine = (a,b) => {
+        const dir_e = e(`DIRECTION('',(${(a[0]-b[0]).toFixed(6)},${(a[1]-b[1]).toFixed(6)},${(a[2]-b[2]).toFixed(6)}));`);
+        const vec_e = e(`VECTOR('',#${dir_e},1.);`);
+        const pt_e  = e(`CARTESIAN_POINT('',(${(px+a[0]).toFixed(6)},${(py+a[1]).toFixed(6)},${(pz+a[2]).toFixed(6)}));`);
+        return e(`LINE('',#${pt_e},#${vec_e});`);
+      };
+      const corners = [
+        [-hW,-hH,-hD],[hW,-hH,-hD],[hW,hH,-hD],[-hW,hH,-hD],
+        [-hW,-hH,hD],[hW,-hH,hD],[hW,hH,hD],[-hW,hH,hD]
+      ];
+      const edgePairs = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+      const edgeCurves = edgePairs.map(([ai,bi]) => {
+        const line = mkLine(corners[ai],corners[bi]);
+        return e(`EDGE_CURVE('',#${vv[ai]},#${vv[bi]},#${line},.T.);`);
+      });
+
+      const oe = (ec, fwd) => e(`ORIENTED_EDGE('',*,*,#${ec},.${fwd?'T':'F'}.);`);
+
+      // 6 Faces
+      const faceData = [
+        { loops: [oe(edgeCurves[0],true), oe(edgeCurves[9],true), oe(edgeCurves[4],false), oe(edgeCurves[8],false)], n:[0,-1,0], an:[1,0,0], o:[px,py-hH,pz] },
+        { loops: [oe(edgeCurves[2],false), oe(edgeCurves[10],true), oe(edgeCurves[6],true), oe(edgeCurves[11],false)], n:[0,1,0], an:[1,0,0], o:[px,py+hH,pz] },
+        { loops: [oe(edgeCurves[3],false), oe(edgeCurves[11],true), oe(edgeCurves[7],false), oe(edgeCurves[8],true)], n:[-1,0,0], an:[0,1,0], o:[px-hW,py,pz] },
+        { loops: [oe(edgeCurves[1],true), oe(edgeCurves[10],false), oe(edgeCurves[5],false), oe(edgeCurves[9],false)], n:[1,0,0], an:[0,1,0], o:[px+hW,py,pz] },
+        { loops: [oe(edgeCurves[3],true), oe(edgeCurves[2],true), oe(edgeCurves[1],false), oe(edgeCurves[0],false)], n:[0,0,-1], an:[1,0,0], o:[px,py,pz-hD] },
+        { loops: [oe(edgeCurves[4],true), oe(edgeCurves[5],true), oe(edgeCurves[6],false), oe(edgeCurves[7],true)], n:[0,0,1], an:[1,0,0], o:[px,py,pz+hD] },
+      ];
+
+      const faceIds = faceData.map(fd => {
+        const loop = e(`EDGE_LOOP('',(${fd.loops.map(x=>'#'+x).join(',')}));`);
+        const bound = e(`FACE_OUTER_BOUND('',#${loop},.T.);`);
+        const ap3 = mkAP3(fd.o[0],fd.o[1],fd.o[2], fd.n[0],fd.n[1],fd.n[2], fd.an[0],fd.an[1],fd.an[2]);
+        const plane = e(`PLANE('',#${ap3});`);
+        return e(`ADVANCED_FACE('',(#${bound}),#${plane},.T.);`);
+      });
+
+      const shell = e(`CLOSED_SHELL('',(${faceIds.map(f=>'#'+f).join(',')}));`);
+      brep = e(`MANIFOLD_SOLID_BREP('${s.name}',#${shell});`);
+
+    } else if (s.type === 'cylinder' || s.type === 'prism') {
+      const r = p.r, h = p.h || 100, hH = h/2;
+      const topAP = mkAP3(px, py+hH, pz, 0,1,0, 1,0,0);
+      const botAP = mkAP3(px, py-hH, pz, 0,-1,0, 1,0,0);
+      const cylAP = mkAP3(px, py-hH, pz, 0,1,0, 1,0,0);
+
+      const topC = e(`CIRCLE('',#${topAP},${r.toFixed(6)});`);
+      const botC = e(`CIRCLE('',#${botAP},${r.toFixed(6)});`);
+
+      const tPt = e(`CARTESIAN_POINT('',(${(px+r).toFixed(6)},${(py+hH).toFixed(6)},${pz.toFixed(6)}));`);
+      const bPt = e(`CARTESIAN_POINT('',(${(px+r).toFixed(6)},${(py-hH).toFixed(6)},${pz.toFixed(6)}));`);
+      const tVP = e(`VERTEX_POINT('',#${tPt});`);
+      const bVP = e(`VERTEX_POINT('',#${bPt});`);
+
+      const tEdge = e(`EDGE_CURVE('',#${tVP},#${tVP},#${topC},.T.);`);
+      const bEdge = e(`EDGE_CURVE('',#${bVP},#${bVP},#${botC},.T.);`);
+
+      const lPt  = e(`CARTESIAN_POINT('',(${(px+r).toFixed(6)},${(py-hH).toFixed(6)},${pz.toFixed(6)}));`);
+      const lDir = e(`DIRECTION('',(0.,1.,0.));`);
+      const lVec = e(`VECTOR('',#${lDir},${h.toFixed(6)});`);
+      const seamLine = e(`LINE('',#${lPt},#${lVec});`);
+      const seamE = e(`EDGE_CURVE('',#${bVP},#${tVP},#${seamLine},.T.);`);
+
+      const tO  = e(`ORIENTED_EDGE('',*,*,#${tEdge},.T.);`);
+      const tO2 = e(`ORIENTED_EDGE('',*,*,#${tEdge},.F.);`);
+      const bO  = e(`ORIENTED_EDGE('',*,*,#${bEdge},.F.);`);
+      const bO2 = e(`ORIENTED_EDGE('',*,*,#${bEdge},.T.);`);
+      const sO1 = e(`ORIENTED_EDGE('',*,*,#${seamE},.T.);`);
+      const sO2 = e(`ORIENTED_EDGE('',*,*,#${seamE},.F.);`);
+
+      const tLoop = e(`EDGE_LOOP('',(#${tO}));`);
+      const bLoop = e(`EDGE_LOOP('',(#${bO2}));`);
+      const cLoop = e(`EDGE_LOOP('',(#${sO1},#${tO2},#${sO2},#${bO}));`);
+
+      const tPlanAP = mkAP3(px, py+hH, pz, 0,1,0, 1,0,0);
+      const bPlanAP = mkAP3(px, py-hH, pz, 0,-1,0, 1,0,0);
+      const tPlan = e(`PLANE('',#${tPlanAP});`);
+      const bPlan = e(`PLANE('',#${bPlanAP});`);
+      const cylS  = e(`CYLINDRICAL_SURFACE('',#${cylAP},${r.toFixed(6)});`);
+
+      const tBound = e(`FACE_OUTER_BOUND('',#${tLoop},.T.);`);
+      const bBound = e(`FACE_OUTER_BOUND('',#${bLoop},.T.);`);
+      const cBound = e(`FACE_OUTER_BOUND('',#${cLoop},.T.);`);
+
+      const tFace = e(`ADVANCED_FACE('',(#${tBound}),#${tPlan},.T.);`);
+      const bFace = e(`ADVANCED_FACE('',(#${bBound}),#${bPlan},.T.);`);
+      const cFace = e(`ADVANCED_FACE('',(#${cBound}),#${cylS},.T.);`);
+
+      const shell = e(`CLOSED_SHELL('',(#${tFace},#${bFace},#${cFace}));`);
+      brep = e(`MANIFOLD_SOLID_BREP('${s.name}',#${shell});`);
+
+    } else if (s.type === 'sphere') {
+      const r = p.r;
+      const sphAP = mkAP3(px, py, pz, 0,1,0, 1,0,0);
+      const sphS  = e(`SPHERICAL_SURFACE('',#${sphAP},${r.toFixed(6)});`);
+
+      const eqAP  = mkAP3(px, py, pz, 0,1,0, 1,0,0);
+      const eqC   = e(`CIRCLE('',#${eqAP},${r.toFixed(6)});`);
+      const ePt   = e(`CARTESIAN_POINT('',(${(px+r).toFixed(6)},${py.toFixed(6)},${pz.toFixed(6)}));`);
+      const eVP   = e(`VERTEX_POINT('',#${ePt});`);
+      const eEdge = e(`EDGE_CURVE('',#${eVP},#${eVP},#${eqC},.T.);`);
+      const eO1   = e(`ORIENTED_EDGE('',*,*,#${eEdge},.T.);`);
+      const eO2   = e(`ORIENTED_EDGE('',*,*,#${eEdge},.F.);`);
+      const eL1   = e(`EDGE_LOOP('',(#${eO1}));`);
+      const eL2   = e(`EDGE_LOOP('',(#${eO2}));`);
+      const eB1   = e(`FACE_OUTER_BOUND('',#${eL1},.T.);`);
+      const eB2   = e(`FACE_OUTER_BOUND('',#${eL2},.T.);`);
+      const f1    = e(`ADVANCED_FACE('',(#${eB1}),#${sphS},.T.);`);
+      const f2    = e(`ADVANCED_FACE('',(#${eB2}),#${sphS},.F.);`);
+      const shell = e(`CLOSED_SHELL('',(#${f1},#${f2}));`);
+      brep = e(`MANIFOLD_SOLID_BREP('${s.name}',#${shell});`);
+
+    } else if (s.type === 'cone') {
+      const r1 = p.r1, r2 = Math.max(p.r2, 0.001), h = p.h, hH = h/2;
+      const topAP = mkAP3(px, py+hH, pz, 0,1,0, 1,0,0);
+      const botAP = mkAP3(px, py-hH, pz, 0,-1,0, 1,0,0);
+      const sA = Math.atan2(r1-r2, h);
+      const coneAP = mkAP3(px, py-hH, pz, 0,1,0, 1,0,0);
+      const coneS = e(`CONICAL_SURFACE('',#${coneAP},${r1.toFixed(6)},${sA.toFixed(6)});`);
+
+      const tPt = e(`CARTESIAN_POINT('',(${(px+r2).toFixed(6)},${(py+hH).toFixed(6)},${pz.toFixed(6)}));`);
+      const bPt = e(`CARTESIAN_POINT('',(${(px+r1).toFixed(6)},${(py-hH).toFixed(6)},${pz.toFixed(6)}));`);
+      const tVP = e(`VERTEX_POINT('',#${tPt});`);
+      const bVP = e(`VERTEX_POINT('',#${bPt});`);
+
+      const tC = e(`CIRCLE('',#${topAP},${r2.toFixed(6)});`);
+      const bC = e(`CIRCLE('',#${botAP},${r1.toFixed(6)});`);
+      const tE = e(`EDGE_CURVE('',#${tVP},#${tVP},#${tC},.T.);`);
+      const bE = e(`EDGE_CURVE('',#${bVP},#${bVP},#${bC},.T.);`);
+
+      const sPt = e(`CARTESIAN_POINT('',(${(px+r1).toFixed(6)},${(py-hH).toFixed(6)},${pz.toFixed(6)}));`);
+      const sDx = r2-r1, sDy = h;
+      const len = Math.sqrt(sDx*sDx+sDy*sDy);
+      const sDir = e(`DIRECTION('',(${(sDx/len).toFixed(6)},${(sDy/len).toFixed(6)},0.));`);
+      const sVec = e(`VECTOR('',#${sDir},${len.toFixed(6)});`);
+      const sLine = e(`LINE('',#${sPt},#${sVec});`);
+      const sEdge = e(`EDGE_CURVE('',#${bVP},#${tVP},#${sLine},.T.);`);
+
+      const tO1 = e(`ORIENTED_EDGE('',*,*,#${tE},.T.);`);
+      const tO2 = e(`ORIENTED_EDGE('',*,*,#${tE},.F.);`);
+      const bO1 = e(`ORIENTED_EDGE('',*,*,#${bE},.F.);`);
+      const bO2 = e(`ORIENTED_EDGE('',*,*,#${bE},.T.);`);
+      const sO1 = e(`ORIENTED_EDGE('',*,*,#${sEdge},.T.);`);
+      const sO2 = e(`ORIENTED_EDGE('',*,*,#${sEdge},.F.);`);
+
+      const tLoop = e(`EDGE_LOOP('',(#${tO2}));`);
+      const bLoop = e(`EDGE_LOOP('',(#${bO2}));`);
+      const cLoop = e(`EDGE_LOOP('',(#${sO1},#${tO1},#${sO2},#${bO1}));`);
+
+      const tPlanAP = mkAP3(px, py+hH, pz, 0,1,0, 1,0,0);
+      const bPlanAP = mkAP3(px, py-hH, pz, 0,-1,0, 1,0,0);
+      const tPlan = e(`PLANE('',#${tPlanAP});`);
+      const bPlan = e(`PLANE('',#${bPlanAP});`);
+
+      const tBnd = e(`FACE_OUTER_BOUND('',#${tLoop},.T.);`);
+      const bBnd = e(`FACE_OUTER_BOUND('',#${bLoop},.T.);`);
+      const cBnd = e(`FACE_OUTER_BOUND('',#${cLoop},.T.);`);
+
+      const tF = e(`ADVANCED_FACE('',(#${tBnd}),#${tPlan},.T.);`);
+      const bF = e(`ADVANCED_FACE('',(#${bBnd}),#${bPlan},.T.);`);
+      const cF = e(`ADVANCED_FACE('',(#${cBnd}),#${coneS},.T.);`);
+
+      const shell = e(`CLOSED_SHELL('',(#${tF},#${bF},#${cF}));`);
+      brep = e(`MANIFOLD_SOLID_BREP('${s.name}',#${shell});`);
+
+    } else {
+      // Fallback to cylinder approximation
+      const r = p.r || p.ro || 30;
+      const h = p.h || 50;
+      // Create simple cylinder
+      const hH = h/2;
+      const cylAP2 = mkAP3(px, py-hH, pz, 0,1,0, 1,0,0);
+      const tAP2   = mkAP3(px, py+hH, pz, 0,1,0, 1,0,0);
+      const bAP2   = mkAP3(px, py-hH, pz, 0,-1,0, 1,0,0);
+      const tC2 = e(`CIRCLE('',#${tAP2},${r.toFixed(6)});`);
+      const bC2 = e(`CIRCLE('',#${bAP2},${r.toFixed(6)});`);
+      const tPt2 = e(`CARTESIAN_POINT('',(${(px+r).toFixed(6)},${(py+hH).toFixed(6)},${pz.toFixed(6)}));`);
+      const bPt2 = e(`CARTESIAN_POINT('',(${(px+r).toFixed(6)},${(py-hH).toFixed(6)},${pz.toFixed(6)}));`);
+      const tVP2 = e(`VERTEX_POINT('',#${tPt2});`);
+      const bVP2 = e(`VERTEX_POINT('',#${bPt2});`);
+      const tE2 = e(`EDGE_CURVE('',#${tVP2},#${tVP2},#${tC2},.T.);`);
+      const bE2 = e(`EDGE_CURVE('',#${bVP2},#${bVP2},#${bC2},.T.);`);
+      const lD2 = e(`DIRECTION('',(0.,1.,0.));`);
+      const lV2 = e(`VECTOR('',#${lD2},${h.toFixed(6)});`);
+      const lP2 = e(`CARTESIAN_POINT('',(${(px+r).toFixed(6)},${(py-hH).toFixed(6)},${pz.toFixed(6)}));`);
+      const ln2 = e(`LINE('',#${lP2},#${lV2});`);
+      const sE2 = e(`EDGE_CURVE('',#${bVP2},#${tVP2},#${ln2},.T.);`);
+      const tO2a = e(`ORIENTED_EDGE('',*,*,#${tE2},.T.);`);
+      const tO2b = e(`ORIENTED_EDGE('',*,*,#${tE2},.F.);`);
+      const bO2a = e(`ORIENTED_EDGE('',*,*,#${bE2},.F.);`);
+      const bO2b = e(`ORIENTED_EDGE('',*,*,#${bE2},.T.);`);
+      const sO2a = e(`ORIENTED_EDGE('',*,*,#${sE2},.T.);`);
+      const sO2b = e(`ORIENTED_EDGE('',*,*,#${sE2},.F.);`);
+      const tL2 = e(`EDGE_LOOP('',(#${tO2a}));`);
+      const bL2 = e(`EDGE_LOOP('',(#${bO2b}));`);
+      const cL2 = e(`EDGE_LOOP('',(#${sO2a},#${tO2b},#${sO2b},#${bO2a}));`);
+      const tPA2 = mkAP3(px, py+hH, pz, 0,1,0, 1,0,0);
+      const bPA2 = mkAP3(px, py-hH, pz, 0,-1,0, 1,0,0);
+      const tPl2 = e(`PLANE('',#${tPA2});`);
+      const bPl2 = e(`PLANE('',#${bPA2});`);
+      const cS2  = e(`CYLINDRICAL_SURFACE('',#${cylAP2},${r.toFixed(6)});`);
+      const tBd2 = e(`FACE_OUTER_BOUND('',#${tL2},.T.);`);
+      const bBd2 = e(`FACE_OUTER_BOUND('',#${bL2},.T.);`);
+      const cBd2 = e(`FACE_OUTER_BOUND('',#${cL2},.T.);`);
+      const tF2  = e(`ADVANCED_FACE('',(#${tBd2}),#${tPl2},.T.);`);
+      const bF2  = e(`ADVANCED_FACE('',(#${bBd2}),#${bPl2},.T.);`);
+      const cF2  = e(`ADVANCED_FACE('',(#${cBd2}),#${cS2},.T.);`);
+      const sh2  = e(`CLOSED_SHELL('',(#${tF2},#${bF2},#${cF2}));`);
+      brep = e(`MANIFOLD_SOLID_BREP('${s.name}',#${sh2});`);
+    }
+
+    const repAP = mkAP3(px, py, pz, 0,1,0, 1,0,0);
+    const absr  = e(`ADVANCED_BREP_SHAPE_REPRESENTATION('',(#${brep},#${repAP}),#${geoCtx});`);
+    const sr    = e(`SHAPE_DEFINITION_REPRESENTATION(#${shapeDef},#${absr});`);
+    allSrIds.push(sr);
+  });
+
+  const header = [
+    'ISO-10303-21;',
+    'HEADER;',
+    `FILE_DESCRIPTION(('${name} - STEP AP203'),'2;1');`,
+    `FILE_NAME('${name}.STEP','${dateStr}',('${author}'),('${org}'),'STEP AP203 Generator HTML5 v1.0','','');`,
+    "FILE_SCHEMA(('CONFIG_CONTROL_DESIGN'));",
+    'ENDSEC;',
+    'DATA;'
+  ].join('\n');
+
+  const footer = 'ENDSEC;\nEND-ISO-10303-21;';
+  return header + '\n' + lines.join('\n') + '\n' + footer + '\n';
+}
+
+// ─── Export Functions ───
+function exportSTEP() {
+  if (shapes.length === 0) { alert('กรุณาเพิ่มรูปทรงก่อน Export!'); return; }
+  const content = generateFullSTEP();
+  if (!content) return;
+  const name = document.getElementById('metaName').value || 'MyPart';
+  downloadText(content, `${name}.STEP`, 'text/plain');
+  showNotif('✅ Export STEP AP203 สำเร็จ!');
+}
+
+function previewSTEP() {
+  if (shapes.length === 0) { document.getElementById('stepPreview').textContent = '; ไม่มีรูปทรง - กรุณาเพิ่มรูปทรงก่อน'; return; }
+  const content = generateFullSTEP();
+  const preview = content.substring(0, 3000) + (content.length > 3000 ? '\n... (ตัดทอนเพื่อแสดงผล)' : '');
+  document.getElementById('stepPreview').textContent = preview;
+}
+
+function exportSTL() {
+  if (shapes.length === 0) { alert('กรุณาเพิ่มรูปทรงก่อน Export!'); return; }
+  const name = document.getElementById('metaName').value || 'MyPart';
+
+  let stl = `solid ${name}\n`;
+  shapes.forEach(s => {
+    const geo = buildGeometry(s);
+    const posAttr = geo.attributes.position;
+    const indexArr = geo.index ? geo.index.array : null;
+    const triCount = indexArr ? indexArr.length / 3 : posAttr.count / 3;
+
+    for (let i = 0; i < triCount; i++) {
+      const i0 = indexArr ? indexArr[i*3]   : i*3;
+      const i1 = indexArr ? indexArr[i*3+1] : i*3+1;
+      const i2 = indexArr ? indexArr[i*3+2] : i*3+2;
+      const x0 = posAttr.getX(i0)+s.position.x, y0 = posAttr.getY(i0)+s.position.y, z0 = posAttr.getZ(i0)+s.position.z;
+      const x1 = posAttr.getX(i1)+s.position.x, y1 = posAttr.getY(i1)+s.position.y, z1 = posAttr.getZ(i1)+s.position.z;
+      const x2 = posAttr.getX(i2)+s.position.x, y2 = posAttr.getY(i2)+s.position.y, z2 = posAttr.getZ(i2)+s.position.z;
+      const nx = (y1-y0)*(z2-z0)-(z1-z0)*(y2-y0);
+      const ny = (z1-z0)*(x2-x0)-(x1-x0)*(z2-z0);
+      const nz = (x1-x0)*(y2-y0)-(y1-y0)*(x2-x0);
+      const nl = Math.sqrt(nx*nx+ny*ny+nz*nz)||1;
+      stl += `  facet normal ${(nx/nl).toFixed(6)} ${(ny/nl).toFixed(6)} ${(nz/nl).toFixed(6)}\n`;
+      stl += `    outer loop\n`;
+      stl += `      vertex ${x0.toFixed(6)} ${y0.toFixed(6)} ${z0.toFixed(6)}\n`;
+      stl += `      vertex ${x1.toFixed(6)} ${y1.toFixed(6)} ${z1.toFixed(6)}\n`;
+      stl += `      vertex ${x2.toFixed(6)} ${y2.toFixed(6)} ${z2.toFixed(6)}\n`;
+      stl += `    endloop\n  endfacet\n`;
+      geo.dispose();
+    }
+    geo.dispose();
+  });
+  stl += `endsolid ${name}\n`;
+  downloadText(stl, `${name}.stl`, 'text/plain');
+  showNotif('✅ Export STL สำเร็จ!');
+}
+
+function exportOBJ() {
+  if (shapes.length === 0) { alert('กรุณาเพิ่มรูปทรงก่อน Export!'); return; }
+  const name = document.getElementById('metaName').value || 'MyPart';
+  let obj = `# OBJ exported by STEP AP203 Generator\n# ${name}\n\n`;
+  let vOffset = 1;
+
+  shapes.forEach(s => {
+    obj += `g ${s.name}\n`;
+    const geo = buildGeometry(s);
+    const pos = geo.attributes.position;
+    const idx = geo.index ? geo.index.array : null;
+
+    for (let i = 0; i < pos.count; i++) {
+      obj += `v ${(pos.getX(i)+s.position.x).toFixed(6)} ${(pos.getY(i)+s.position.y).toFixed(6)} ${(pos.getZ(i)+s.position.z).toFixed(6)}\n`;
+    }
+    const triCount = idx ? idx.length/3 : pos.count/3;
+    for (let i = 0; i < triCount; i++) {
+      const a = (idx ? idx[i*3] : i*3) + vOffset;
+      const b = (idx ? idx[i*3+1] : i*3+1) + vOffset;
+      const c = (idx ? idx[i*3+2] : i*3+2) + vOffset;
+      obj += `f ${a} ${b} ${c}\n`;
+    }
+    vOffset += pos.count;
+    geo.dispose();
+  });
+
+  downloadText(obj, `${name}.obj`, 'text/plain');
+  showNotif('✅ Export OBJ สำเร็จ!');
+}
+
+function downloadText(content, filename, mime) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function showNotif(msg) {
+  const n = document.createElement('div');
+  n.style.cssText = 'position:fixed;top:60px;right:20px;background:#238636;color:#fff;padding:10px 18px;border-radius:8px;font-size:.85rem;z-index:999;border:1px solid #2ea043;box-shadow:0 4px 12px rgba(0,0,0,.5);';
+  n.textContent = msg;
+  document.body.appendChild(n);
+  setTimeout(() => n.remove(), 3000);
+}
+
+// ─── Start ───
+window.addEventListener('load', () => {
+  if (typeof THREE === 'undefined') {
+    document.getElementById('loading').innerHTML = '<h2 style="color:#da3633">⚠️ โหลด Three.js ไม่สำเร็จ</h2><p style="color:#8b949e;margin-top:8px">กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วรีโหลดหน้า</p>';
+    return;
+  }
+  initThree();
+  setupDrag();
+});
+</script>
+</body>
+</html>
