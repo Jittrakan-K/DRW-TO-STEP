@@ -1,0 +1,1805 @@
+/* ==============================================================================
+   ORBRAY CAD 3D STUDIO - STYLESHEET
+   Factorium-Style Red & White Enterprise Theme (ตีมสีแดงขาว)
+   Clean White Surfaces • Precision Red Accents • High Legibility • Responsive
+   ============================================================================== */
+
+:root {
+  /* Brand Red Palette */
+  --red-50: #fef2f2;
+  --red-100: #fee2e2;
+  --red-200: #fecaca;
+  --red-300: #fca5a5;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+  --red-800: #991b1b;
+  --red-900: #7f1d1d;
+
+  /* Clean Neutrals */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-subtle: #f1f5f9;
+  --bg-dark: #0f172a;
+  --bg-darker: #090d16;
+
+  /* Typography Colors */
+  --text-dark: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+  --text-white: #ffffff;
+
+  /* Borders & Dividers */
+  --border-light: #e2e8f0;
+  --border-focus: #dc2626;
+  --border-dark: #334155;
+
+  /* Functional Accents */
+  --accent-green: #10b981;
+  --accent-green-bg: #ecfdf5;
+  --accent-green-border: #a7f3d0;
+  
+  --accent-amber: #f59e0b;
+  --accent-amber-bg: #fffbeb;
+  --accent-amber-border: #fde68a;
+
+  --accent-blue: #0284c7;
+  --accent-blue-bg: #f0f9ff;
+  --accent-blue-border: #bae6fd;
+
+  /* Geometry & Shadows */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.07), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 35px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-red: 0 8px 25px -3px rgba(220, 38, 38, 0.35);
+  --shadow-red-lg: 0 14px 35px -5px rgba(220, 38, 38, 0.45);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GLOBAL RESETS & TYPOGRAPHY
+   ───────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-body);
+  font-family: -apple-system, BlinkMacSystemFont, "Sarabun", "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select {
+  font-family: inherit;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   1. TOP NAVIGATION BAR (WHITE & CLEAN THEME)
+   ───────────────────────────────────────────────────────────── */
+.top-nav {
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+  height: 70px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Brand Logo */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.brand-logo-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--red-50);
+  border: 1.5px solid var(--red-200);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.brand:hover .brand-logo-icon {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.logo-svg {
+  width: 26px;
+  height: 26px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-weight: 900;
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+  color: var(--text-dark);
+}
+
+.brand-highlight {
+  color: var(--red-600);
+}
+
+.brand-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--red-600);
+  background: var(--red-50);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 1px;
+  display: inline-block;
+  margin-top: -2px;
+}
+
+/* Nav Menu */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-link {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-body);
+  transition: color 0.15s ease;
+  position: relative;
+  padding: 6px 0;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--red-600);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--red-600);
+  border-radius: 2px;
+}
+
+/* Nav Actions */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.lang-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-body);
+  padding: 7px 12px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.lang-selector:hover {
+  border-color: var(--border-light);
+  background: #e2e8f0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+}
+
+.btn-outline-nav {
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  background: #ffffff;
+  color: var(--text-dark);
+  border: 1.5px solid var(--border-light);
+}
+
+.btn-outline-nav:hover {
+  border-color: var(--red-600);
+  color: var(--red-600);
+  background: var(--red-50);
+}
+
+.btn-primary-nav {
+  padding: 9px 20px;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, var(--red-500), var(--red-600));
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+}
+
+.btn-primary-nav:hover {
+  background: linear-gradient(135deg, var(--red-600), var(--red-700));
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.35);
+  transform: translateY(-1px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. ENTERPRISE HERO SECTION (FACTORIUM STYLE)
+   ───────────────────────────────────────────────────────────── */
+.hero-section {
+  position: relative;
+  background: linear-gradient(180deg, #090d16 0%, #111827 60%, #1e1b2e 100%);
+  color: var(--text-white);
+  padding: 85px 24px 75px;
+  text-align: center;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Subtle Industrial Blueprint Grid Pattern & Red Glow */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 50% 20%, rgba(239, 68, 68, 0.16) 0%, transparent 65%),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 36px 36px, 36px 36px;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  max-width: 1040px;
+  margin: 0 auto;
+  z-index: 10;
+}
+
+/* Hero Pill Badge */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  padding: 6px 18px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fecaca;
+  margin-bottom: 24px;
+  backdrop-filter: blur(8px);
+}
+
+.badge-shield {
+  font-size: 1rem;
+}
+
+/* Main Headline */
+.hero-title {
+  font-size: 2.85rem;
+  font-weight: 900;
+  line-height: 1.22;
+  letter-spacing: -0.8px;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.hero-title-highlight {
+  background: linear-gradient(135deg, #fca5a5 0%, #ef4444 50%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Subheadline */
+.hero-subtitle {
+  font-size: 1.12rem;
+  line-height: 1.65;
+  color: #cbd5e1;
+  max-width: 860px;
+  margin: 0 auto 36px;
+  font-weight: 400;
+}
+
+/* Dual CTA Buttons */
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 36px;
+  font-size: 1.06rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-red-lg);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-hero-primary:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  box-shadow: 0 18px 40px -4px rgba(220, 38, 38, 0.6);
+  transform: translateY(-2px);
+}
+
+.btn-hero-primary .btn-arrow {
+  font-size: 1.4rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.btn-hero-primary:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.btn-hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  font-size: 1.02rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.25s ease;
+}
+
+.btn-hero-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-2px);
+}
+
+/* Stats Counter Bar */
+.hero-stats-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px);
+  border-radius: var(--radius-lg);
+  padding: 24px 36px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.35);
+  margin-top: 10px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-number {
+  font-size: 2.15rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #94a3b8;
+  letter-spacing: 0.3px;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. MAIN CAD STUDIO WORKSPACE (CLEAN RED & WHITE THEME)
+   ───────────────────────────────────────────────────────────── */
+.studio-section {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 56px 24px 90px;
+}
+
+.studio-header {
+  text-align: center;
+  margin-bottom: 38px;
+}
+
+.section-tag {
+  color: var(--red-600);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--text-dark);
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+
+.section-desc {
+  font-size: 1.02rem;
+  color: var(--text-muted);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* Layout Grid */
+.studio-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.studio-col {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Universal Card Styling (White & Subtle Border) */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.step-badge {
+  background: linear-gradient(135deg, var(--red-500), var(--red-600));
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+  white-space: nowrap;
+}
+
+.step-header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: -0.2px;
+}
+
+.card-subtitle {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   STEP 1: DRAWING DROP ZONE & BLUEPRINT VIEWER
+   ───────────────────────────────────────────────────────────── */
+.drop-zone {
+  border: 2px dashed var(--red-300);
+  background: var(--red-50);
+  border-radius: var(--radius-md);
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+}
+
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: var(--red-600);
+  background: var(--red-100);
+  transform: scale(1.008);
+}
+
+.drop-icon-wrap {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--red-600);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15);
+}
+
+.drop-svg {
+  width: 24px;
+  height: 24px;
+}
+
+.drop-main-text {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.drop-sub-text {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* File Loaded Pill */
+.file-loaded-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  margin-bottom: 14px;
+}
+
+.file-info-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.file-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+}
+
+.file-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--accent-green-bg);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green-border);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.btn-text-action {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--red-600);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.btn-text-action:hover {
+  text-decoration: underline;
+}
+
+/* PDF Page Bar */
+.pdf-page-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  margin-bottom: 12px;
+}
+
+.btn-page {
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btn-page:hover {
+  background: #e2e8f0;
+}
+
+.page-indicator {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+/* Blueprint Viewport */
+.drawing-viewport-container {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-dark);
+}
+
+.drawing-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+}
+
+.viewport-title {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.toolbar-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-btn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: #334155;
+  color: #f1f5f9;
+  border: 1px solid #475569;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.icon-btn:hover {
+  background: #475569;
+  color: #ffffff;
+}
+
+.drawing-viewport {
+  height: 380px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+}
+
+.drawing-viewport:active {
+  cursor: grabbing;
+}
+
+.drawing-wrapper {
+  transform-origin: center center;
+  transition: transform 0.05s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawing-wrapper img, .drawing-wrapper canvas {
+  max-width: 90%;
+  max-height: 350px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  background: #ffffff;
+}
+
+/* Loading Overlay */
+.drawing-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #ffffff;
+  z-index: 20;
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 3.5px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--red-500);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.loading-desc {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  max-width: 320px;
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   STEP 2: 100% ACCURATE DIMENSION SPECIFICATIONS
+   ───────────────────────────────────────────────────────────── */
+.meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meta-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meta-input {
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.meta-input:focus {
+  border-color: var(--red-600);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.meta-val-badge {
+  background: var(--red-50);
+  border: 1.5px solid var(--red-200);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--red-600);
+  text-align: center;
+}
+
+/* Table */
+.table-wrapper {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.dim-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.dim-table thead {
+  background: var(--bg-subtle);
+  border-bottom: 1.5px solid var(--border-light);
+}
+
+.dim-table th {
+  padding: 10px 12px;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-align: left;
+  font-size: 0.82rem;
+}
+
+.dim-table tbody tr {
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color 0.1s ease;
+}
+
+.dim-table tbody tr:nth-child(even) {
+  background-color: #fafbfc;
+}
+
+.dim-table tbody tr:hover {
+  background-color: var(--red-50);
+}
+
+.dim-table td {
+  padding: 8px 12px;
+  color: var(--text-body);
+}
+
+.dim-input {
+  width: 100%;
+  max-width: 72px;
+  padding: 5px 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  outline: none;
+}
+
+.dim-input:focus {
+  border-color: var(--red-600);
+}
+
+/* Engineering Badges */
+.badge-feat {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  margin-right: 4px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+}
+
+.badge-feat-flats {
+  background: var(--red-50);
+  color: var(--red-600);
+  border: 1px solid var(--red-300);
+}
+
+.badge-feat-thread {
+  background: var(--accent-blue-bg);
+  color: var(--accent-blue);
+  border: 1px solid var(--accent-blue-border);
+}
+
+.badge-feat-tol {
+  background: var(--accent-green-bg);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green-border);
+}
+
+.badge-feat-chamfer {
+  background: var(--accent-amber-bg);
+  color: var(--accent-amber);
+  border: 1px solid var(--accent-amber-border);
+}
+
+/* Engineering Notes */
+.notes-box {
+  background: #f8fafc;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 22px;
+}
+
+.notes-title {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.notes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.note-chip {
+  font-size: 0.78rem;
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--text-body);
+}
+
+.note-chip b {
+  color: var(--red-600);
+}
+
+/* STEP 3: MAIN GENERATE CAD ACTION BUTTON */
+.action-cta-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.btn-generate-main {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 18px 28px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  box-shadow: var(--shadow-red);
+  transition: all 0.25s ease;
+}
+
+.btn-generate-main:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%);
+  box-shadow: var(--shadow-red-lg);
+  transform: translateY(-2px);
+}
+
+.btn-generate-main.generating {
+  animation: pulse-red 1.4s infinite;
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+  70% { box-shadow: 0 0 0 16px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.cta-subtext {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cta-subtext span {
+  color: var(--accent-green);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3D CAD VIEWPORT CARD
+   ───────────────────────────────────────────────────────────── */
+.viewport-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.viewport-title-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.viewport-main-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.live-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--accent-green);
+  background: var(--accent-green-bg);
+  border: 1px solid var(--accent-green-border);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.view-cube-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-subtle);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+.cube-btn {
+  font-size: 0.76rem;
+  font-weight: 700;
+  background: transparent;
+  color: var(--text-body);
+  border: none;
+  padding: 4px 9px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cube-btn:hover {
+  background: #ffffff;
+  color: var(--text-dark);
+}
+
+.cube-btn.active {
+  background: var(--red-600);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
+}
+
+.canvas-wrapper {
+  width: 100%;
+  height: 380px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  border-radius: var(--radius-md);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+#threeCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hud-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hud-bar b {
+  color: #ffffff;
+}
+
+.viewport-footer {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   STEP 4: DOWNLOAD HUB (4 DEDICATED RED & WHITE THEME CARDS)
+   ───────────────────────────────────────────────────────────── */
+.download-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.dl-card {
+  background: #ffffff;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+}
+
+.dl-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.dl-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.dl-card-icon {
+  font-size: 1.3rem;
+}
+
+.dl-card-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.5px;
+}
+
+.badge-red {
+  background: var(--red-50);
+  color: var(--red-600);
+  border: 1px solid var(--red-200);
+}
+
+.badge-green {
+  background: var(--accent-green-bg);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green-border);
+}
+
+.badge-amber {
+  background: var(--accent-amber-bg);
+  color: var(--accent-amber);
+  border: 1px solid var(--accent-amber-border);
+}
+
+.badge-blue {
+  background: var(--accent-blue-bg);
+  color: var(--accent-blue);
+  border: 1px solid var(--accent-blue-border);
+}
+
+.dl-card-content {
+  margin-bottom: 16px;
+}
+
+.dl-card-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.dl-card-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* Download Buttons */
+.btn-dl {
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ffffff;
+  transition: all 0.15s ease;
+}
+
+/* Card Specific Button Colors */
+.dl-card-sldprt {
+  border-color: var(--red-200);
+  background: linear-gradient(180deg, #ffffff 0%, var(--red-50) 100%);
+}
+.dl-card-sldprt:hover {
+  border-color: var(--red-600);
+}
+.btn-dl-sldprt {
+  background: linear-gradient(135deg, var(--red-500), var(--red-600));
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+}
+.btn-dl-sldprt:hover {
+  background: linear-gradient(135deg, var(--red-600), var(--red-700));
+}
+
+.dl-card-step {
+  border-color: var(--accent-green-border);
+  background: linear-gradient(180deg, #ffffff 0%, var(--accent-green-bg) 100%);
+}
+.dl-card-step:hover {
+  border-color: var(--accent-green);
+}
+.btn-dl-step {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+.btn-dl-step:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+}
+
+.dl-card-vba {
+  border-color: var(--accent-amber-border);
+  background: linear-gradient(180deg, #ffffff 0%, var(--accent-amber-bg) 100%);
+}
+.dl-card-vba:hover {
+  border-color: var(--accent-amber);
+}
+.btn-dl-vba {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+}
+.btn-dl-vba:hover {
+  background: linear-gradient(135deg, #d97706, #b45309);
+}
+
+.dl-card-btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-dl-sub {
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  background: #ffffff;
+  color: var(--text-dark);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-dl-sub:hover {
+  border-color: var(--accent-amber);
+  background: var(--accent-amber-bg);
+}
+
+.dl-card-stl {
+  border-color: var(--accent-blue-border);
+  background: linear-gradient(180deg, #ffffff 0%, var(--accent-blue-bg) 100%);
+}
+.dl-card-stl:hover {
+  border-color: var(--accent-blue);
+}
+.btn-dl-stl {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+.btn-dl-stl:hover {
+  background: linear-gradient(135deg, #0369a1, #075985);
+}
+
+/* Feature Tree Accordion */
+.tree-preview-box {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.tree-preview-header {
+  padding: 12px 16px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  background: var(--bg-subtle);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+}
+
+.tree-preview-header::-webkit-details-marker {
+  display: none;
+}
+
+.tree-preview-arrow {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.tree-preview-box[open] .tree-preview-arrow {
+  transform: rotate(180deg);
+}
+
+.sw-tree-body {
+  padding: 14px 18px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tree-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-body);
+  cursor: default;
+}
+
+.tree-node.root {
+  font-weight: 800;
+  color: var(--red-600);
+}
+
+.tree-divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 4px 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. MODALS (VBA CODE & SOLIDWORKS 2018 GUIDE)
+   ───────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-box {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  animation: modal-pop 0.2s ease-out;
+}
+
+.modal-box-wide {
+  max-width: 820px;
+}
+
+@keyframes modal-pop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-icon-red {
+  font-size: 1.25rem;
+}
+
+.modal-title {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.modal-close:hover {
+  background: var(--bg-subtle);
+  color: var(--text-dark);
+}
+
+.modal-content {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.modal-desc {
+  font-size: 0.88rem;
+  color: var(--text-body);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.vba-code-block {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  font-family: Consolas, Monaco, "Courier New", monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  max-height: 380px;
+  overflow-y: auto;
+  user-select: text;
+}
+
+.guide-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.guide-card {
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.guide-card-icon {
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+}
+
+.guide-card h4 {
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.guide-card p {
+  font-size: 0.84rem;
+  color: var(--text-body);
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+.guide-card code {
+  background: var(--red-50);
+  color: var(--red-600);
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-subtle);
+}
+
+.btn-secondary {
+  padding: 9px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  background: #ffffff;
+  color: var(--text-dark);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #f1f5f9;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. TOAST NOTIFICATION
+   ───────────────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--text-dark);
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  z-index: 3000;
+  transform: translateY(120px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-left: 4px solid var(--red-500);
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6. RESPONSIVE BREAKPOINTS
+   ───────────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────
+   PART TYPE SELECTOR & REFRESH BUTTONS
+   ───────────────────────────────────────────────────────────── */
+.card-header-step2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-refresh-step2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: var(--red-50);
+  color: var(--red-600);
+  border: 1.5px solid var(--red-300);
+  border-radius: var(--radius-full);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.1);
+}
+
+.btn-refresh-step2:hover {
+  background: var(--red-600);
+  color: #ffffff;
+  border-color: var(--red-600);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-refresh-act {
+  background: linear-gradient(135deg, var(--red-500), var(--red-600)) !important;
+  color: #ffffff !important;
+  border-color: var(--red-400) !important;
+  font-weight: 700 !important;
+}
+
+.btn-refresh-act:hover {
+  background: linear-gradient(135deg, var(--red-600), var(--red-700)) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
+
+.file-pill-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.part-type-selector-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.type-selector-label {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.type-selector-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-type-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  background: #ffffff;
+  color: var(--text-body);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-type-tab:hover {
+  border-color: var(--red-300);
+  color: var(--red-600);
+}
+
+.btn-type-tab.active {
+  background: var(--red-600);
+  color: #ffffff;
+  border-color: var(--red-600);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+}
+
+.tab-icon {
+  font-size: 1rem;
+}
+
+/* Dim Table for Plate */
+.dim-input-wide {
+  max-width: 140px;
+}
+
+.badge-feat-pocket {
+  background: var(--accent-amber-bg);
+  color: var(--accent-amber);
+  border: 1px solid var(--accent-amber-border);
+}
+
+.badge-feat-hole {
+  background: var(--accent-blue-bg);
+  color: var(--accent-blue);
+  border: 1px solid var(--accent-blue-border);
+}
+
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+  .hero-stats-grid {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .stat-divider {
+    width: 80%;
+    height: 1px;
+  }
+  .nav-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-title {
+    font-size: 1.85rem;
+  }
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btn-hero-primary, .btn-hero-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+  .download-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .meta-grid {
+    grid-template-columns: 1fr;
+  }
+}

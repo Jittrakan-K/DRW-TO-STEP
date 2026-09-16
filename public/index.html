@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOLIDWORKS 3D CAD Studio - ระบบแปลงแบบ 2D Drawing เป็น STEP AP203 &amp; SLDPRT อัตโนมัติ</title>
+
+<!-- PDF.js via CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<!-- Three.js via CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ═════════════════════════════════════════════════════════════
+     1. TOP NAVIGATION BAR (WHITE & CLEAN THEME)
+     ═════════════════════════════════════════════════════════════ -->
+<header class="top-nav">
+  <div class="nav-container">
+    <!-- Brand Logo -->
+    <a href="#" class="brand">
+      <div class="brand-logo-icon">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
+          <path d="M4 8L16 2L28 8V24L16 30L4 24V8Z" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M16 2V30M4 8L28 24M28 8L4 24" stroke="#dc2626" stroke-width="1.8" stroke-opacity="0.85"/>
+          <circle cx="16" cy="16" r="3.5" fill="#ef4444"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">ORBRAY<span class="brand-highlight">CAD</span></span>
+        <span class="brand-tag">3D STUDIO</span>
+      </div>
+    </a>
+
+    <!-- Center Navigation Menu -->
+    <nav class="nav-menu">
+      <a href="#heroSection" class="nav-link active">หน้าแรก</a>
+      <a href="#studioSection" class="nav-link">แนบแบบ Drawing</a>
+      <a href="#cardStep2" class="nav-link">สเปกมิติ 100%</a>
+      <a href="#viewportCard" class="nav-link">โมเดล 3D</a>
+      <a href="#downloadHub" class="nav-link">ดาวน์โหลด CAD</a>
+      <a href="javascript:void(0)" onclick="openHelpModal()" class="nav-link">คู่มือ SolidWorks</a>
+    </nav>
+
+    <!-- Right Header Actions -->
+    <div class="nav-actions">
+      <div class="lang-selector" title="เลือกภาษา">
+        <span class="lang-icon">🌐</span>
+        <span class="lang-text">TH ไทย</span>
+        <span class="lang-arrow">▾</span>
+      </div>
+      <button class="btn btn-outline-nav" onclick="openHelpModal()">
+        <span>คู่มือใช้งาน</span>
+      </button>
+      <button class="btn btn-primary-nav" onclick="scrollToStudio()">
+        <span>เริ่มใช้งานฟรี</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═════════════════════════════════════════════════════════════
+     2. ENTERPRISE HERO SECTION (FACTORIUM STYLE)
+     ═════════════════════════════════════════════════════════════ -->
+<section class="hero-section" id="heroSection">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    
+    <!-- Top Pill Badge -->
+    <div class="hero-badge">
+      <span class="badge-shield">🛡️</span>
+      <span class="badge-text">สนับสนุนมาตรฐานสากล ISO 10303-21 • รองรับ SOLIDWORKS 2018+</span>
+    </div>
+
+    <!-- Main Headline -->
+    <h1 class="hero-title">
+      แปลงแบบ 2D Drawing สู่ 3D STEP &amp; SLDPRT<br>
+      <span class="hero-title-highlight">แม่นยำตรงตามแบบ 100%</span> ที่วิศวกรเลือกใช้
+    </h1>
+
+    <!-- Subheadline -->
+    <p class="hero-subtitle">
+      ระบบวิเคราะห์แบบ Drawing อัตโนมัติ สกัดขนาดเพลา เส้นผ่านศูนย์กลาง ความยาว เกลียว M12 และปาดเหลี่ยมประแจ 9.5×9.5 mm<br>
+      แปลงเป็นไฟล์ STEP AP203 และ Native SLDPRT พร้อมเปิดใช้งานใน SOLIDWORKS 2018 ได้ทันทีในคลิกเดียว
+    </p>
+
+    <!-- Hero CTA Buttons -->
+    <div class="hero-cta-group">
+      <button class="btn btn-hero-primary" onclick="scrollToStudio()">
+        <span>เริ่มสร้างไฟล์ 3D อัตโนมัติ</span>
+        <span class="btn-arrow">›</span>
+      </button>
+      <button class="btn btn-hero-secondary" onclick="loadSampleDrawing()">
+        <span class="btn-icon">📄</span>
+        <span>แบบเพลา AA-14 (SUS303)</span>
+      </button>
+      <button class="btn btn-hero-secondary" onclick="loadSampleJigDrawing()">
+        <span class="btn-icon">🔲</span>
+        <span>แบบจิ๊ก JIG-MOT097 (Acrylic)</span>
+      </button>
+    </div>
+
+    <!-- Stats Counter Bar -->
+    <div class="hero-stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">ความแม่นยำขนาดมิติ (Dimension Accuracy)</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-number">ISO 10303-21</div>
+        <div class="stat-label">มาตรฐานสากล STEP AP203 B-Rep</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-number">SOLIDWORKS</div>
+        <div class="stat-label">รองรับเวอร์ชัน 2018 ถึง 2026+</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═════════════════════════════════════════════════════════════
+     3. MAIN CAD STUDIO WORKSPACE (CLEAN RED & WHITE THEME)
+     ═════════════════════════════════════════════════════════════ -->
+<section class="studio-section" id="studioSection">
+  <div class="studio-header">
+    <div class="section-tag">AUTOMATED 3D CAD STUDIO</div>
+    <h2 class="section-title">สตูดิโอแปลงแบบ Drawing วิศวกรรมเป็น 3D อัตโนมัติ</h2>
+    <p class="section-desc">แนบไฟล์ Drawing เพื่อให้ระบบสกัดขนาดมิติ คำนวณโครงสร้าง 3D B-Rep และสร้างไฟล์สำหรับ SolidWorks 2018 โดยอัตโนมัติ</p>
+  </div>
+
+  <div class="studio-layout">
+
+    <!-- ─────────────────────────────────────────────────────────
+         LEFT COLUMN: DRAWING & DIMENSIONS
+         ───────────────────────────────────────────────────────── -->
+    <div class="studio-col studio-col-left">
+
+      <!-- STEP 1: ATTACH DRAWING -->
+      <div class="card step-card" id="cardStep1">
+        <div class="card-header">
+          <div class="step-badge">ขั้นตอนที่ 1</div>
+          <div class="step-header-text">
+            <h3 class="card-title">แนบแบบวิศวกรรม 2D (Drawing Blueprint)</h3>
+            <p class="card-subtitle">รองรับไฟล์ PDF (หลายหน้า), PNG, JPG, JPEG ความละเอียดสูง</p>
+          </div>
+        </div>
+
+        <!-- Drag & Drop Zone -->
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+          <div class="drop-icon-wrap">
+            <svg class="drop-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+            </svg>
+          </div>
+          <div class="drop-main-text">คลิกหรือลากไฟล์แบบ Drawing มาวางที่นี่</div>
+          <div class="drop-sub-text">รองรับ PDF หลายหน้า และรูปภาพแบบสแกนความละเอียดสูง</div>
+          <input type="file" id="fileInput" accept=".pdf,image/*" style="display:none" onchange="handleFileInput(event)">
+        </div>
+
+        <!-- File Loaded Info Pill -->
+        <div class="file-loaded-pill" id="fileLoadedPill" style="display:none">
+          <div class="file-info-left">
+            <span class="file-icon">📄</span>
+            <span class="file-name" id="txtLoadedFileName">IDA-007 DRAWING.pdf</span>
+            <span class="file-badge" id="txtFileBadge">วิเคราะห์ตรง 100%</span>
+          </div>
+          <div class="file-pill-actions">
+            <button class="btn-text-action" onclick="reAnalyzeCurrentDrawing()" title="วิเคราะห์ขนาดจากแบบใหม่">🔄 รีเฟรชแบบ</button>
+            <button class="btn-text-action" onclick="document.getElementById('fileInput').click()">เปลี่ยนไฟล์</button>
+          </div>
+        </div>
+
+        <!-- Multi-page Navigation Bar for PDF -->
+        <div class="pdf-page-bar" id="pdfPageBar" style="display:none">
+          <button class="btn-page" onclick="prevPdfPage()">◀ หน้าก่อนหน้า</button>
+          <span class="page-indicator" id="pdfPageNum">หน้า 1 / 1</span>
+          <button class="btn-page" onclick="nextPdfPage()">หน้าถัดไป ▶</button>
+        </div>
+
+        <!-- Blueprint Viewport -->
+        <div class="drawing-viewport-container">
+          <div class="drawing-toolbar">
+            <span class="viewport-title">🔎 พรีวิวแบบ Drawing (Blueprint Viewer)</span>
+            <div class="toolbar-btns">
+              <button class="icon-btn btn-refresh-act" onclick="reAnalyzeCurrentDrawing()" title="รีเฟรชและวิเคราะห์แบบ Drawing อีกครั้ง">🔄 วิเคราะห์แบบใหม่</button>
+              <button class="icon-btn" onclick="zoomDrawing(0.2)" title="ซูมเข้า">🔍+</button>
+              <button class="icon-btn" onclick="zoomDrawing(-0.2)" title="ซูมออก">🔍-</button>
+              <button class="icon-btn" onclick="rotateDrawing()" title="หมุนภาพ 90 องศา">🔄 หมุน 90°</button>
+              <button class="icon-btn" onclick="resetDrawingTransform()" title="รีเซ็ตมุมมอง">🎯 รีเซ็ต</button>
+            </div>
+          </div>
+
+          <div class="drawing-viewport" id="drawingViewport">
+            <div class="drawing-wrapper" id="drawingWrapper">
+              <img id="drawingImage" alt="Drawing Blueprint">
+              <canvas id="pdfCanvas" style="display:none"></canvas>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div class="drawing-loading" id="drawingLoading">
+              <div class="spinner"></div>
+              <div class="loading-title">กำลังวิเคราะห์แบบ Drawing ละเอียด 100%...</div>
+              <div class="loading-desc" id="loadingDescText">ตรวจจับขนาดมิติ, ฟีเจอร์การขึ้นรูป, วัสดุ, และตำแหน่งรูเจาะตามแบบ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: VERIFIED 100% DIMENSIONS -->
+      <div class="card step-card" id="cardStep2">
+        <div class="card-header card-header-step2">
+          <div class="card-header-left">
+            <div class="step-badge">ขั้นตอนที่ 2</div>
+            <div class="step-header-text">
+              <h3 class="card-title">ขนาดและสเปกมิติที่วิเคราะห์ได้ (ตรงตามแบบ 100%)</h3>
+              <p class="card-subtitle" id="step2Subtitle">สกัดค่ามิติครบถ้วน พร้อมพิกัดความเผื่อและฟีเจอร์วิศวกรรม</p>
+            </div>
+          </div>
+          <button class="btn-refresh-step2" onclick="reAnalyzeCurrentDrawing()" title="รีเฟรชสเปกตามแบบ Drawing 100%">
+            <span>🔄 รีเฟรชสเปกตามแบบ</span>
+          </button>
+        </div>
+
+        <!-- Part Type Selector Tabs -->
+        <div class="part-type-selector-bar">
+          <span class="type-selector-label">ประเภทชิ้นงาน:</span>
+          <div class="type-selector-btns">
+            <button class="btn-type-tab" id="tabTypeShaft" onclick="switchPartType('shaft')">
+              <span class="tab-icon">🔩</span>
+              <span>เพลากลึง / ทรงกระบอก (Shaft)</span>
+            </button>
+            <button class="btn-type-tab" id="tabTypePlate" onclick="switchPartType('plate')">
+              <span class="tab-icon">🔲</span>
+              <span>แผ่นเพลท / จิ๊กถาด (Plate / Jig)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Metadata Bar -->
+        <div class="meta-grid">
+          <div class="meta-item">
+            <label class="meta-label">ชื่อชิ้นงาน (Part No.)</label>
+            <input type="text" class="meta-input" id="inpPartName" value="AA-14" oninput="markNeedsUpdate()">
+          </div>
+          <div class="meta-item">
+            <label class="meta-label">วัสดุตามแบบ (Material)</label>
+            <select class="meta-input" id="inpMaterial" onchange="markNeedsUpdate()">
+              <option value="SUS303" selected>SUS303 (Stainless Steel)</option>
+              <option value="Black Acrylic">Black Acrylic (อะคริลิกสีดำ)</option>
+              <option value="SUS304">SUS304 Stainless Steel</option>
+              <option value="SUS316L">SUS316L Stainless Steel</option>
+              <option value="S45C">S45C Carbon Steel</option>
+              <option value="SKD11">SKD11 Tool Steel</option>
+              <option value="Al 6061-T6">Al 6061-T6 Aluminum</option>
+              <option value="Brass C3604">Brass C3604</option>
+              <option value="POM / Delrin">POM / Delrin (วิศวกรรมพลาสติก)</option>
+            </select>
+          </div>
+          <div class="meta-item">
+            <label class="meta-label" id="valTotalLenLabel">ความยาวรวม (Total Length)</label>
+            <div class="meta-val-badge" id="valTotalLen">59.0 mm</div>
+          </div>
+        </div>
+
+        <!-- Dynamic Table Container for Shaft or Plate -->
+        <div class="table-wrapper" id="dimTableWrapper">
+          <table class="dim-table" id="dimTable">
+            <thead id="dimTableHead">
+              <!-- Rendered by JS -->
+            </thead>
+            <tbody id="dimTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Engineering Notes Callout -->
+        <div class="notes-box">
+          <div class="notes-title">📌 ข้อกำหนดทางวิศวกรรมตามแบบ Drawing (Engineering Notes)</div>
+          <div class="notes-grid" id="notesGrid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- STEP 3: THE MAIN ACTION BUTTON (PROMINENT RED GRADIENT) -->
+        <div class="action-cta-box">
+          <button class="btn-generate-main" id="btnGenerateCad" onclick="triggerCadGeneration()">
+            <span class="btn-icon">⚡</span>
+            <span class="btn-main-text">สร้างไฟล์ STEP AP203 และ SLDPRT อัตโนมัติ</span>
+            <span class="btn-arrow">›</span>
+          </button>
+          <div class="cta-subtext">
+            <span>✔️ รองรับเปิดใน SOLIDWORKS 2018 ได้ทันที</span> • 
+            <span>✔️ มาตรฐานสากล ISO 10303-21 B-Rep Manifold Solid</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────
+         RIGHT COLUMN: 3D CAD VIEWPORT & DOWNLOAD HUB
+         ───────────────────────────────────────────────────────── -->
+    <div class="studio-col studio-col-right">
+
+      <!-- 3D VIEWPORT CARD -->
+      <div class="card viewport-card" id="viewportCard">
+        <div class="viewport-header">
+          <div class="viewport-title-left">
+            <span class="viewport-main-title">🔷 โมเดล 3D SolidWorks (B-Rep Solid Model)</span>
+            <span class="live-badge" id="viewportBadge">● 3D LIVE PREVIEW</span>
+          </div>
+          <div class="view-cube-controls">
+            <button class="cube-btn active" onclick="setView('iso')">Isometric</button>
+            <button class="cube-btn" onclick="setView('front')">Front</button>
+            <button class="cube-btn" onclick="setView('top')">Top</button>
+            <button class="cube-btn" onclick="setView('right')">Right</button>
+            <button class="cube-btn" onclick="toggleWireframe()">Wireframe</button>
+            <button class="cube-btn" onclick="toggleGrid()">Grid</button>
+          </div>
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="threeCanvas"></canvas>
+          <div class="hud-bar" id="hudStats">
+            <span>Part: <b id="hudPart">AA-14</b></span> |
+            <span>Material: <b id="hudMaterial">SUS303</b></span> |
+            <span>ความยาว: <b id="hudLen">59.0 mm</b></span> |
+            <span>Ø สูงสุด: <b id="hudMaxDia">Ø18.0 mm</b></span>
+          </div>
+        </div>
+
+        <div class="viewport-footer">
+          <span>🖱️ ควบคุม 3D: หมุน (คลิกซ้ายค้างแล้วลาก) | ซูม (หมุน Scroll Wheel) | เลื่อน (Shift + คลิกซ้ายลาก)</span>
+        </div>
+      </div>
+
+      <!-- STEP 4: DOWNLOAD HUB (4 DEDICATED CARDS IN RED & WHITE THEME) -->
+      <div class="card download-hub-card" id="downloadHub">
+        <div class="card-header">
+          <div class="step-badge">ขั้นตอนที่ 4</div>
+          <div class="step-header-text">
+            <h3 class="card-title">ศูนย์ดาวน์โหลดไฟล์ 3D CAD (Download Hub)</h3>
+            <p class="card-subtitle">เลือกไฟล์ที่ต้องการนำไปเปิดใช้งานใน SOLIDWORKS 2018 หรือส่งเข้าเครื่องจักร CNC</p>
+          </div>
+        </div>
+
+        <div class="download-cards-grid">
+
+          <!-- CARD 1: SOLIDWORKS 2018 SLDPRT -->
+          <div class="dl-card dl-card-sldprt">
+            <div class="dl-card-header">
+              <span class="dl-card-icon">🔴</span>
+              <span class="dl-card-badge badge-red">SOLIDWORKS 2018+</span>
+            </div>
+            <div class="dl-card-content">
+              <div class="dl-card-title">SOLIDWORKS Part (.sldprt)</div>
+              <div class="dl-card-desc">ไฟล์ Native Part ของแท้พร้อม Feature Tree เปิดใน SOLIDWORKS 2018 ได้ทันที</div>
+            </div>
+            <button class="btn-dl btn-dl-sldprt" onclick="downloadSldprtFile()">
+              <span>📥 ดาวน์โหลด .sldprt</span>
+            </button>
+          </div>
+
+          <!-- CARD 2: STEP AP203 -->
+          <div class="dl-card dl-card-step">
+            <div class="dl-card-header">
+              <span class="dl-card-icon">📦</span>
+              <span class="dl-card-badge badge-green">ISO 10303-21</span>
+            </div>
+            <div class="dl-card-content">
+              <div class="dl-card-title">STEP AP203 (.step)</div>
+              <div class="dl-card-desc">ไฟล์มาตรฐานสากล B-Rep Solid Body พร้อมรอยปาดเหลี่ยมประแจและแชมเฟอร์ตรง 100%</div>
+            </div>
+            <button class="btn-dl btn-dl-step" onclick="downloadStepAP203()">
+              <span>📦 ดาวน์โหลด STEP AP203</span>
+            </button>
+          </div>
+
+          <!-- CARD 3: SOLIDWORKS MACRO VBA -->
+          <div class="dl-card dl-card-vba">
+            <div class="dl-card-header">
+              <span class="dl-card-icon">⚡</span>
+              <span class="dl-card-badge badge-amber">EDITABLE FEATURE TREE</span>
+            </div>
+            <div class="dl-card-content">
+              <div class="dl-card-title">SolidWorks Macro (.vba)</div>
+              <div class="dl-card-desc">สร้าง Feature Tree (Sketch, Revolve, Cut, Chamfer) สามารถแก้ไข Dimension ได้ 100%</div>
+            </div>
+            <div class="dl-card-btn-group">
+              <button class="btn-dl btn-dl-vba" onclick="downloadMacroFile()">
+                <span>📥 ดาวน์โหลด .vba</span>
+              </button>
+              <button class="btn-dl-sub" onclick="openMacroModal()" title="ดูและคัดลอกโค้ด VBA">
+                <span>📋 ดูโค้ด</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- CARD 4: STL 3D MESH -->
+          <div class="dl-card dl-card-stl">
+            <div class="dl-card-header">
+              <span class="dl-card-icon">🖨️</span>
+              <span class="dl-card-badge badge-blue">3D PRINT &amp; MESH</span>
+            </div>
+            <div class="dl-card-content">
+              <div class="dl-card-title">3D STL Mesh (.stl)</div>
+              <div class="dl-card-desc">ไฟล์ Mesh 3D ความละเอียดสูงสำหรับ 3D Printing, Slicer และ Web 3D Viewer</div>
+            </div>
+            <button class="btn-dl btn-dl-stl" onclick="downloadSTL()">
+              <span>🖨️ ดาวน์โหลด STL</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Feature Tree Accordion -->
+        <details class="tree-preview-box">
+          <summary class="tree-preview-header">
+            <span>🌳 โครงสร้าง Feature Tree ที่จะถูกสร้างใน SolidWorks</span>
+            <span class="tree-preview-arrow">▼</span>
+          </summary>
+          <div class="sw-tree-body">
+            <div class="tree-node root">
+              <span class="tree-icon">📁</span>
+              <span class="tree-title" id="treePartTitle">AA-14.sldprt</span>
+            </div>
+            <div class="tree-node" style="padding-left:18px">
+              <span class="tree-icon">🧱</span>
+              <span class="tree-title" id="treeMatTitle">Material &lt;SUS303&gt;</span>
+            </div>
+            <div class="tree-node" style="padding-left:18px" onclick="setView('front')">
+              <span class="tree-icon" style="color:#ef4444">📐</span>
+              <span class="tree-title">Front Plane (XY)</span>
+            </div>
+            <div class="tree-node" style="padding-left:18px" onclick="setView('top')">
+              <span class="tree-icon" style="color:#10b981">📐</span>
+              <span class="tree-title">Top Plane (XZ)</span>
+            </div>
+            <div class="tree-node" style="padding-left:18px" onclick="setView('right')">
+              <span class="tree-icon" style="color:#0ea5e9">📐</span>
+              <span class="tree-title">Right Plane (YZ)</span>
+            </div>
+            <div class="tree-node" style="padding-left:18px">
+              <span class="tree-icon">📍</span>
+              <span class="tree-title">Origin</span>
+            </div>
+            <div class="tree-divider"></div>
+            <div id="dynamicTreeFeatures">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </details>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ═════════════════════════════════════════════════════════════
+     4. MODAL: SOLIDWORKS MACRO CODE
+     ═════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="macroModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title-wrap">
+        <span class="modal-icon-red">⚡</span>
+        <span class="modal-title">SolidWorks Parametric Feature Tree Macro (.vba)</span>
+      </div>
+      <button class="modal-close" onclick="closeMacroModal()">✕</button>
+    </div>
+    <div class="modal-content">
+      <p class="modal-desc">
+        โค้ด VBA ด้านล่างนี้จะสั่งให้ SolidWorks 2018+ วาด Sketch และสร้าง Revolve, Cut-Flats, Chamfer พร้อม Feature Tree ที่สามารถ <b>Edit Feature</b> และ <b>Edit Sketch</b> ได้อย่างอิสระ
+      </p>
+      <pre class="vba-code-block" id="vbaCodeBox">' กำลังโหลดโค้ด Macro...</pre>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="copyMacroVBA()">📋 คัดลอกโค้ด (Copy)</button>
+      <button class="btn btn-primary-nav" onclick="downloadMacroFile()">📥 ดาวน์โหลด Macro (.vba)</button>
+      <button class="btn btn-secondary" onclick="closeMacroModal()">ปิดหน้าต่าง</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     5. MODAL: SOLIDWORKS 2018 GUIDE
+     ═════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="helpModal">
+  <div class="modal-box modal-box-wide">
+    <div class="modal-head">
+      <div class="modal-title-wrap">
+        <span class="modal-icon-red">🚀</span>
+        <span class="modal-title">คู่มือการเปิดไฟล์ใน SOLIDWORKS 2018</span>
+      </div>
+      <button class="modal-close" onclick="closeHelpModal()">✕</button>
+    </div>
+    <div class="modal-content">
+      <div class="guide-grid">
+
+        <div class="guide-card">
+          <div class="guide-card-icon">🔴</div>
+          <h4>วิธีที่ 1: เปิดไฟล์ .sldprt โดยตรง (เร็วที่สุด)</h4>
+          <p>1. กดปุ่ม <b>"ดาวน์โหลด .sldprt"</b> จากหน้าเว็บ</p>
+          <p>2. ดับเบิลคลิกไฟล์ <code>AA-14.sldprt</code> เพื่อเปิดใน SOLIDWORKS 2018 ได้ทันที</p>
+          <p>3. ไฟล์จะแสดงเป็นชิ้นงาน Part ดั้งเดิมของ SolidWorks พร้อมใช้งานต่อใน Assembly หรือ Drawing 2D</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">📦</div>
+          <h4>วิธีที่ 2: เปิดไฟล์ STEP AP203 (.step)</h4>
+          <p>1. ในโปรแกรม SolidWorks ไปที่เมนู <b>File &gt; Open...</b></p>
+          <p>2. ที่ช่องประเภทไฟล์เลือก <b>STEP AP203/214 (*.step, *.stp)</b></p>
+          <p>3. เลือกไฟล์ <code>AA-14_AP203.step</code></p>
+          <p>4. SolidWorks จะ Import โครงสร้าง 3D B-Rep Manifold Solid เข้ามาเป็นเนื้อตัน (Solid Body) ทันที</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">⚡</div>
+          <h4>วิธีที่ 3: รัน SolidWorks Macro (.vba) เพื่อสร้าง Feature Tree</h4>
+          <p>1. ใน SolidWorks เปิดเอกสารชิ้นงานใหม่ (<b>File &gt; New &gt; Part</b>)</p>
+          <p>2. ไปที่เมนู <b>Tools &gt; Macro &gt; Run...</b> (หรือกดคีย์ลัด <code>Alt+F11</code>)</p>
+          <p>3. เลือกไฟล์ <code>AA-14_SolidWorks_Macro.vba</code></p>
+          <p>4. โปรแกรมจะวาด Sketch จริง และสร้าง Revolve, Cut-Extrude, Chamfer ใน Feature Tree ให้อัตโนมัติ สามารถเข้าไปแก้ไขตัวเลขขนาดเดิมได้ 100%!</p>
+        </div>
+
+        <div class="guide-card">
+          <div class="guide-card-icon">⚙️</div>
+          <h4>วิธีที่ 4: สั่งสร้างผ่านไฟล์สคริปต์อัตโนมัติในเครื่อง</h4>
+          <p>หากคุณเปิดระบบในโฟลเดอร์โครงการ สามารถดับเบิลคลิกไฟล์ <code>generate_sldprt.bat</code> เพื่อสั่งให้ SolidWorks 2018 ในเครื่องเปิดขึ้นมาสร้างและเซฟไฟล์ <code>.sldprt</code> ให้โดยอัตโนมัติ</p>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary-nav" onclick="closeHelpModal()">เข้าใจแล้ว เริ่มใช้งาน</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast">
+  <span class="toast-icon">ℹ️</span>
+  <span id="toastMsg">แจ้งเตือน</span>
+</div>
+
+<!-- IN-MEMORY CAD ASSETS & CLIENT ENGINE -->
+<script src="cad_assets.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
