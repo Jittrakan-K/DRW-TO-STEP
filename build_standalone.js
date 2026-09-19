@@ -18,5 +18,8 @@ html = html.replace(/<script src="cad_assets\.js"><\/script>\s*<script src="app\
 const outPath = path.join(__dirname, 'solidworks_studio.html');
 fs.writeFileSync(outPath, html, 'utf8');
 
-console.log('Successfully generated solidworks_studio.html at:', outPath);
+const rootIndexPath = path.join(__dirname, 'index.html');
+fs.writeFileSync(rootIndexPath, html, 'utf8');
+
+console.log('Successfully generated solidworks_studio.html and index.html');
 console.log('Total file size:', fs.statSync(outPath).size, 'bytes');
