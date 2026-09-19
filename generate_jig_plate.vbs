@@ -18,10 +18,31 @@ If swApp Is Nothing Then
     WScript.Quit 1
 End If
 
-templatePath = swApp.GetUserPreferenceStringValue(16)
-If templatePath = "" Or Not fso.FileExists(templatePath) Then
-    templatePath = "C:\ProgramData\SolidWorks\SOLIDWORKS 2018\templates\Part.prtdot"
+swApp.Visible = True
+
+Dim candidates, cand
+candidates = Array( _
+    "C:\ProgramData\SolidWorks\SOLIDWORKS 2024\templates\Part.PRTDOT", _
+    "C:\ProgramData\SolidWorks\SOLIDWORKS 2023\templates\Part.PRTDOT", _
+    "C:\ProgramData\SolidWorks\SOLIDWORKS 2022\templates\Part.PRTDOT", _
+    "C:\ProgramData\SolidWorks\SOLIDWORKS 2021\templates\Part.PRTDOT", _
+    "C:\ProgramData\SolidWorks\SOLIDWORKS 2020\templates\Part.PRTDOT", _
+    "C:\ProgramData\SolidWorks\SOLIDWORKS 2019\templates\Part.PRTDOT", _
+    "C:\ProgramData\SolidWorks\SOLIDWORKS 2018\templates\Part.prtdot" _
+)
+templatePath = ""
+For Each cand In candidates
+    If fso.FileExists(cand) Then
+        templatePath = cand
+        Exit For
+    End If
+Next
+
+If templatePath = "" Then
+    templatePath = swApp.GetUserPreferenceStringValue(16)
 End If
+
+WScript.Echo "Using Template: " & templatePath
 
 Set swModel = swApp.NewDocument(templatePath, 0, 0, 0)
 If swModel Is Nothing Then
@@ -52,7 +73,7 @@ Else
     WScript.Echo "1. Boss-Extrude1 SUCCESS"
 End If
 
-' 2. Select Top Plane & Cut 100 Pockets (10x10 Matrix, ?11 depth 3mm)
+' 2. Select Top Plane & Cut 100 Pockets (10x10 Matrix, Ø11 depth 3mm)
 swModel.ClearSelection2 True
 swModelDocExt.SelectByID2 "Top Plane", "PLANE", 0, 0, 0, False, 0, Nothing, 0
 swSketchMgr.InsertSketch True
@@ -66,17 +87,17 @@ For r = 0 To 9
 Next
 swModel.ClearSelection2 True
 
-' Sd=True, FlipSideToCut=False, Dir=True (Cut down into -Y), Type1=0 (Blind), Depth1=0.003
-Set featPockets = swFeatMgr.FeatureCut4(True, False, True, 0, 0, 0.003, 0.01, False, False, False, False, 0.0, 0.0, False, False, False, False, False, True, True, True, True, False, 0, 0, False, False)
+' Sd=True, FlipSideToCut=False, Dir=False (Cut down into -Y), Type1=0 (Blind), Depth1=0.003
+Set featPockets = swFeatMgr.FeatureCut4(True, False, False, 0, 0, 0.003, 0.01, False, False, False, False, 0.0, 0.0, False, False, False, False, False, True, True, True, True, False, 0, 0, False, False)
 If featPockets Is Nothing Then
     WScript.Echo "2. Cut-Extrude1 Pockets FAILED"
     WScript.Quit 4
 Else
-    featPockets.Name = "Cut-Extrude1 (100 Pockets ?11 Depth 3mm)"
+    featPockets.Name = "Cut-Extrude1 (100 Pockets Ø11 Depth 3mm)"
     WScript.Echo "2. Cut-Extrude1 Pockets SUCCESS"
 End If
 
-' 3. Select Top Plane & Cut 4 Corner Holes ?4.5 Thru All
+' 3. Select Top Plane & Cut 4 Corner Holes Ø4.5 Thru All
 swModel.ClearSelection2 True
 swModelDocExt.SelectByID2 "Top Plane", "PLANE", 0, 0, 0, False, 0, Nothing, 0
 swSketchMgr.InsertSketch True
@@ -86,17 +107,17 @@ swSketchMgr.CreateCircleByRadius 0.005, 0.140, 0.0, 0.00225
 swSketchMgr.CreateCircleByRadius 0.140, 0.140, 0.0, 0.00225
 swModel.ClearSelection2 True
 
-' Sd=True, FlipSideToCut=False, Dir=True, Type1=1 (Thru All)
-Set featHoles = swFeatMgr.FeatureCut4(True, False, True, 1, 0, 0.02, 0.01, False, False, False, False, 0.0, 0.0, False, False, False, False, False, True, True, True, True, False, 0, 0, False, False)
+' Sd=True, FlipSideToCut=False, Dir=False, Type1=1 (Thru All)
+Set featHoles = swFeatMgr.FeatureCut4(True, False, False, 1, 0, 0.02, 0.01, False, False, False, False, 0.0, 0.0, False, False, False, False, False, True, True, True, True, False, 0, 0, False, False)
 If featHoles Is Nothing Then
     WScript.Echo "3. Cut-Extrude2 Holes FAILED"
     WScript.Quit 5
 Else
-    featHoles.Name = "Cut-Extrude2 (4 Corner Holes ?4.5 Thru)"
+    featHoles.Name = "Cut-Extrude2 (4 Corner Holes Ø4.5 Thru)"
     WScript.Echo "3. Cut-Extrude2 Holes SUCCESS"
 End If
 
-' 4. Select Top Plane & Cut 4 Counterbores ?8 depth 4mm
+' 4. Select Top Plane & Cut 4 Counterbores Ø8 depth 4mm
 swModel.ClearSelection2 True
 swModelDocExt.SelectByID2 "Top Plane", "PLANE", 0, 0, 0, False, 0, Nothing, 0
 swSketchMgr.InsertSketch True
@@ -106,13 +127,13 @@ swSketchMgr.CreateCircleByRadius 0.005, 0.140, 0.0, 0.004
 swSketchMgr.CreateCircleByRadius 0.140, 0.140, 0.0, 0.004
 swModel.ClearSelection2 True
 
-' Sd=True, FlipSideToCut=False, Dir=True, Type1=0 (Blind), Depth1=0.004
-Set featCbores = swFeatMgr.FeatureCut4(True, False, True, 0, 0, 0.004, 0.01, False, False, False, False, 0.0, 0.0, False, False, False, False, False, True, True, True, True, False, 0, 0, False, False)
+' Sd=True, FlipSideToCut=False, Dir=False, Type1=0 (Blind), Depth1=0.004
+Set featCbores = swFeatMgr.FeatureCut4(True, False, False, 0, 0, 0.004, 0.01, False, False, False, False, 0.0, 0.0, False, False, False, False, False, True, True, True, True, False, 0, 0, False, False)
 If featCbores Is Nothing Then
     WScript.Echo "4. Cut-Extrude3 Counterbores FAILED"
     WScript.Quit 6
 Else
-    featCbores.Name = "Cut-Extrude3 (4 Counterbores ?8 Depth 4mm)"
+    featCbores.Name = "Cut-Extrude3 (4 Counterbores Ø8 Depth 4mm)"
     WScript.Echo "4. Cut-Extrude3 Counterbores SUCCESS"
 End If
 
@@ -133,6 +154,12 @@ WScript.Echo "Saved SLDPRT: " & sldprtPath & ", size: " & fso.GetFile(sldprtPath
 ' Save as STEP
 swModelDocExt.SaveAs stepPath, 0, 1, Nothing, errs, warns
 WScript.Echo "Saved STEP: " & stepPath & ", size: " & fso.GetFile(stepPath).Size
+
+' Save snapshot image
+Dim imgPath
+imgPath = scriptDir & "\outputs\jig_plate_solidworks_verified.png"
+swModel.SaveAs3 imgPath, 0, 2
+WScript.Echo "Saved snapshot: " & imgPath & " (Exists: " & fso.FileExists(imgPath) & ")"
 
 ' Copy to public and static
 fso.CopyFile sldprtPath, scriptDir & "\public\JIG-MOT097Z001-0.sldprt", True
