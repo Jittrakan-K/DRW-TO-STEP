@@ -3,8 +3,10 @@ On Error Resume Next
 Dim swApp, swModel, swPart, swFeat
 Dim sldprtPath, fso
 
+Dim scriptDir
 Set fso = CreateObject("Scripting.FileSystemObject")
-sldprtPath = "D:\jittrakan.katprasat\OneDrive - Orbray (Thailand)\ORBRAY 20523\20523 JUNIOR\WORK\PROJECT DOCUMENT\AUTOMATION BUILD 3D SOLIDWORKS\outputs\JIG-MOT097Z001-0.sldprt"
+scriptDir = fso.GetParentFolderName(WScript.ScriptFullName)
+sldprtPath = scriptDir & "\outputs\JIG-MOT097Z001-0.sldprt"
 
 Set swApp = CreateObject("SldWorks.Application")
 If swApp Is Nothing Then
@@ -54,7 +56,7 @@ WScript.Echo "Rebuild completed."
 
 ' Save image snapshot
 Dim imgPath
-imgPath = "D:\jittrakan.katprasat\OneDrive - Orbray (Thailand)\ORBRAY 20523\20523 JUNIOR\WORK\PROJECT DOCUMENT\AUTOMATION BUILD 3D SOLIDWORKS\outputs\jig_plate_solidworks_verified.png"
+imgPath = scriptDir & "\outputs\jig_plate_solidworks_verified.png"
 swModel.ShowNamedView2 "*Isometric", 7
 swModel.ViewZoomtofit2
 swModel.SaveAs3 imgPath, 0, 2

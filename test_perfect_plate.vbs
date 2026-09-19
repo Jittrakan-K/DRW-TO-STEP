@@ -2,12 +2,13 @@
 On Error Resume Next
 
 Dim fso, swApp, swModel, swPart, swFeatMgr, swSketchMgr, swModelDocExt, swFeat
-Dim boolstatus, sldprtPath, stepPath, templatePath
+Dim boolstatus, sldprtPath, stepPath, templatePath, scriptDir
 Dim nErrors, nWarnings
 
 Set fso = CreateObject("Scripting.FileSystemObject")
-sldprtPath = "D:\jittrakan.katprasat\OneDrive - Orbray (Thailand)\ORBRAY 20523\20523 JUNIOR\WORK\PROJECT DOCUMENT\AUTOMATION BUILD 3D SOLIDWORKS\outputs\JIG-MOT097Z001-0.sldprt"
-stepPath = "D:\jittrakan.katprasat\OneDrive - Orbray (Thailand)\ORBRAY 20523\20523 JUNIOR\WORK\PROJECT DOCUMENT\AUTOMATION BUILD 3D SOLIDWORKS\outputs\JIG-MOT097Z001-0_AP203.step"
+scriptDir = fso.GetParentFolderName(WScript.ScriptFullName)
+sldprtPath = scriptDir & "\outputs\JIG-MOT097Z001-0.sldprt"
+stepPath = scriptDir & "\outputs\JIG-MOT097Z001-0_AP203.step"
 
 Set swApp = CreateObject("SldWorks.Application")
 If swApp Is Nothing Then
@@ -15,10 +16,30 @@ If swApp Is Nothing Then
     WScript.Quit 1
 End If
 
-templatePath = "C:\ProgramData\SolidWorks\SOLIDWORKS 2018\templates\Part.prtdot"
-If Not fso.FileExists(templatePath) Then
-    templatePath = swApp.GetUserPreferenceStringValue(16)
+templatePath = swApp.GetUserPreferenceStringValue(16)
+If templatePath = "" Or Not fso.FileExists(templatePath) Then
+    templatePath = swApp.GetDocumentTemplate(1, "", 0, 0, 0)
 End If
+If templatePath = "" Or Not fso.FileExists(templatePath) Then
+    Dim candidates, cand
+    candidates = Array( _
+        "C:\ProgramData\SolidWorks\SOLIDWORKS 2024\templates\Part.PRTDOT", _
+        "C:\ProgramData\SolidWorks\SOLIDWORKS 2023\templates\Part.PRTDOT", _
+        "C:\ProgramData\SolidWorks\SOLIDWORKS 2022\templates\Part.PRTDOT", _
+        "C:\ProgramData\SolidWorks\SOLIDWORKS 2021\templates\Part.PRTDOT", _
+        "C:\ProgramData\SolidWorks\SOLIDWORKS 2020\templates\Part.PRTDOT", _
+        "C:\ProgramData\SolidWorks\SOLIDWORKS 2019\templates\Part.PRTDOT", _
+        "C:\ProgramData\SolidWorks\SOLIDWORKS 2018\templates\Part.prtdot" _
+    )
+    For Each cand In candidates
+        If fso.FileExists(cand) Then
+            templatePath = cand
+            Exit For
+        End If
+    Next
+End If
+
+WScript.Echo "Using Template: " & templatePath
 
 Set swModel = swApp.NewDocument(templatePath, 0, 0, 0)
 If swModel Is Nothing Then
@@ -26,10 +47,13 @@ If swModel Is Nothing Then
     WScript.Quit 2
 End If
 
+swApp.Visible = True
+
 Set swPart = swModel
 Set swFeatMgr = swModel.FeatureManager
 Set swSketchMgr = swModel.SketchManager
 Set swModelDocExt = swModel.Extension
+
 
 ' 1. Select Top Plane & Create 145 x 145 mm Base Block
 swModel.ClearSelection2 True
@@ -130,6 +154,18 @@ WScript.Echo "Saved SLDPRT: " & sldprtPath & ", size: " & fso.GetFile(sldprtPath
 ' Also export STEP AP203
 swModel.SaveAs3 stepPath, 0, 2
 WScript.Echo "Saved STEP: " & stepPath & ", size: " & fso.GetFile(stepPath).Size
+
+' Save snapshot image
+Dim imgPath
+imgPath = scriptDir & "\outputs\jig_plate_sw_snap.png"
+swModel.SaveAs3 imgPath, 0, 2
+WScript.Echo "Saved snapshot: " & imgPath & " (Exists: " & fso.FileExists(imgPath) & ")"
+
+' Copy to public and static
+fso.CopyFile sldprtPath, scriptDir & "\public\JIG-MOT097Z001-0.sldprt", True
+fso.CopyFile sldprtPath, scriptDir & "\static\JIG-MOT097Z001-0.sldprt", True
+fso.CopyFile stepPath, scriptDir & "\public\JIG-MOT097Z001-0_AP203.step", True
+fso.CopyFile stepPath, scriptDir & "\static\JIG-MOT097Z001-0_AP203.step", True
 
 swApp.CloseDoc swModel.GetTitle
 WScript.Quit 0

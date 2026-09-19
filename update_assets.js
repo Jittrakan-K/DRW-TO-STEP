@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 const sldprtBuf = fs.readFileSync(path.join(__dirname, 'outputs', 'JIG-MOT097Z001-0.sldprt'));
@@ -22,13 +22,14 @@ if (sldprtRegex.test(content)) {
     console.error('Could not find JIG_SLDPRT_BASE64 regex match!');
 }
 
-// Replace JIG_STEP_BASE64
+// Replace or append JIG_STEP_BASE64
 const stepRegex = /const JIG_STEP_BASE64 = "[^"]*";/;
 if (stepRegex.test(content)) {
     content = content.replace(stepRegex, `const JIG_STEP_BASE64 = "${stepB64}";`);
     console.log('Replaced JIG_STEP_BASE64 in public/cad_assets.js');
 } else {
-    console.error('Could not find JIG_STEP_BASE64 regex match!');
+    content += `\nconst JIG_STEP_BASE64 = "${stepB64}";\n`;
+    console.log('Appended JIG_STEP_BASE64 to public/cad_assets.js');
 }
 
 fs.writeFileSync(cadAssetsPath, content, 'utf8');
