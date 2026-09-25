@@ -1,558 +1,1143 @@
 /* ==============================================================================
-   SWITCHING STEP - CIRKIT DESIGNER THEME STYLESHEET
-   Clean Web CAD IDE & Engineering Portal • 2 Primary Colors: Red (#dc2626) & White (#ffffff)
-   Authentic SaaS Card Elevations • Responsive Layout • ISO 10303-21 Standard
+   NASA AEROSPACE CAD STUDIO — OFFICIAL DESIGN SYSTEM (HDS / USWDS)
+   Theme: Carbon Deep Space Black, NASA Meatball Red & Blue, High-Tech Telemetry
+   Fonts: Public Sans, Inter, DM Mono (Monospace Engineering Telemetry)
    ============================================================================== */
 
 :root {
-  /* 2 Primary Colors */
-  --red: #dc2626;
-  --red-hover: #b91c1c;
-  --red-light: #fee2e2;
-  --red-subtle: #fef2f2;
-  --red-border: #fca5a5;
-  --white: #ffffff;
-
-  /* SaaS Surface & Backgrounds */
-  --bg-page: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-input: #f8fafc;
-  --bg-table-stripe: #fcfdfe;
-  --bg-tag: #f1f5f9;
-
-  /* Borders */
-  --border-default: #e2e8f0;
-  --border-card: #e2e8f0;
-  --border-subtle: #f1f5f9;
-  --border-focus: #dc2626;
-
-  /* Modern SaaS Typography */
-  --text-title: #0f172a;
-  --text-main: #1e293b;
-  --text-body: #334155;
+  /* NASA Color Palette */
+  --bg-space-black: #000000;
+  --bg-carbon-90: #07090e;
+  --bg-carbon-80: #0d1118;
+  --bg-carbon-70: #121722;
+  --bg-panel: #161c28;
+  --bg-panel-hover: #1e2535;
+  --bg-input: #0b0e15;
+  
+  --border-carbon: #242c3d;
+  --border-carbon-light: #323d54;
+  --border-accent-blue: #1c67e3;
+  --border-accent-cyan: #288bff;
+  
+  /* NASA Iconic Accents */
+  --nasa-red: #f64137;
+  --nasa-red-hover: #d82b22;
+  --nasa-red-dark: #b60109;
+  --nasa-blue-meatball: #0b3d91;
+  --nasa-blue-electric: #1c67e3;
+  --nasa-cyan: #288bff;
+  --nasa-green-live: #22c55e;
+  --nasa-amber-warn: #f59e0b;
+  
+  /* High-Contrast Typography */
+  --spacesuit-white: #ffffff;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-telemetry: #94a3b8;
   --text-muted: #64748b;
-  --text-dim: #94a3b8;
-
-  /* Shadows & Radius */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-hover: 0 10px 25px -4px rgba(0, 0, 0, 0.08), 0 6px 10px -6px rgba(0, 0, 0, 0.04);
-  --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-card: 14px;
+  --text-dark: #0f172a;
+  
+  /* Typography Families */
+  --font-nasa-sans: 'Public Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'DM Mono', Consolas, 'Courier New', monospace;
+  
+  /* Transitions & Shadows */
+  --shadow-panel: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+  --shadow-glow-red: 0 0 25px rgba(246, 65, 55, 0.45);
+  --shadow-glow-blue: 0 0 25px rgba(40, 139, 255, 0.35);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
   --radius-pill: 9999px;
+  --transition-fast: 0.18s ease-in-out;
+  --transition-normal: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   GLOBAL RESETS & TYPOGRAPHY (ALL ENGLISH IN UPPERCASE)
+   GLOBAL RESETS & TYPOGRAPHY
    ───────────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  text-transform: uppercase;
 }
 
-html, body {
-  width: 100%;
-  min-height: 100vh;
-  background-color: var(--bg-page);
-  color: var(--text-body);
-  font-family: "Inter", "Sarabun", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+html {
+  font-size: 15px;
+  scroll-behavior: smooth;
+  background-color: var(--bg-space-black);
+  color: var(--spacesuit-white);
+}
+
+body {
+  font-family: var(--font-nasa-sans);
+  background-color: var(--bg-space-black);
+  color: var(--text-primary);
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
-  text-transform: uppercase;
+  overflow-x: hidden;
+  position: relative;
 }
 
-input, select, textarea, button, table {
-  font-family: inherit;
-  text-transform: uppercase;
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
 }
-
-input::placeholder, textarea::placeholder {
-  text-transform: uppercase;
+::-webkit-scrollbar-track {
+  background: var(--bg-carbon-90);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-carbon);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-accent-cyan);
 }
 
 a {
   color: inherit;
   text-decoration: none;
-  text-transform: uppercase;
 }
 
 button {
+  font-family: inherit;
   cursor: pointer;
   border: none;
   background: none;
+  color: inherit;
+}
+
+input, select, textarea {
   font-family: inherit;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  color: inherit;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   1. CIRKIT-STYLE TOP NAVIGATION BAR
+   1. NASA GLOBAL HEADER BAR
    ───────────────────────────────────────────────────────────── */
-.top-nav-bar {
+.nasa-global-header {
   position: sticky;
   top: 0;
+  z-index: 1000;
+  background-color: rgba(7, 9, 14, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-carbon);
+  padding: 0 20px;
   height: 56px;
-  background: var(--white);
-  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  transition: all var(--transition-fast);
+}
+
+.nasa-header-container {
+  max-width: 1800px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px;
-  z-index: 1000;
-  box-shadow: var(--shadow-sm);
+  gap: 16px;
 }
 
-.nav-brand-section {
+/* Header Left: Logo Brand & Explore */
+.nasa-header-left {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-
-.brand-logo-badge {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--red-subtle);
-  border: 1px solid var(--red-border);
-  border-radius: 8px;
-}
-
-.brand-text-wrap {
-  display: flex;
-  flex-direction: column;
-}
-
-.brand-title {
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: -0.2px;
-  color: var(--text-title);
-  line-height: 1.15;
-}
-
-.accent-red {
-  color: var(--red);
-}
-
-.brand-byline {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0.2px;
-}
-
-/* Center Search Pill (Cirkit Designer Style) */
-.nav-search-section {
-  display: flex;
-  align-items: center;
-}
-
-.search-pill-box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-page);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-pill);
-  padding: 0 14px;
-  height: 36px;
-  width: 340px;
-  transition: all 0.2s ease;
-}
-
-.search-pill-box:focus-within {
-  background: var(--white);
-  border-color: var(--red-border);
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
-  width: 380px;
-}
-
-.search-svg {
-  color: var(--text-dim);
+  gap: 14px;
   flex-shrink: 0;
 }
 
-.search-pill-box input {
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 12.5px;
-  color: var(--text-main);
-  width: 100%;
-}
-
-.search-pill-box input::placeholder {
-  color: var(--text-dim);
-}
-
-.search-kbd-chip {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: var(--white);
-  border: 1px solid var(--border-default);
-  border-radius: 4px;
-  padding: 1px 6px;
-  flex-shrink: 0;
-}
-
-/* Right Navigation Actions */
-.nav-actions-section {
-  display: flex;
+.nasa-brand-link {
+  display: inline-flex;
   align-items: center;
   gap: 10px;
-}
-
-.iso-standard-pill {
-  font-size: 11px;
-  font-weight: 700;
-  background: var(--red-subtle);
-  color: var(--red);
-  padding: 5px 12px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--red-border);
-  letter-spacing: 0.3px;
-}
-
-.nav-btn-ghost {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border-radius: var(--radius-pill);
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--text-body);
-  border: 1px solid transparent;
-}
-
-.nav-btn-ghost:hover {
-  background: var(--bg-page);
-  border-color: var(--border-default);
-  color: var(--red);
-}
-
-.nav-btn-primary {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
-  background: var(--red);
-  color: var(--white);
-  border-radius: var(--radius-pill);
-  font-size: 12.5px;
-  font-weight: 700;
-  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
-}
-
-.nav-btn-primary:hover {
-  background: var(--red-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
-}
-
-/* ─────────────────────────────────────────────────────────────
-   PORTAL CONTAINER
-   ───────────────────────────────────────────────────────────── */
-.portal-container {
-  width: 100%;
-  max-width: 1680px;
-  margin: 0 auto;
-  padding: 0;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   SECTION 1: HERO ACTION DECK ("Start a new CAD project")
-   ───────────────────────────────────────────────────────────── */
-.hero-deck-section {
-  padding: 32px 32px 16px 32px;
-}
-
-.hero-deck-header {
-  margin-bottom: 20px;
-}
-
-.hero-deck-title {
-  font-size: 23px;
-  font-weight: 800;
-  color: var(--text-title);
-  letter-spacing: -0.3px;
-  margin-bottom: 6px;
-}
-
-.hero-deck-subtitle {
-  font-size: 13.5px;
-  color: var(--text-muted);
-}
-
-.hero-action-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-
-.hero-card {
-  background: var(--white);
-  border: 1px solid var(--border-card);
-  border-radius: var(--radius-card);
-  padding: 22px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow-card);
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-}
-
-.hero-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-hover);
-  border-color: var(--red-border);
-}
-
-/* Card 1 Highlighted */
-.hero-card.card-primary-highlight {
-  border: 1.5px dashed var(--red);
-  background: linear-gradient(180deg, #ffffff 0%, #fffbfb 100%);
-  box-shadow: 0 2px 10px rgba(220, 38, 38, 0.06);
-}
-
-.hero-card.card-primary-highlight:hover {
-  border-style: solid;
-  border-color: var(--red);
-  box-shadow: 0 10px 25px -4px rgba(220, 38, 38, 0.15);
-}
-
-.hero-card-icon-box {
-  width: 46px;
-  height: 46px;
-  border-radius: var(--radius-md);
-  background: var(--bg-page);
-  border: 1px solid var(--border-default);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-body);
-  margin-bottom: 16px;
-}
-
-.hero-card-icon-box.icon-red {
-  background: var(--red-subtle);
-  border-color: var(--red-border);
-  color: var(--red);
-}
-
-.hero-card:hover .hero-card-icon-box {
-  background: var(--red-subtle);
-  border-color: var(--red-border);
-  color: var(--red);
-}
-
-.hero-card-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.hero-card-badge-pill {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--red);
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
-}
-
-.hero-card-name {
-  font-size: 15.5px;
-  font-weight: 700;
-  color: var(--text-title);
-  margin-bottom: 8px;
-  line-height: 1.25;
-}
-
-.hero-card-desc {
-  font-size: 12.5px;
-  color: var(--text-muted);
-  line-height: 1.45;
-  margin-bottom: 18px;
-  flex-grow: 1;
-}
-
-.hero-card-action-link {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--red);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.hero-card-action-link .arrow {
-  transition: transform 0.15s ease;
-}
-
-.hero-card:hover .hero-card-action-link .arrow {
-  transform: translateX(4px);
-}
-
-/* ─────────────────────────────────────────────────────────────
-   SECTION 2: LIVE CAD STUDIO WORKSPACE
-   ───────────────────────────────────────────────────────────── */
-.studio-section-wrapper {
-  padding: 24px 32px;
-  scroll-margin-top: 60px;
-}
-
-.studio-section-heading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
-
-.section-title {
-  font-size: 21px;
-  font-weight: 800;
-  color: var(--text-title);
-  letter-spacing: -0.3px;
-  margin-bottom: 4px;
-}
-
-.section-subtitle {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.studio-status-tag {
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--red);
-  background: var(--red-subtle);
-  border: 1px solid var(--red-border);
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
-}
-
-/* Studio 3-Column Grid */
-.studio-cards-grid {
-  display: grid;
-  grid-template-columns: 31% 34% 35%;
-  gap: 16px;
-  min-height: 660px;
-}
-
-.saas-card {
-  background: var(--white);
-  border: 1px solid var(--border-card);
-  border-radius: var(--radius-card);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: var(--shadow-card);
-}
-
-.saas-card-header {
-  height: 50px;
-  padding: 0 16px;
-  border-bottom: 1px solid var(--border-default);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--white);
-  flex-shrink: 0;
-}
-
-.card-title-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.card-icon {
-  font-size: 16px;
-}
-
-.card-heading-text {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--text-title);
-}
-
-.card-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-pill-primary {
-  background: var(--red);
-  color: var(--white);
-  padding: 5px 12px;
-  border-radius: var(--radius-pill);
-  font-size: 11.5px;
-  font-weight: 700;
-}
-
-.btn-pill-primary:hover {
-  background: var(--red-hover);
-}
-
-.btn-pill-outline {
-  background: var(--white);
-  color: var(--text-body);
-  border: 1px solid var(--border-default);
-  padding: 5px 12px;
-  border-radius: var(--radius-pill);
-  font-size: 11.5px;
-  font-weight: 600;
-}
-
-.btn-pill-outline:hover {
-  border-color: var(--red);
-  color: var(--red);
-  background: var(--red-subtle);
-}
-
-/* ─────────────────────────────────────────────────────────────
-   COLUMN 1: BLUEPRINT VIEWER & INTERACTION
-   ───────────────────────────────────────────────────────────── */
-.saas-file-status-bar {
-  padding: 7px 14px;
-  background: var(--bg-page);
-  border-bottom: 1px solid var(--border-default);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 11.5px;
-  flex-shrink: 0;
-  gap: 8px;
-}
-
-.file-name-text {
-  font-weight: 600;
-  color: var(--text-body);
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-decoration: none;
   white-space: nowrap;
 }
 
-.file-status-badge {
-  font-size: 10px;
+.nasa-meatball-insignia {
+  display: flex;
+  align-items: center;
+  filter: drop-shadow(0 2px 8px rgba(11, 61, 145, 0.45));
+  transition: transform var(--transition-fast);
+}
+.nasa-brand-link:hover .nasa-meatball-insignia {
+  transform: scale(1.05);
+}
+
+.nasa-brand-text-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.nasa-brand-name {
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--spacesuit-white);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.nasa-brand-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--nasa-cyan);
+  background: rgba(40, 139, 255, 0.12);
+  border: 1px solid rgba(40, 139, 255, 0.3);
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.nasa-explore-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-carbon);
+  color: var(--spacesuit-white);
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+.nasa-explore-trigger:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border-accent-cyan);
+  color: var(--spacesuit-white);
+}
+
+.nasa-explore-arrow {
+  transition: transform var(--transition-fast);
+}
+.nasa-explore-trigger:hover .nasa-explore-arrow {
+  transform: translateY(2px);
+}
+
+/* Header Center: Navigation Tabs (TAPs) */
+.nasa-header-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.nasa-nav-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(18, 23, 34, 0.6);
+  padding: 3px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nasa-nav-item {
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 6px 11px;
+  border-radius: 4px;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  line-height: 1;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.nasa-nav-item:hover {
+  color: var(--spacesuit-white);
+  background: rgba(255, 255, 255, 0.08);
+}
+.nasa-nav-item.highlight-red {
+  color: var(--nasa-red);
+}
+.nasa-nav-item.highlight-red:hover {
+  background: rgba(246, 65, 55, 0.14);
+  color: #ff6b62;
+}
+
+.pulse-indicator-red {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nasa-red);
+  box-shadow: 0 0 8px var(--nasa-red);
+  animation: pulse-ring 1.8s infinite;
+  flex-shrink: 0;
+}
+
+.api-key-status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #94a3b8;
+  margin-left: 2px;
+  flex-shrink: 0;
+}
+
+/* Header Right: Telemetry Search, Live Badge, CTA */
+.nasa-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.nasa-search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  width: 180px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), width var(--transition-fast);
+}
+.nasa-search-bar:focus-within {
+  width: 210px;
+  border-color: var(--nasa-cyan);
+  box-shadow: 0 0 0 2px rgba(40, 139, 255, 0.2);
+}
+.nasa-search-icon {
+  color: var(--text-telemetry);
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+.nasa-search-bar input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.76rem;
+  color: var(--spacesuit-white);
+  width: 100%;
+}
+.nasa-search-bar input::placeholder {
   color: var(--text-muted);
-  background: var(--white);
-  border: 1px solid var(--border-default);
-  padding: 2px 8px;
+}
+.nasa-search-kbd {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  background: var(--bg-carbon-70);
+  border: 1px solid var(--border-carbon);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--text-telemetry);
+  white-space: nowrap;
+}
+
+.nasa-telemetry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--nasa-green-live);
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  padding: 4px 8px;
   border-radius: var(--radius-pill);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.nasa-pulse-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--nasa-green-live);
+  box-shadow: 0 0 6px var(--nasa-green-live);
+  animation: pulse-ring 1.8s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.nasa-btn-flight-deck {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--spacesuit-white);
+  color: var(--bg-space-black);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.nasa-btn-flight-deck:hover {
+  background: #f1f5f9;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. NASA MISSION TELEMETRY STATUS RIBBON
+   ───────────────────────────────────────────────────────────── */
+.nasa-mission-ribbon {
+  background: rgba(9, 13, 20, 0.96);
+  border-bottom: 1px solid rgba(40, 139, 255, 0.2);
+  padding: 6px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  backdrop-filter: blur(10px);
+}
+.nasa-ribbon-container {
+  max-width: 1840px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.ribbon-telemetry-items {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.ribbon-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.ribbon-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nasa-green-live);
+  box-shadow: 0 0 6px var(--nasa-green-live);
+  animation: pulse-ring 1.8s infinite;
+}
+.ribbon-label {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.ribbon-val {
+  color: var(--spacesuit-white);
+  font-weight: 700;
+}
+.ribbon-val.text-green {
+  color: var(--nasa-green-live);
+}
+.ribbon-sep {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.7rem;
+}
+.ribbon-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ribbon-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-carbon-light);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+.ribbon-chip-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--spacesuit-white);
+  border-color: var(--nasa-cyan);
+}
+.ribbon-chip-btn.highlight {
+  border-color: rgba(246, 65, 55, 0.45);
+  color: #ff857d;
+  background: rgba(246, 65, 55, 0.08);
+}
+.ribbon-chip-btn.highlight:hover {
+  background: rgba(246, 65, 55, 0.18);
+  color: var(--spacesuit-white);
+}
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 70px 24px 60px;
+  border-bottom: 1px solid var(--border-carbon);
+}
+
+.nasa-cosmos-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.nasa-stars-layer {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 120px 80px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 250px 140px, #a5b4fc, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 380px 260px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 520px 70px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 640px 190px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 780px 290px, #38bdf8, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 920px 90px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 1080px 210px, #ffffff, rgba(0,0,0,0)),
+    radial-gradient(1.5px 1.5px at 1240px 140px, #ffffff, rgba(0,0,0,0));
+  background-size: 1300px 360px;
+  opacity: 0.65;
+}
+.nasa-orbital-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(28, 103, 227, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28, 103, 227, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.nasa-radial-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 35%, rgba(11, 61, 145, 0.22) 0%, rgba(0, 0, 0, 0.88) 75%, #000000 100%);
+}
+
+.nasa-hero-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nasa-mission-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  background: rgba(18, 23, 34, 0.85);
+  border: 1px solid var(--border-carbon-light);
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 22px;
+  backdrop-filter: blur(8px);
+}
+.nasa-pill-flag {
+  color: var(--nasa-red);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.nasa-pill-divider {
+  color: var(--border-carbon-light);
+}
+.nasa-pill-status {
+  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+}
+
+.nasa-hero-headline {
+  font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--spacesuit-white);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.nasa-headline-highlight {
+  background: linear-gradient(135deg, #ffffff 40%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nasa-hero-description {
+  max-width: 820px;
+  font-size: clamp(0.95rem, 1.4vw, 1.12rem);
+  color: var(--text-secondary);
+  line-height: 1.68;
+  margin-bottom: 34px;
+}
+
+/* NASA Signature Buttons */
+.nasa-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 46px;
+}
+
+/* Authentic NASA button-primary (NASA Red pill with circle arrow) */
+.button-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px 8px 24px;
+  border-radius: var(--radius-pill);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--spacesuit-white);
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.button-primary.bg-nasa-red {
+  background-color: var(--nasa-red);
+}
+.button-primary.bg-nasa-red:hover {
+  background-color: var(--nasa-red-hover);
+  box-shadow: var(--shadow-glow-red);
+  transform: translateY(-1px);
+}
+.button-primary-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--spacesuit-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+.button-primary-circle svg {
+  width: 18px;
+  height: 18px;
+}
+.button-primary-circle svg path {
+  fill: var(--nasa-red);
+}
+.button-primary:hover .button-primary-circle {
+  transform: translateX(3px);
+}
+
+.button-secondary-spacesuit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border-radius: var(--radius-pill);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--spacesuit-white);
+  backdrop-filter: blur(8px);
+  transition: all var(--transition-fast);
+}
+.button-secondary-spacesuit:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--spacesuit-white);
+  transform: translateY(-1px);
+}
+
+.button-ghost-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 22px;
+  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--border-carbon-light);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+.button-ghost-outline:hover {
+  color: var(--spacesuit-white);
+  border-color: var(--nasa-cyan);
+}
+
+/* NASA Telemetry Ticker Strip */
+.nasa-telemetry-ticker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 16px 28px;
+  background: rgba(13, 17, 24, 0.8);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(10px);
+}
+.nasa-ticker-item {
+  text-align: left;
+}
+.ticker-label {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 500;
+  color: var(--text-telemetry);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.ticker-value {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--spacesuit-white);
+  letter-spacing: 0.05em;
+}
+.nasa-ticker-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--border-carbon);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. NASA FEATURED MISSIONS GRID (TOPIC CARDS)
+   ───────────────────────────────────────────────────────────── */
+.nasa-missions-grid-section {
+  padding: 50px 24px;
+  background: var(--bg-carbon-90);
+  border-bottom: 1px solid var(--border-carbon);
+}
+.nasa-grid-container {
+  max-width: 1720px;
+  margin: 0 auto;
+}
+
+.nasa-section-header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+.nasa-overline {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--nasa-cyan);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+.nasa-section-heading {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--spacesuit-white);
+  text-transform: uppercase;
+}
+.nasa-link-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nasa-cyan);
+  transition: color var(--transition-fast);
+}
+.nasa-link-more:hover {
+  color: #7dd3fc;
+}
+
+.nasa-topic-cards-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* NASA Topic Card Component */
+.hds-card-topic {
+  position: relative;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--transition-normal), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.hds-card-topic:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-accent-cyan);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(40, 139, 255, 0.2);
+}
+
+.hds-card-thumbnail {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+  background: #000;
+}
+.hds-card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease;
+}
+.hds-card-topic:hover .hds-card-img-placeholder {
+  transform: scale(1.08);
+}
+
+.mission-bg-ai {
+  background: radial-gradient(circle at 70% 30%, #38bdf8 0%, #0369a1 40%, #021a36 100%);
+}
+.mission-bg-radar {
+  background: radial-gradient(circle at 30% 40%, #10b981 0%, #065f46 50%, #022016 100%);
+}
+.mission-bg-step {
+  background: radial-gradient(circle at 60% 50%, #f64137 0%, #991b1b 50%, #1c0505 100%);
+}
+.mission-bg-vba {
+  background: radial-gradient(circle at 40% 40%, #8b5cf6 0%, #5b21b6 50%, #170733 100%);
+}
+
+.skrim-overlay-dark {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(22, 28, 40, 1) 0%, rgba(22, 28, 40, 0.4) 60%, transparent 100%);
+}
+
+.hds-card-content {
+  padding: 16px 20px 20px;
+  position: relative;
+}
+.hds-card-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--nasa-cyan);
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+.hds-card-title {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--spacesuit-white);
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.hds-card-desc {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.hds-card-arrow {
+  display: flex;
+  justify-content: flex-end;
+}
+.hds-card-arrow .button-primary-circle {
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-carbon-light);
+}
+.hds-card-arrow .button-primary-circle svg path {
+  fill: var(--spacesuit-white);
+}
+.hds-card-topic:hover .hds-card-arrow .button-primary-circle {
+  background: var(--nasa-red);
+  border-color: var(--nasa-red);
+  transform: translateX(4px);
+}
+.hds-card-topic:hover .hds-card-arrow .button-primary-circle svg path {
+  fill: #ffffff;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. NASA CAD FLIGHT DECK (GRAND 2-PANEL WORKBENCH)
+   ───────────────────────────────────────────────────────────── */
+.nasa-flight-deck-wrapper {
+  padding: 16px 20px 40px;
+  background: radial-gradient(circle at 50% 0%, rgba(11, 61, 145, 0.08) 0%, var(--bg-space-black) 70%);
+}
+
+.nasa-workbench-container {
+  max-width: 1840px;
+  margin: 0 auto;
+}
+
+/* 2-Panel Masterpiece Grid (Left Console 460px | Right 3D Studio 1fr) */
+.nasa-flight-deck-grid {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.nasa-command-console {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nasa-orbital-studio-col {
+  position: sticky;
+  top: 66px;
+}
+
+.sticky-studio-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-carbon-light);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), var(--shadow-panel);
+}
+
+.nasa-deck-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-carbon);
+}
+.deck-title-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.deck-indicator-line {
+  width: 4px;
+  height: 44px;
+  background: var(--nasa-red);
+  border-radius: 2px;
+  margin-top: 4px;
+}
+.nasa-deck-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--nasa-cyan);
+  letter-spacing: 0.14em;
+  display: block;
+  margin-bottom: 4px;
+}
+.nasa-deck-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--spacesuit-white);
+  line-height: 1.15;
+}
+.nasa-deck-sub {
+  font-size: 0.84rem;
+  color: var(--text-telemetry);
+  margin-top: 4px;
+}
+
+/* Unified NASA Panel Card */
+.nasa-panel-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+.nasa-panel-card:hover {
+  border-color: var(--border-carbon-light);
+}
+
+.nasa-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--bg-carbon-80);
+  border-bottom: 1px solid var(--border-carbon);
+}
+.panel-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.panel-icon {
+  font-size: 1.15rem;
+}
+.panel-heading-text {
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--spacesuit-white);
+}
+
+.panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nasa-btn-panel-primary {
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--nasa-red);
+  color: #fff;
+  padding: 5px 11px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.nasa-btn-panel-primary:hover {
+  background: var(--nasa-red-hover);
+}
+.nasa-btn-panel-ghost {
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: transparent;
+  border: 1px solid var(--border-carbon-light);
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+.nasa-btn-panel-ghost:hover {
+  border-color: var(--nasa-cyan);
+  color: var(--spacesuit-white);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MODULE 01: INGESTION DECK (RADAR BLUEPRINT & AI PROMPT)
+   ───────────────────────────────────────────────────────────── */
+.nasa-mode-tabs {
+  display: flex;
+  background: var(--bg-carbon-90);
+  border-bottom: 1px solid var(--border-carbon);
+  padding: 6px;
+  gap: 6px;
+}
+.nasa-mode-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-telemetry);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  transition: all var(--transition-fast);
+}
+.nasa-mode-tab-btn:hover {
+  color: var(--spacesuit-white);
+  background: rgba(255, 255, 255, 0.04);
+}
+.nasa-mode-tab-btn.active {
+  background: var(--bg-panel);
+  color: var(--spacesuit-white);
+  border: 1px solid var(--border-carbon-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.nasa-tab-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: var(--nasa-cyan);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+}
+
+.nasa-subpanel-wrap {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* File Status Strip */
+.nasa-file-status-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  gap: 10px;
+}
+.file-name-meta {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.telemetry-label-sm {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+.file-name-text {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--spacesuit-white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.file-status-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--text-telemetry);
+  border: 1px solid var(--border-carbon);
   white-space: nowrap;
 }
 
@@ -561,984 +1146,1261 @@ button {
   align-items: center;
   gap: 4px;
 }
-
 .pdf-pager-pills button {
-  padding: 2px 6px;
-  border: 1px solid var(--border-default);
-  border-radius: 4px;
-  background: var(--white);
-  font-size: 10px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-carbon);
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 0.75rem;
+}
+.pdf-pager-pills span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0 4px;
 }
 
-.blueprint-viewport-box {
-  flex: 1;
+/* Radar Blueprint Viewport Box */
+.nasa-radar-viewport {
   position: relative;
+  height: 480px;
+  background: #020306;
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
   overflow: hidden;
-  background: #fafafa;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 480px;
-  cursor: grab;
+}
+.nasa-radar-viewport.drag-over {
+  border-color: var(--nasa-cyan);
+  box-shadow: 0 0 20px rgba(40, 139, 255, 0.4);
 }
 
-.blueprint-viewport-box:active {
-  cursor: grabbing;
-}
-
-.floating-pill-toolbar {
+.nasa-floating-toolbar {
   position: absolute;
   top: 12px;
-  left: 12px;
+  right: 12px;
+  z-index: 50;
   display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(8px);
-  padding: 4px 8px;
+  gap: 6px;
+  background: rgba(11, 14, 21, 0.88);
+  border: 1px solid var(--border-carbon);
   border-radius: var(--radius-pill);
-  border: 1px solid var(--border-default);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  z-index: 20;
-}
-
-.tool-btn {
   padding: 4px 8px;
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 6px;
-  color: var(--text-body);
+  backdrop-filter: blur(8px);
+}
+.nasa-tool-btn {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+.nasa-tool-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
 }
 
-.tool-btn:hover {
-  background: var(--red-subtle);
-  color: var(--red);
-}
-
-/* Empty Blueprint Prompt (Dead-Center) */
-.empty-blueprint-prompt {
-  position: relative;
-  z-index: 20;
+/* Radar Reticle Target */
+.nasa-empty-radar-prompt {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  padding: 36px 24px;
+  padding: 24px;
   cursor: pointer;
-  border: 2px dashed var(--border-default);
-  border-radius: var(--radius-card);
-  background: var(--white);
-  margin: 20px;
-  max-width: 360px;
-  transition: all 0.2s ease;
-  user-select: none;
+  width: 100%;
 }
-
-.empty-blueprint-prompt:hover {
-  border-color: var(--red);
-  background: #fffcfc;
-  box-shadow: 0 8px 20px -4px rgba(220, 38, 38, 0.1);
-}
-
-.empty-prompt-icon {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: var(--red-subtle);
+.radar-target-reticle {
+  position: relative;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 14px;
-  pointer-events: none;
+  margin-bottom: 18px;
+}
+.radar-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(246, 65, 55, 0.35);
+}
+.radar-circle.circle-1 {
+  width: 86px;
+  height: 86px;
+  border-style: dashed;
+}
+.radar-circle.circle-2 {
+  width: 60px;
+  height: 60px;
+}
+.radar-crosshair {
+  position: absolute;
+  background: rgba(246, 65, 55, 0.3);
+}
+.crosshair-x {
+  width: 100%;
+  height: 1px;
+}
+.crosshair-y {
+  height: 100%;
+  width: 1px;
 }
 
-.empty-prompt-title {
-  font-size: 14.5px;
-  font-weight: 700;
-  color: var(--text-title);
+.radar-prompt-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--spacesuit-white);
   margin-bottom: 6px;
-  pointer-events: none;
 }
-
-.empty-prompt-sub {
-  font-size: 12px;
-  color: var(--text-muted);
+.radar-prompt-sub {
+  font-size: 0.82rem;
+  color: var(--text-telemetry);
+  max-width: 320px;
   line-height: 1.45;
   margin-bottom: 18px;
-  pointer-events: none;
 }
 
-.empty-prompt-btn {
-  background: var(--red);
-  color: var(--white);
-  padding: 8px 20px;
-  border-radius: var(--radius-pill);
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.2);
+.nasa-btn-browse-file {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  background: var(--spacesuit-white);
+  color: var(--bg-space-black);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
   cursor: pointer;
-  user-select: none;
-  pointer-events: auto; /* Native click enabled */
-  position: relative;
-  z-index: 25;
-  transition: all 0.15s ease;
+  transition: all var(--transition-fast);
+  margin-bottom: 20px;
+}
+.nasa-btn-browse-file:hover {
+  background: #cbd5e1;
 }
 
-.empty-prompt-btn:hover {
-  background: var(--red-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
-}
-
-.empty-prompt-features {
+.radar-specs-features {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  pointer-events: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-telemetry);
 }
 
 .drawing-image-wrapper {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform-origin: center center;
-  pointer-events: none;
-  z-index: 5;
+  overflow: hidden;
+  cursor: grab;
 }
-
-.drawing-image-wrapper img,
-.drawing-image-wrapper canvas {
-  max-width: 94%;
-  max-height: 94%;
+.drawing-image-wrapper:active {
+  cursor: grabbing;
+}
+.drawing-image-wrapper img, .drawing-image-wrapper canvas {
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--border-default);
-  background: #ffffff;
-  pointer-events: auto;
+  transition: transform 0.05s ease-out;
 }
 
-/* Loading Curtain */
 .drawing-loading-curtain {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(4px);
+  background: rgba(7, 9, 14, 0.92);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 50;
-  gap: 12px;
+  gap: 14px;
+  z-index: 100;
 }
-
-.loading-spinner-circle {
-  width: 38px;
-  height: 38px;
-  border: 3px solid var(--red-light);
-  border-top-color: var(--red);
+.nasa-loading-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(246, 65, 55, 0.2);
+  border-top-color: var(--nasa-red);
   border-radius: 50%;
-  animation: spin 0.75s linear infinite;
+  animation: spinner-spin 0.8s linear infinite;
+}
+.nasa-loading-text {
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  color: var(--spacesuit-white);
+  letter-spacing: 0.05em;
 }
 
-.loading-text-bold {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--red);
-}
-
-@keyframes spin {
+@keyframes spinner-spin {
   to { transform: rotate(360deg); }
 }
 
-/* ─────────────────────────────────────────────────────────────
-   COLUMN 2: SPECIFICATIONS & DIMENSION TABLE
-   ───────────────────────────────────────────────────────────── */
-.specs-meta-row {
-  padding: 12px 16px;
-  background: var(--bg-page);
-  border-bottom: 1px solid var(--border-default);
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-  flex-shrink: 0;
+/* AI Prompt Studio */
+.nasa-ai-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+.ai-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.status-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+  box-shadow: 0 0 6px #3b82f6;
+}
+.ai-status-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.nasa-btn-key-link {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--nasa-cyan);
+  border: 1px solid rgba(40, 139, 255, 0.3);
+  padding: 3px 8px;
+  border-radius: 3px;
+  transition: all var(--transition-fast);
+}
+.nasa-btn-key-link:hover {
+  background: rgba(40, 139, 255, 0.15);
+  border-color: var(--nasa-cyan);
 }
 
-.specs-input-field {
+.nasa-prompt-input-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.prompt-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nasa-input-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--spacesuit-white);
+}
+.nasa-lang-chip {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--text-telemetry);
+}
+
+.nasa-prompt-textarea {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-size: 0.9rem;
+  color: var(--spacesuit-white);
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 90px;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.nasa-prompt-textarea:focus {
+  border-color: var(--nasa-cyan);
+  box-shadow: 0 0 0 2px rgba(40, 139, 255, 0.25);
+}
+
+/* Reference Sketch Upload Zone */
+.ai-ref-image-zone {
+  border: 1px dashed var(--border-carbon-light);
+  border-radius: var(--radius-sm);
+  background: rgba(11, 14, 21, 0.6);
+  padding: 12px;
+  transition: all var(--transition-fast);
+}
+.ai-ref-image-zone.drag-over {
+  border-color: var(--nasa-cyan);
+  background: rgba(40, 139, 255, 0.08);
+}
+.ai-ref-drop-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+.ai-ref-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+.ai-ref-text-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.ai-ref-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--spacesuit-white);
+}
+.ai-ref-sub {
+  font-size: 0.72rem;
+  color: var(--text-telemetry);
+  line-height: 1.35;
+}
+.btn-browse-ref-img {
+  font-size: 0.74rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-carbon-light);
+  color: var(--spacesuit-white);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+.btn-browse-ref-img:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: #fff;
+}
+
+.ai-ref-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+.ai-ref-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--border-carbon);
+  cursor: pointer;
+}
+.ai-ref-meta {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+.ai-ref-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--nasa-green-live);
+}
+.ai-ref-filename {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--spacesuit-white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ai-ref-filesize {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-telemetry);
+}
+.btn-remove-ref-img {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  padding: 4px 8px;
+  border-radius: 3px;
+  transition: all var(--transition-fast);
+}
+.btn-remove-ref-img:hover {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: #f87171;
+}
+
+/* Quick Presets Row */
+.nasa-quick-presets-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.presets-caption {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-telemetry);
+  letter-spacing: 0.05em;
+}
+.presets-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.nasa-preset-pill {
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  color: var(--text-secondary);
+  padding: 4px 9px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all var(--transition-fast);
+}
+.nasa-preset-pill:hover {
+  border-color: var(--nasa-cyan);
+  color: var(--spacesuit-white);
+  background: rgba(40, 139, 255, 0.08);
+}
+
+.nasa-btn-generate-ai {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--nasa-red) 0%, #d82b22 100%);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 12px 18px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 14px rgba(246, 65, 55, 0.35);
+  transition: all var(--transition-fast);
+}
+.nasa-btn-generate-ai:hover {
+  box-shadow: var(--shadow-glow-red);
+  transform: translateY(-1px);
+}
+.nasa-btn-generate-ai.loading {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+.nasa-precision-callout {
+  display: flex;
+  gap: 10px;
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+.nasa-precision-callout .callout-icon {
+  font-size: 1.1rem;
+}
+.nasa-precision-callout .callout-text {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+.nasa-precision-callout .callout-text b {
+  color: #38bdf8;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MODULE 02: TELEMETRY & DIMENSIONS SPECIFICATIONS
+   ───────────────────────────────────────────────────────────── */
+.nasa-meta-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.1fr;
+  gap: 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+.nasa-meta-field {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-
-.specs-input-field label {
-  font-size: 10.5px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.specs-input-field input,
-.specs-input-field select {
-  height: 32px;
-  padding: 0 10px;
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-sm);
-  background: var(--white);
-  font-size: 12px;
+.meta-field-label {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
   font-weight: 600;
-  color: var(--text-title);
-  outline: none;
-  transition: border-color 0.15s ease;
+  color: var(--text-telemetry);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
-
-.specs-input-field input:focus,
-.specs-input-field select:focus {
-  border-color: var(--red);
-}
-
-.total-dim-badge {
-  height: 32px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  border: 1px solid var(--red-border);
-  background: var(--red-subtle);
-  color: var(--red);
+.nasa-input-meta, .nasa-select-meta {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-carbon);
   border-radius: var(--radius-sm);
-  font-size: 12px;
-  font-weight: 800;
+  padding: 6px 10px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--spacesuit-white);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+.nasa-input-meta:focus, .nasa-select-meta:focus {
+  border-color: var(--nasa-cyan);
+}
+.nasa-dim-display {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--nasa-cyan);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  white-space: nowrap;
 }
 
-/* Dimension Table */
-.dimension-table-container {
-  flex: 1;
-  overflow-y: auto;
-  max-height: 400px;
+/* Telemetry Table */
+.nasa-dim-table-container {
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  max-height: 380px;
+  background: var(--bg-input);
 }
-
-.saas-dim-table {
+.nasa-telemetry-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
   text-align: left;
+  font-size: 0.84rem;
 }
-
-.saas-dim-table thead {
+.nasa-telemetry-table th {
   position: sticky;
   top: 0;
-  background: #f1f5f9;
+  background: #0f1420;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-telemetry);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-carbon);
   z-index: 10;
 }
-
-.saas-dim-table th {
-  padding: 8px 12px;
-  font-size: 10.5px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  border-bottom: 2px solid var(--border-default);
-  letter-spacing: 0.3px;
-}
-
-.saas-dim-table td {
-  padding: 9px 12px;
-  border-bottom: 1px solid var(--border-subtle);
-  color: var(--text-body);
+.nasa-telemetry-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
   vertical-align: middle;
 }
-
-.saas-dim-table tbody tr:nth-child(even) {
-  background-color: var(--bg-table-stripe);
-}
-
-.saas-dim-table tbody tr:hover {
-  background-color: var(--red-subtle);
+.nasa-telemetry-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .empty-table-placeholder {
   text-align: center;
-  padding: 48px 16px !important;
-  color: var(--text-muted);
-  font-size: 12.5px;
+  padding: 40px 16px !important;
+  color: var(--text-telemetry) !important;
   line-height: 1.6;
+  font-size: 0.86rem;
 }
 
-/* Engineering Notes */
-.engineering-notes-box {
-  padding: 12px 16px;
-  background: var(--bg-page);
-  border-top: 1px solid var(--border-default);
-  flex-shrink: 0;
-}
-
-.notes-box-title {
-  font-size: 11px;
+.dim-input {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-carbon);
+  border-radius: 3px;
+  padding: 3px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
   font-weight: 700;
-  color: var(--text-muted);
+  color: #fff;
+  text-align: center;
+  outline: none;
+}
+.dim-input:focus {
+  border-color: var(--nasa-cyan);
+  box-shadow: 0 0 6px rgba(40, 139, 255, 0.4);
+}
+
+/* Feature Badges */
+.badge-feat {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.badge-feat-pocket {
+  background: rgba(246, 65, 55, 0.15);
+  color: #ff6b62;
+  border: 1px solid rgba(246, 65, 55, 0.35);
+}
+.badge-feat-hole {
+  background: rgba(40, 139, 255, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(40, 139, 255, 0.35);
+}
+.badge-feat-flats {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+.badge-feat-tol {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.35);
+}
+.badge-feat-blank {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+/* Notes Deck */
+.nasa-notes-box {
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+.notes-header-line {
   margin-bottom: 8px;
 }
-
+.notes-tag-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-telemetry);
+  letter-spacing: 0.06em;
+}
 .notes-chips-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 6px;
 }
-
+.note-tag {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 2px solid var(--nasa-cyan);
+  padding: 4px 8px;
+  line-height: 1.4;
+}
 .empty-notes-chip {
-  font-size: 11.5px;
-  color: var(--text-dim);
+  font-size: 0.78rem;
+  color: var(--text-muted);
   font-style: italic;
 }
 
-.notes-chip {
-  font-size: 11px;
+/* SolidWorks Feature Tree Preview */
+.nasa-tree-box {
+  margin-top: 14px;
+  border: 1px solid var(--border-carbon-light);
+  border-radius: var(--radius-sm);
+  background: rgba(7, 9, 14, 0.7);
+  padding: 10px 14px;
+}
+.tree-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--electric-cyan);
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+}
+.tree-sub-mat {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-bottom: 6px;
+}
+.tree-nodes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+.tree-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 6px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 3px;
+  border-left: 2px solid var(--nasa-cyan);
+}
+.tree-icon {
+  font-size: 0.85rem;
+}
+.tree-title {
+  color: var(--spacesuit-white);
   font-weight: 600;
-  background: var(--white);
-  border: 1px solid var(--border-default);
-  padding: 3px 8px;
-  border-radius: 4px;
-  color: var(--text-body);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   COLUMN 3: 3D CAD LIVE PREVIEW & EXPORT DECK
+   MODULE 03: 3D ORBITAL CAD STUDIO & ASSETS
    ───────────────────────────────────────────────────────────── */
-.view-angle-pills {
+.nasa-view-pills {
   display: flex;
-  align-items: center;
   gap: 4px;
 }
-
-.pill-view {
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 10px;
+.nasa-pill-view {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
   font-weight: 700;
-  background: var(--bg-page);
-  border: 1px solid var(--border-default);
-  color: var(--text-muted);
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  color: var(--text-telemetry);
+  padding: 4px 8px;
+  border-radius: 3px;
+  transition: all var(--transition-fast);
+}
+.nasa-pill-view:hover {
+  color: #fff;
+  border-color: var(--border-carbon-light);
+}
+.nasa-pill-view.active {
+  background: var(--nasa-cyan);
+  border-color: var(--nasa-cyan);
+  color: #fff;
 }
 
-.pill-view:hover {
-  border-color: var(--red);
-  color: var(--red);
-}
-
-.pill-view.active {
-  background: var(--red);
-  color: var(--white);
-  border-color: var(--red);
-}
-
-.webgl-canvas-box {
-  height: 350px;
+/* WebGL Viewport */
+.nasa-webgl-box {
   position: relative;
-  background: #ffffff;
-  border-bottom: 1px solid var(--border-default);
-  flex-shrink: 0;
+  height: 520px;
+  background: radial-gradient(circle at 50% 50%, #0d131f 0%, #030508 100%);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
-
-.webgl-canvas-box canvas {
-  width: 100% !important;
-  height: 100% !important;
+#threeCanvas {
+  width: 100%;
+  height: 100%;
   display: block;
 }
 
-.webgl-hud-overlay {
+/* Flight HUD Overlay */
+.nasa-hud-overlay {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(6px);
-  border: 1px solid var(--border-default);
-  border-radius: 6px;
-  padding: 5px 10px;
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  background: rgba(7, 9, 14, 0.85);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
   display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: var(--shadow-sm);
-  z-index: 10;
+  flex-direction: column;
+  gap: 2px;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+}
+.hud-item {
+  color: var(--spacesuit-white);
+}
+.hud-tag {
+  color: var(--text-muted);
+  font-weight: 700;
 }
 
-.webgl-hud-overlay b {
-  color: var(--red);
-}
-
-.webgl-nav-hint {
+.nasa-nav-hint {
   position: absolute;
   bottom: 8px;
   right: 10px;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text-dim);
-  background: rgba(255, 255, 255, 0.88);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  background: rgba(7, 9, 14, 0.7);
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 3px;
   pointer-events: none;
 }
 
-/* Export Deck */
-.saas-export-hub {
-  padding: 16px;
-  background: var(--white);
+/* NASA Export Hub */
+.nasa-export-hub {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  flex: 1;
+  background: var(--bg-carbon-80);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 14px;
 }
 
-.btn-generate-main {
+.nasa-btn-generate-cad {
   width: 100%;
-  height: 42px;
-  background: var(--red);
-  color: var(--white);
-  border-radius: var(--radius-md);
-  font-size: 13px;
-  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+  background: linear-gradient(135deg, var(--nasa-red) 0%, #d82b22 100%);
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgba(246, 65, 55, 0.4);
+  transition: all var(--transition-fast);
 }
-
-.btn-generate-main:hover {
-  background: var(--red-hover);
-  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
+.nasa-btn-generate-cad:hover {
+  box-shadow: var(--shadow-glow-red);
   transform: translateY(-1px);
 }
+.nasa-btn-generate-cad.generating {
+  opacity: 0.85;
+  cursor: wait;
+}
 
-.export-cards-dual-grid {
+.nasa-export-cards-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-
-.export-card-item {
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  padding: 12px;
-  background: var(--bg-page);
+.nasa-export-card {
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 10px;
-  transition: all 0.15s ease;
+  gap: 8px;
 }
-
-.export-card-item:hover {
-  border-color: var(--red-border);
-  background: var(--white);
-  box-shadow: var(--shadow-sm);
-}
-
-.export-card-format {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--text-title);
-  margin-bottom: 2px;
-}
-
-.export-card-desc {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.btn-download-action {
-  height: 32px;
-  background: var(--white);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-sm);
-  color: var(--text-title);
-  font-size: 11.5px;
-  font-weight: 700;
+.export-meta-group {
   display: flex;
+  flex-direction: column;
+}
+.export-format-badge {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--spacesuit-white);
+}
+.export-format-desc {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-telemetry);
+  line-height: 1.3;
+}
+.nasa-btn-dl-action {
+  width: 100%;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: all 0.15s ease;
+  background: var(--spacesuit-white);
+  color: var(--bg-space-black);
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+.nasa-btn-dl-action:hover {
+  background: #cbd5e1;
 }
 
-.btn-download-action:hover {
-  background: var(--red-subtle);
-  border-color: var(--red);
-  color: var(--red);
+.nasa-secondary-exports-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+.nasa-btn-link-export {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--nasa-cyan);
+  transition: color var(--transition-fast);
+}
+.nasa-btn-link-export:hover {
+  color: #7dd3fc;
+  text-decoration: underline;
+}
+.sep-dot {
+  color: var(--border-carbon-light);
 }
 
-.export-support-tagline {
-  font-size: 10.5px;
-  font-weight: 600;
+.nasa-export-compliance-tag {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
   color: var(--text-muted);
   text-align: center;
-  line-height: 1.35;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   SECTION 3: FEATURED CAD PROJECTS GALLERY
+   5. NASA OFFICIAL AGENCY FOOTER
    ───────────────────────────────────────────────────────────── */
-.featured-projects-section {
-  padding: 24px 32px 48px 32px;
+.nasa-agency-footer {
+  background: #020306;
+  border-top: 1px solid var(--border-carbon);
+  padding: 60px 24px 40px;
+}
+.nasa-footer-container {
+  max-width: 1720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
-.featured-heading-box {
+.nasa-footer-identity-row {
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 20px;
+  gap: 40px;
 }
-
-.featured-title {
-  font-size: 21px;
+.nasa-footer-logo-col {
+  display: flex;
+  gap: 16px;
+  max-width: 480px;
+}
+.heading-agency {
+  font-size: 1.15rem;
   font-weight: 800;
-  color: var(--text-title);
-  letter-spacing: -0.3px;
-  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+  color: var(--spacesuit-white);
+  margin-bottom: 6px;
+}
+.agency-mission-text {
+  font-size: 0.84rem;
+  color: var(--text-telemetry);
+  line-height: 1.55;
 }
 
-.featured-subtitle {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.project-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.project-showcase-card {
-  background: var(--white);
-  border: 1px solid var(--border-card);
-  border-radius: var(--radius-card);
-  overflow: hidden;
+.nasa-footer-links-col {
   display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow-card);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 48px;
 }
-
-.project-showcase-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-hover);
-  border-color: var(--red-border);
-}
-
-.card-thumb-wrap {
-  height: 200px;
-  background: #f8fafc;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid var(--border-subtle);
-  cursor: pointer;
-}
-
-.card-thumb-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 14px;
-  transition: transform 0.3s ease;
-}
-
-.project-showcase-card:hover .card-thumb-wrap img {
-  transform: scale(1.05);
-}
-
-.thumb-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  font-size: 10.5px;
+.footer-col-heading {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   font-weight: 700;
-  text-transform: uppercase;
-  color: var(--white);
-  background: var(--red);
-  padding: 3px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.3px;
-}
-
-.card-details-box {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.card-tags-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  color: var(--spacesuit-white);
+  letter-spacing: 0.1em;
   margin-bottom: 12px;
 }
-
-.tag-chip {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: var(--bg-tag);
-  color: var(--text-body);
-}
-
-.card-part-title {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--text-title);
-  margin-bottom: 8px;
-  line-height: 1.25;
-}
-
-.card-part-desc {
-  font-size: 12.5px;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-bottom: 18px;
-  flex: 1;
-}
-
-.btn-open-project {
-  width: 100%;
-  height: 38px;
-  background: var(--white);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  color: var(--text-title);
-  font-size: 12.5px;
-  font-weight: 700;
+.footer-unstyled-list {
+  list-style: none;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 14px;
-  transition: all 0.15s ease;
-}
-
-.btn-open-project .arrow {
-  transition: transform 0.15s ease;
-}
-
-.btn-open-project:hover {
-  background: var(--red-subtle);
-  border-color: var(--red);
-  color: var(--red);
-}
-
-.btn-open-project:hover .arrow {
-  transform: translateX(4px);
-}
-
-.btn-open-project.btn-highlight-open {
-  background: var(--red);
-  color: var(--white);
-  border-color: var(--red);
-}
-
-.btn-open-project.btn-highlight-open:hover {
-  background: var(--red-hover);
-  color: var(--white);
-}
-
-/* ─────────────────────────────────────────────────────────────
-   SAAS FOOTER
-   ───────────────────────────────────────────────────────────── */
-.saas-footer {
-  background: var(--white);
-  border-top: 1px solid var(--border-default);
-  padding: 24px 32px;
-  margin-top: 32px;
-}
-
-.footer-content-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.footer-brand {
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--text-title);
-  margin-bottom: 2px;
-}
-
-.footer-tagline {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.footer-right {
-  display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 8px;
-  font-size: 11.5px;
-  color: var(--text-muted);
-  font-weight: 500;
+}
+.footer-unstyled-list a {
+  font-size: 0.82rem;
+  color: var(--text-telemetry);
+  transition: color var(--transition-fast);
+}
+.footer-unstyled-list a:hover {
+  color: var(--nasa-cyan);
 }
 
-.footer-right .dot {
-  color: var(--text-dim);
+.nasa-footer-legal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-carbon);
+}
+.nasa-legal-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.nasa-legal-list a {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+.nasa-legal-list a:hover {
+  color: var(--spacesuit-white);
+}
+
+.nasa-footer-meta-info {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.meta-sep {
+  margin: 0 6px;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   MODAL DIALOG (CIRKIT THEME)
+   6. NASA MODAL DIALOGS
    ───────────────────────────────────────────────────────────── */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.84);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9999;
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
   padding: 20px;
 }
-
 .modal-overlay.open {
   display: flex;
 }
 
-.saas-modal-card {
-  background: var(--white);
-  border-radius: 16px;
-  border: 1px solid var(--border-default);
-  box-shadow: var(--shadow-modal);
+.nasa-modal-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-carbon-light);
+  border-radius: var(--radius-md);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.95);
   width: 100%;
-  max-width: 620px;
+  max-width: 660px;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: modal-pop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes modalPop {
+@keyframes modal-pop {
   from { opacity: 0; transform: scale(0.96) translateY(8px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.modal-header-bar {
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border-default);
+.nasa-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--bg-carbon-80);
+  border-bottom: 1px solid var(--border-carbon);
 }
-
-.modal-header-title {
-  font-size: 14.5px;
+.nasa-modal-title {
+  font-size: 0.92rem;
   font-weight: 800;
-  color: var(--text-title);
+  letter-spacing: 0.05em;
+  color: var(--spacesuit-white);
+}
+.nasa-modal-close {
+  font-size: 1.1rem;
+  color: var(--text-telemetry);
+  transition: color var(--transition-fast);
+}
+.nasa-modal-close:hover {
+  color: var(--spacesuit-white);
 }
 
-.modal-close-btn {
-  font-size: 16px;
-  color: var(--text-muted);
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-.modal-close-btn:hover {
-  background: var(--bg-page);
-  color: var(--red);
-}
-
-.modal-body-content {
+.nasa-modal-body {
   padding: 20px;
+  overflow-y: auto;
+  max-height: 75vh;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-height: 70vh;
-  overflow-y: auto;
+  gap: 14px;
 }
-
-.guide-card-box {
-  background: var(--bg-page);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  padding: 16px;
+.nasa-guide-card {
+  background: var(--bg-input);
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 14px;
 }
-
-.guide-box-title {
-  font-size: 13.5px;
+.guide-title {
+  font-size: 0.9rem;
   font-weight: 800;
-  color: var(--red);
-  margin-bottom: 10px;
+  color: var(--spacesuit-white);
+  margin-bottom: 8px;
 }
-
-.guide-card-box p {
-  font-size: 12.5px;
-  color: var(--text-body);
-  line-height: 1.6;
+.nasa-guide-card p {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
   margin-bottom: 6px;
 }
-
-.guide-card-box code {
-  background: var(--white);
-  border: 1px solid var(--border-default);
-  border-radius: 4px;
-  padding: 2px 6px;
-  color: var(--red);
-  font-weight: 700;
+.nasa-guide-card code {
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 5px;
+  border-radius: 3px;
+  color: #38bdf8;
 }
 
-.modal-footer-bar {
-  padding: 14px 20px;
-  background: var(--bg-page);
-  border-top: 1px solid var(--border-default);
+.nasa-security-alert {
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  color: #86efac;
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+
+.nasa-modal-footer {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  background: var(--bg-carbon-80);
+  border-top: 1px solid var(--border-carbon);
+}
+
+/* VBA Code Box */
+.vba-code-container {
+  background: #05070c;
+  border: 1px solid var(--border-carbon);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.vba-code-pre {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: #38bdf8;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Viewfinder frame */
+.viewfinder-frame {
+  position: relative;
+  display: inline-block;
+  padding: 8px;
+  border: 1px solid var(--border-accent-cyan);
+  background: #000;
+}
+.viewfinder-image {
+  max-width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  display: block;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   SAAS TOAST NOTIFICATION
+   7. NASA TOAST NOTIFICATION
    ───────────────────────────────────────────────────────────── */
-.saas-toast {
+.nasa-toast-banner {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: var(--white);
-  border: 1px solid var(--red-border);
-  box-shadow: var(--shadow-modal);
-  border-radius: var(--radius-pill);
-  padding: 10px 18px;
-  display: none;
-  align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--text-title);
-  z-index: 3000;
-  animation: toastSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.saas-toast.show {
+  z-index: 10000;
   display: flex;
-}
-
-.toast-dot {
-  color: var(--red);
-  font-size: 12px;
-}
-
-@keyframes toastSlide {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Dynamic Dimension Table & Notes Tags */
-.dim-input {
-  border: 1px solid var(--border-default);
-  border-radius: 4px;
-  padding: 3px 6px;
-  background: var(--white);
-  font-size: 11.5px;
+  align-items: center;
+  gap: 10px;
+  background: rgba(13, 17, 24, 0.95);
+  border: 1px solid var(--border-accent-cyan);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), var(--shadow-glow-blue);
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 0.86rem;
   font-weight: 700;
-  color: var(--text-title);
-  text-align: center;
-  outline: none;
-  transition: border-color 0.15s ease;
+  color: var(--spacesuit-white);
+  transform: translateY(100px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(10px);
 }
-
-.dim-input:focus {
-  border-color: var(--red);
-  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+.nasa-toast-banner.show {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
 }
-
-.note-tag {
-  display: inline-block;
-  font-size: 10.5px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 4px;
-  background: var(--white);
-  border: 1px solid var(--border-default);
-  color: var(--text-body);
-  margin: 2px;
-}
-
-.dim-badge-red {
-  display: inline-block;
-  padding: 2px 7px;
-  background: var(--red-subtle);
-  color: var(--red);
-  border: 1px solid var(--red-border);
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-/* Generating State for CAD Action Button */
-.btn-generate-main.generating,
-#btnGenerateCad.generating {
-  background: var(--red-hover);
-  animation: pulseGen 1.8s infinite;
-}
-
-@keyframes pulseGen {
-  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
-  70% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+.nasa-toast-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--nasa-cyan);
+  box-shadow: 0 0 8px var(--nasa-cyan);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   RESPONSIVE DESIGN BREAKPOINTS
+   RESPONSIVENESS (MOBILE / TABLET)
    ───────────────────────────────────────────────────────────── */
-@media (max-width: 1280px) {
-  .hero-action-cards-grid {
+@media (max-width: 1200px) {
+  .nasa-flight-deck-grid {
+    grid-template-columns: 1fr;
+  }
+  .nasa-orbital-studio-col {
+    position: static;
+  }
+  .sticky-studio-card {
+    height: auto;
+  }
+  .nasa-webgl-box {
+    height: 480px;
+  }
+  .nasa-topic-cards-row {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .studio-cards-grid {
-    grid-template-columns: 1fr;
-    min-height: auto;
-  }
-  .blueprint-viewport-box {
-    min-height: 380px;
-  }
-  .project-cards-grid {
-    grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 768px) {
-  .top-nav-bar {
-    padding: 0 16px;
+@media (max-width: 900px) {
+  .nasa-global-header {
+    height: auto;
+    padding: 8px 16px;
   }
-  .nav-search-section {
+  .nasa-header-container {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .nasa-header-left {
+    order: 1;
+  }
+  .nasa-search-bar {
     display: none;
   }
-  .hero-deck-section,
-  .studio-section-wrapper,
-  .featured-projects-section,
-  .saas-footer {
-    padding: 16px;
+  .nasa-header-center {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 2px;
   }
-  .hero-action-cards-grid {
-    grid-template-columns: 1fr;
+  .nasa-nav-links {
+    display: inline-flex;
+    overflow-x: auto;
   }
-  .specs-meta-row {
-    grid-template-columns: 1fr;
+  .nasa-header-right {
+    order: 2;
   }
-  .export-cards-dual-grid {
-    grid-template-columns: 1fr;
-  }
-  .footer-content-wrap {
+  .nasa-footer-identity-row {
     flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
+  }
+  .nasa-footer-links-col {
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 640px) {
+  .nasa-topic-cards-row {
+    grid-template-columns: 1fr;
+  }
+  .nasa-meta-row {
+    grid-template-columns: 1fr;
+  }
+  .nasa-export-cards-row {
+    grid-template-columns: 1fr;
+  }
+  .nasa-hero-headline {
+    font-size: 2.1rem;
   }
 }
