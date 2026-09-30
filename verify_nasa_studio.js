@@ -15,7 +15,12 @@ const uniqueIds = Array.from(new Set(idMatches.map(m => m[1])));
 const dynamicIds = new Set([
   'fl_od', 'fl_id', 'fl_thick', 'fl_pcd', 'fl_hcount', 'fl_hdia',
   'bl_w', 'bl_len', 'bl_h', 'bl_bore',
-  'p_width', 'p_len', 'p_thick', 'pk_dia', 'pk_depth', 'ch_dia', 'p_chamfer'
+  'p_width', 'p_len', 'p_thick', 'pk_dia', 'pk_depth', 'ch_dia', 'p_chamfer',
+  'dl_base_l', 'dl_base_w', 'dl_base_t', 'dl_bolt_dia', 'dl_bolt_len', 'dl_bolt_throw',
+  'dl_barrel_od', 'dl_handle_len', 'dl_keeper_l', 'dl_screw_cnt', 'dl_screw_dia',
+  'lb_leg1', 'lb_leg2', 'lb_w', 'lb_t', 'lb_hcnt', 'lb_hdia',
+  'hg_len', 'hg_w', 'hg_t', 'hg_kod', 'hg_hdia',
+  'ub_span', 'ub_h', 'ub_bdia', 'ub_fdia'
 ]);
 
 const staticIds = uniqueIds.filter(id => !dynamicIds.has(id));
