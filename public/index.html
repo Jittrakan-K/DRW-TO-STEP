@@ -11,10 +11,10 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="favicon.png">
 
-<!-- Google Fonts: Public Sans (Official NASA HDS font), Inter, and DM Mono (NASA Telemetry) -->
+<!-- Google Fonts: Prompt (Thai Modern High-Legibility), Plus Jakarta Sans (Precision UI), JetBrains Mono (CAD Telemetry) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700;800&family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <!-- PDF.js via CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -57,39 +57,32 @@
         </div>
       </a>
 
-      <button class="nasa-explore-trigger" id="global-navigation-trigger" onclick="scrollToMissions()">
-        <span>Explore</span>
-        <svg class="nasa-explore-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.2"/>
-          <path d="M6 7l2 2 2-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
     </div>
 
-    <!-- Center: Primary Navigation Tabs (Single Line TAPs) -->
+    <!-- Center: Primary Navigation Tabs (Sleek Segmented Control) -->
     <div class="nasa-header-center">
       <nav class="nasa-nav-links">
-        <button class="nasa-nav-item" onclick="switchInputMode('drawing'); scrollToStudio();" title="สลับสู่โหมดแบบวิศวกรรม 2D Blueprint">
-          <span>BLUEPRINT</span>
+        <button class="nasa-nav-item active" id="hdrTabDrawing" onclick="switchInputMode('drawing'); scrollToStudio();" title="แบบวิศวกรรม 2D Blueprint &amp; รูปภาพ">
+          <span>📄 2D BLUEPRINT &amp; รูปภาพ</span>
         </button>
-        <button class="nasa-nav-item highlight-red" onclick="switchInputMode('prompt'); scrollToStudio();" title="สร้างโมเดล CAD จากคำอธิบายด้วย AI">
+        <button class="nasa-nav-item highlight-red" id="hdrTabAi" onclick="switchInputMode('prompt'); scrollToStudio();" title="สร้างโมเดล CAD จากคำอธิบายด้วย AI">
           <span class="pulse-indicator-red"></span>
-          <span>AI VISION LAB</span>
+          <span>🤖 AI PROMPT LAB</span>
         </button>
         <button class="nasa-nav-item" onclick="openApiKeyModal()" title="ตั้งค่า Google Gemini API Key">
-          <span>API KEY</span>
+          <span>🔑 API KEY</span>
           <span class="api-key-status-dot" id="navKeyStatusDot"></span>
         </button>
         <button class="nasa-nav-item" onclick="openHelpModal()" title="ดูคู่มือและเอกสารการใช้งาน">
-          <span>MANUAL</span>
+          <span>📖 คู่มือ</span>
         </button>
         <button class="nasa-nav-item" onclick="resetAllData(true)" title="ล้างข้อมูลและเริ่มใหม่ทั้งหมด">
-          <span>RESET</span>
+          <span>🔄 รีเซ็ต</span>
         </button>
       </nav>
     </div>
 
-    <!-- Right: Telemetry Search, Live Status, and 3D Flight Deck Launch -->
+    <!-- Right: Quick Search & Status -->
     <div class="nasa-header-right">
       <div class="nasa-search-bar">
         <svg class="nasa-search-icon" width="13" height="13" viewBox="0 0 16 16" fill="none">
@@ -102,55 +95,12 @@
 
       <div class="nasa-telemetry-badge">
         <span class="nasa-pulse-dot"></span>
-        <span>LIVE</span>
+        <span>ONLINE</span>
       </div>
-
-      <button class="nasa-btn-flight-deck" onclick="scrollToStudio()" title="เข้าสู่พื้นที่ทำงาน CAD Flight Deck">
-        <span>3D FLIGHT DECK</span>
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
     </div>
 
   </div>
 </header>
-
-<!-- ═════════════════════════════════════════════════════════════
-     2. NASA MISSION TELEMETRY STATUS RIBBON
-     ═════════════════════════════════════════════════════════════ -->
-<div class="nasa-mission-ribbon">
-  <div class="nasa-ribbon-container">
-    <div class="ribbon-telemetry-items">
-      <div class="ribbon-item">
-        <span class="ribbon-pulse-dot"></span>
-        <span class="ribbon-label">MISSION STATUS:</span>
-        <span class="ribbon-val text-green">FLIGHT READY // ZERO-DEFECT CAD</span>
-      </div>
-      <div class="ribbon-sep">•</div>
-      <div class="ribbon-item">
-        <span class="ribbon-label">SPEC:</span>
-        <span class="ribbon-val">ISO 10303-21 STEP AP203</span>
-      </div>
-      <div class="ribbon-sep">•</div>
-      <div class="ribbon-item">
-        <span class="ribbon-label">SOLID B-REP:</span>
-        <span class="ribbon-val">100% CLOSED SHELL</span>
-      </div>
-      <div class="ribbon-sep">•</div>
-      <div class="ribbon-item">
-        <span class="ribbon-label">RUNTIME:</span>
-        <span class="ribbon-val">IN-BROWSER CLIENT-SIDE (0ms LATENCY)</span>
-      </div>
-    </div>
-    <div class="ribbon-actions">
-      <button class="ribbon-chip-btn" onclick="switchInputMode('drawing')">
-        <span>📄 2D BLUEPRINT RADAR</span>
-      </button>
-      <button class="ribbon-chip-btn highlight" onclick="switchInputMode('prompt')">
-        <span>🤖 AI MULTIMODAL PROMPT</span>
-      </button>
-    </div>
-  </div>
-</div>
 
 <!-- ═════════════════════════════════════════════════════════════
      3. NASA CAD FLIGHT DECK WORKSTATION (GRAND 2-PANEL LAYOUT)
@@ -192,11 +142,11 @@
           <div class="nasa-mode-tabs">
             <button class="nasa-mode-tab-btn active" id="tabModeDrawing" onclick="switchInputMode('drawing')">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-              <span>📄 2D BLUEPRINT RADAR</span>
+              <span>📄 2D BLUEPRINT &amp; IMAGE VISION</span>
             </button>
             <button class="nasa-mode-tab-btn" id="tabModeAi" onclick="switchInputMode('prompt')">
               <span>🤖 AI PROMPT &amp; VISION LAB</span>
-              <span class="nasa-tab-badge">GEMINI 1.5</span>
+              <span class="nasa-tab-badge" id="tabAiModelBadge" onclick="event.stopPropagation(); cycleGeminiModel();" style="cursor:pointer;" title="คลิกเพื่อสลับโมเดลระหว่าง GEMINI 3.8 FLASH (HIGH) และ 3.1 PRO (HIGH)">GEMINI 3.8 FLASH (HIGH)</span>
             </button>
           </div>
 
@@ -206,7 +156,7 @@
             <div class="nasa-file-status-strip" id="fileLoadedPill">
               <div class="file-name-meta">
                 <span class="telemetry-label-sm">SOURCE:</span>
-                <span class="file-name-text" id="txtLoadedFileName">ยังไม่ได้แนบไฟล์แบบ DRAWING (พร้อมรับไฟล์)</span>
+                <span class="file-name-text" id="txtLoadedFileName">ยังไม่ได้แนบไฟล์แบบ DRAWING หรือรูปภาพชิ้นงาน</span>
               </div>
               <div class="file-status-badge" id="txtFileBadge">รอข้อมูลแบบ</div>
               <div class="pdf-pager-pills" id="pdfPageBar" style="display:none">
@@ -228,19 +178,27 @@
 
               <!-- High-Tech Drag & Drop Prompt Overlay -->
               <div class="nasa-radar-dropzone-prompt" id="emptyBlueprintPrompt" onclick="document.getElementById('fileInput').click()">
-                <div class="radar-reticle">
-                  <div class="reticle-ring"></div>
-                  <div class="reticle-cross-h"></div>
-                  <div class="reticle-cross-v"></div>
-                  <div class="reticle-dot"></div>
+                <div class="radar-drop-icon">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
                 </div>
-                <div class="radar-prompt-headline">คลิกหรือลากแบบ DRAWING มาวางที่นี่</div>
-                <div class="radar-prompt-sub">รองรับเอกสาร PDF วิศวกรรมหลายหน้า, PNG, JPG ความละเอียดสูง</div>
-                <div class="nasa-blueprint-quick-presets">
-                  <span class="presets-caption">⚡ โหลดแบบตัวอย่างทันที:</span>
+                <div class="radar-prompt-headline">คลิก หรือ ลากไฟล์แบบ DRAWING / รูปภาพมาวางที่นี่</div>
+                <div class="radar-prompt-sub">รองรับรูปถ่ายชิ้นงานจริง (กลอนประตู, บานพับ, ฉากยึด), ภาพสเก็ตช์ และแบบวิศวกรรม PDF</div>
+                <div class="nasa-btn-browse-accent">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <span>เลือกไฟล์จากเครื่อง (Browse Files)</span>
+                </div>
+                <div class="nasa-blueprint-quick-presets" onclick="event.stopPropagation();">
+                  <span class="presets-caption">⚡ โหลดตัวอย่างโมเดลสำเร็จรูป:</span>
                   <div class="presets-pills-row">
-                    <button type="button" class="nasa-sample-pill" onclick="loadSampleDrawing(event, 'shaft')">📐 แบบเพลา AA-14</button>
-                    <button type="button" class="nasa-sample-pill" onclick="loadSampleDrawing(event, 'plate')">🧱 แบบจิ๊กแผ่นเจาะรู</button>
+                    <button type="button" class="nasa-sample-pill" onclick="loadSampleDrawing(event, 'door_latch')">🔒 กลอนประตู (Door Latch)</button>
+                    <button type="button" class="nasa-sample-pill" onclick="loadSampleDrawing(event, 'l_bracket')">📐 ฉากยึด L-Bracket</button>
+                    <button type="button" class="nasa-sample-pill" onclick="loadSampleDrawing(event, 'hinge')">🚪 บานพับ (Hinge)</button>
+                    <button type="button" class="nasa-sample-pill" onclick="loadSampleDrawing(event, 'shaft')">⚙️ เพลา AA-14</button>
+                    <button type="button" class="nasa-sample-pill" onclick="loadSampleDrawing(event, 'plate')">🧱 แผ่นเพลทเจาะรู</button>
                   </div>
                 </div>
               </div>
@@ -254,11 +212,35 @@
               <!-- Loading Scanner Curtain -->
               <div class="drawing-loading-curtain" id="drawingLoading" style="display:none">
                 <div class="nasa-loading-spinner"></div>
-                <div class="nasa-loading-text">กำลังสแกนและวิเคราะห์แบบ DRAWING ละเอียด 100%...</div>
+                <div class="nasa-loading-text">กำลังใช้ AI Vision วิเคราะห์รูปร่างและสกัดสเปก 3D...</div>
                 <span id="loadingDescText" style="display:none"></span>
               </div>
 
               <div id="dropZone" style="display:none"></div>
+            </div>
+
+            <!-- Inline AI Vision Description & Shape Override Bar (Works directly with attached image!) -->
+            <div class="nasa-blueprint-ai-bar" style="margin-top:10px;padding:10px 12px;background:rgba(11,61,145,0.18);border:1px solid rgba(40,139,255,0.32);border-radius:6px;display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                <span style="font-size:0.76rem;font-weight:700;color:#93c5fd;letter-spacing:0.3px;">🤖 AI VISION &amp; SHAPE DESCRIPTION (อธิบายรูปภาพเพิ่มเติมเพื่อให้ตรง 100%):</span>
+                <span id="blueprintAiEngineLabel" style="font-size:0.68rem;color:#cbd5e1;font-family:var(--font-mono);">GEMINI 3.8 FLASH (HIGH) + CV CONTOUR</span>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <input type="text" id="blueprintDescInput" class="nasa-input-meta" style="flex:1;height:34px;font-size:0.82rem;" placeholder="เช่น กลอนประตูสแตนเลส 100x38 มม. สลัก Ø10 มม., ฉากยึด, บานพับ..." onkeydown="if(event.key==='Enter') reAnalyzeWithAiVision()">
+                <button type="button" class="nasa-btn-panel-primary" style="height:34px;padding:0 12px;white-space:nowrap;background:linear-gradient(135deg,#e11d48,#be123c);border-color:#f43f5e;" onclick="reAnalyzeWithAiVision()">
+                  🚀 วิเคราะห์รูป &amp; สร้าง 3D
+                </button>
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                <span style="font-size:0.7rem;color:#94a3b8;">เลือกทรงชิ้นงานด่วน:</span>
+                <button type="button" class="nasa-sample-pill" style="padding:2px 8px;font-size:0.7rem;" onclick="forcePartCategory('door_latch')">🔒 กลอนประตู</button>
+                <button type="button" class="nasa-sample-pill" style="padding:2px 8px;font-size:0.7rem;" onclick="forcePartCategory('l_bracket')">📐 ฉากยึด L</button>
+                <button type="button" class="nasa-sample-pill" style="padding:2px 8px;font-size:0.7rem;" onclick="forcePartCategory('hinge')">🚪 บานพับ</button>
+                <button type="button" class="nasa-sample-pill" style="padding:2px 8px;font-size:0.7rem;" onclick="forcePartCategory('u_bracket')">把手 มือจับ/U</button>
+                <button type="button" class="nasa-sample-pill" style="padding:2px 8px;font-size:0.7rem;" onclick="forcePartCategory('plate')">🧱 แผ่นเพลท</button>
+                <button type="button" class="nasa-sample-pill" style="padding:2px 8px;font-size:0.7rem;" onclick="forcePartCategory('flange')">⭕ หน้าแปลน</button>
+                <button type="button" class="nasa-sample-pill" style="padding:2px 8px;font-size:0.7rem;" onclick="forcePartCategory('shaft')">⚙️ เพลากลึง</button>
+              </div>
             </div>
           </div>
 
@@ -268,7 +250,7 @@
             <div class="nasa-ai-status-bar">
               <div class="ai-status-indicator">
                 <span class="status-indicator-dot" id="aiEngineDot"></span>
-                <span class="ai-status-text" id="aiEngineStatusText">ENGINE: BUILT-IN SMART PARSER (OFFLINE 100%)</span>
+                <span class="ai-status-text" id="aiEngineStatusText">ENGINE: GEMINI 3.8 FLASH (HIGH) VISION + SMART CAD ENGINE</span>
               </div>
               <button class="nasa-btn-key-link" onclick="openApiKeyModal()" title="ตั้งค่าหรือเปลี่ยน Google Gemini API Key">
                 🔑 GEMINI API KEY
@@ -281,7 +263,7 @@
                 <label for="aiPromptInput" class="nasa-input-label">✍️ อธิบายสเปกหรือลักษณะชิ้นงานที่ต้องการ (CAD PROMPT):</label>
                 <span class="nasa-lang-chip">THAI / ENGLISH READY</span>
               </div>
-              <textarea id="aiPromptInput" class="nasa-prompt-textarea" rows="3" placeholder="ตัวอย่าง: สร้าง COVER รถเข็นขนาด ที่ทำจาก CLEAR ACRYLIC ขนาด 210x410x5 mm แผ่นเปล่าไม่มีรู..."></textarea>
+              <textarea id="aiPromptInput" class="nasa-prompt-textarea" rows="3" placeholder="ตัวอย่าง: กลอนประตูสแตนเลส SUS304 แผ่นฐานยาว 100 กว้าง 38 หนา 2.5 มม. ลูกกลอน Ø10 ยาว 115 มม. พร้อมก้านมือจับและตัวรับลูกกลอน เจาะรูสกรู 6 รู..."></textarea>
             </div>
 
             <!-- Reference Sketch / Multimodal Image Zone -->
@@ -291,8 +273,8 @@
               <div class="ai-ref-drop-content" id="aiRefDropPrompt" onclick="document.getElementById('aiRefFileInput').click()">
                 <div class="ai-ref-icon">🖼️</div>
                 <div class="ai-ref-text-group">
-                  <span class="ai-ref-title">แนบรูปภาพตัวอย่าง / ภาพสเก็ตช์คร่าวๆ (REFERENCE IMAGE / SKETCH)</span>
-                  <span class="ai-ref-sub">คลิกหรือลากไฟล์ภาพมาวาง (PNG, JPG, WEBP) เพื่อให้ AI Vision วิเคราะห์สเปกร่วมกับคำอธิบาย</span>
+                  <span class="ai-ref-title">แนบรูปภาพตัวอย่าง / ภาพถ่ายชิ้นงานจริง (REFERENCE IMAGE / SKETCH)</span>
+                  <span class="ai-ref-sub">คลิกหรือลากไฟล์ภาพมาวาง (PNG, JPG, WEBP) เพื่อให้ AI Vision วิเคราะห์รูปร่างและสเปกร่วมกับคำอธิบาย</span>
                 </div>
                 <button type="button" class="btn-browse-ref-img">เลือกรูปภาพ</button>
               </div>
@@ -312,15 +294,24 @@
             <!-- Quick Presets -->
             <div class="nasa-quick-presets-deck">
               <div class="presets-caption">⚡ ตัวอย่างคำสั่งสำเร็จรูป (PRESET COMMANDS):</div>
-              <div class="presets-pills-row">
+              <div class="presets-pills-row" style="flex-wrap:wrap;">
+                <button type="button" class="nasa-preset-pill" onclick="applyPromptPreset('door_latch')">
+                  <span>🔒</span> กลอนประตูสแตนเลส (Door Latch 100×38 mm พร้อมสลักเลื่อนและตัวรับ)
+                </button>
+                <button type="button" class="nasa-preset-pill" onclick="applyPromptPreset('l_bracket')">
+                  <span>📐</span> ฉากยึด L-Bracket (60×60×40 หนา 4 mm มีครีบเสริมแรง)
+                </button>
+                <button type="button" class="nasa-preset-pill" onclick="applyPromptPreset('hinge')">
+                  <span>🚪</span> บานพับประตูสแตนเลส (Butt Hinge 100×75×3 mm 6 รูสกรู)
+                </button>
                 <button type="button" class="nasa-preset-pill" onclick="applyPromptPreset('cover')">
                   <span>🛡️</span> ฝา COVER อะคริลิกใส (210×410 หนา 5 ไม่มีรู)
                 </button>
                 <button type="button" class="nasa-preset-pill" onclick="applyPromptPreset('shaft')">
-                  <span>⚙️</span> เพลาขั้นบันได Ø35 (ยาว 140 mm มีร่องลิ่ม)
+                  <span>⚙️</span> เพลาขั้นบันได Ø35 (ยาว 120 mm มีร่องประแจ)
                 </button>
                 <button type="button" class="nasa-preset-pill" onclick="applyPromptPreset('plate')">
-                  <span>🧱</span> แผ่นเพลท 100×100 (หนา 12 มีรูเจาะ 4×4)
+                  <span>🧱</span> แผ่นเพลทจิ๊ก 150×100 (หนา 12 มีหลุม 24 หลุม)
                 </button>
               </div>
             </div>
@@ -340,15 +331,19 @@
         <div class="nasa-panel-card" id="cardStep2">
 
           <!-- Card Header Bar -->
-          <div class="nasa-panel-header">
+          <div class="nasa-panel-header" style="flex-wrap:wrap;gap:6px;">
             <div class="panel-title-wrap">
               <span class="panel-icon">📐</span>
               <span class="panel-heading-text">MODULE 02 // สเปกมิติวิศวกรรม (TELEMETRY SPECS)</span>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div class="type-tab-badges" style="display:inline-flex;gap:4px;">
-                <span id="tabTypeShaft" class="nasa-status-pill active" style="font-size:0.68rem;padding:2px 8px;border-radius:3px;background:rgba(40,139,255,0.15);color:var(--electric-cyan);border:1px solid rgba(40,139,255,0.3);font-family:var(--font-mono);">SHAFT</span>
-                <span id="tabTypePlate" class="nasa-status-pill" style="font-size:0.68rem;padding:2px 8px;border-radius:3px;background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid var(--border-carbon-light);font-family:var(--font-mono);">PLATE</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <div class="type-tab-badges" id="typeTabsContainer" style="display:inline-flex;gap:4px;flex-wrap:wrap;">
+                <span id="tabTypeLatch" onclick="forcePartCategory('door_latch')" class="nasa-status-pill" style="cursor:pointer;font-size:0.66rem;padding:2px 7px;border-radius:3px;background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid var(--border-carbon-light);font-family:var(--font-mono);">🔒 LATCH</span>
+                <span id="tabTypeBracket" onclick="forcePartCategory('l_bracket')" class="nasa-status-pill" style="cursor:pointer;font-size:0.66rem;padding:2px 7px;border-radius:3px;background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid var(--border-carbon-light);font-family:var(--font-mono);">📐 BRACKET</span>
+                <span id="tabTypeHinge" onclick="forcePartCategory('hinge')" class="nasa-status-pill" style="cursor:pointer;font-size:0.66rem;padding:2px 7px;border-radius:3px;background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid var(--border-carbon-light);font-family:var(--font-mono);">🚪 HINGE</span>
+                <span id="tabTypePlate" onclick="forcePartCategory('plate')" class="nasa-status-pill" style="cursor:pointer;font-size:0.66rem;padding:2px 7px;border-radius:3px;background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid var(--border-carbon-light);font-family:var(--font-mono);">🧱 PLATE</span>
+                <span id="tabTypeFlange" onclick="forcePartCategory('flange')" class="nasa-status-pill" style="cursor:pointer;font-size:0.66rem;padding:2px 7px;border-radius:3px;background:rgba(255,255,255,0.05);color:var(--text-muted);border:1px solid var(--border-carbon-light);font-family:var(--font-mono);">⭕ FLANGE</span>
+                <span id="tabTypeShaft" onclick="forcePartCategory('shaft')" class="nasa-status-pill active" style="cursor:pointer;font-size:0.66rem;padding:2px 7px;border-radius:3px;background:rgba(40,139,255,0.15);color:var(--electric-cyan);border:1px solid rgba(40,139,255,0.3);font-family:var(--font-mono);">⚙️ SHAFT</span>
               </div>
               <div class="file-status-badge" id="cardStep2Badge">รอข้อมูลแบบ</div>
             </div>
@@ -364,15 +359,16 @@
             <div class="nasa-meta-field">
               <label class="meta-field-label">วัสดุ (MATERIAL)</label>
               <select id="inpMaterial" class="nasa-select-meta" onchange="markNeedsUpdate()">
-                <option value="SUS303" selected>SUS303 STAINLESS STEEL</option>
+                <option value="SUS304" selected>SUS304 STAINLESS STEEL (สแตนเลส 304)</option>
+                <option value="SUS303">SUS303 STAINLESS STEEL</option>
+                <option value="BRASS">BRASS C3604 (ทองเหลืองขัดเงา)</option>
+                <option value="SUS316">SUS316 AEROSPACE STAINLESS</option>
+                <option value="AL 6061-T6">ALUMINUM 6061-T6 (อะลูมิเนียมเกรดอากาศยาน)</option>
+                <option value="S45C">S45C CARBON STEEL (เหล็กกล้าคาร์บอน)</option>
                 <option value="CLEAR ACRYLIC">CLEAR ACRYLIC (อะคริลิกใส)</option>
                 <option value="BLACK ACRYLIC">BLACK ACRYLIC (อะคริลิกดำ)</option>
                 <option value="WHITE ACRYLIC">WHITE ACRYLIC (อะคริลิกขาว)</option>
-                <option value="SUS304">SUS304 STAINLESS STEEL</option>
-                <option value="SUS316">SUS316 AEROSPACE STAINLESS</option>
-                <option value="S45C">S45C CARBON STEEL</option>
-                <option value="AL 6061-T6">ALUMINUM 6061-T6 (AEROSPACE GRADE)</option>
-                <option value="POM / DELRIN">POM / DELRIN (ENGINEERING PLASTIC)</option>
+                <option value="POM / DELRIN">POM / DELRIN (พลาสติกวิศวกรรม)</option>
                 <option value="SCM440">SCM440 ALLOY STEEL</option>
               </select>
             </div>
@@ -450,6 +446,7 @@
               <button class="nasa-pill-view" onclick="setView('right')">RIGHT</button>
               <button class="nasa-pill-view" onclick="toggleWireframe()">WIREFRAME</button>
               <button class="nasa-pill-view" onclick="toggleGrid()">GRID</button>
+              <button class="nasa-pill-view" onclick="toggleViewportTheme()" id="btnViewportTheme" title="สลับพื้นหลัง Dark / Light Studio">🌓 THEME</button>
             </div>
           </div>
 
@@ -470,12 +467,12 @@
             </div>
           </div>
 
-          <!-- NASA Export Deck -->
+          <!-- NASA Export Deck (Balanced, Modern & Compact) -->
           <div class="nasa-export-hub" id="downloadHub">
-            <!-- Big Action Button (NASA Red) -->
+            <!-- Action Button: Balanced, High Impact -->
             <button class="nasa-btn-generate-cad" id="btnGenerateCad" onclick="triggerCadGeneration()">
               <span class="btn-icon">⚡</span>
-              <span class="btn-gen-text">สร้างไฟล์ STEP AP203 และ STL (GENERATE 3D CAD)</span>
+              <span class="btn-gen-text">สร้างโมเดล 3D CAD (GENERATE 3D STEP &amp; STL)</span>
             </button>
 
             <!-- Dual Export Cards (STEP & STL) -->
@@ -484,10 +481,10 @@
               <div class="nasa-export-card">
                 <div class="export-meta-group">
                   <div class="export-format-badge">STEP AP203 (.STEP)</div>
-                  <div class="export-format-desc">ISO 10303-21 B-REP SOLID GEOMETRY</div>
+                  <div class="export-format-desc">ISO 10303-21 B-REP SOLID</div>
                 </div>
                 <button class="nasa-btn-dl-action" onclick="downloadStepAP203()">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>
                     <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -500,10 +497,10 @@
               <div class="nasa-export-card">
                 <div class="export-meta-group">
                   <div class="export-format-badge">3D STL MESH (.STL)</div>
-                  <div class="export-format-desc">HIGH-RES MESH FOR 3D PRINT &amp; CNC</div>
+                  <div class="export-format-desc">MESH FOR 3D PRINT &amp; CNC</div>
                 </div>
                 <button class="nasa-btn-dl-action" onclick="downloadSTL()">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>
                     <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -525,7 +522,7 @@
             </div>
 
             <div class="nasa-export-compliance-tag">
-              ✔️ รองรับ SOLIDWORKS 2018-2026+ • AUTODESK INVENTOR • FUSION 360 • 3D PRINTING &amp; CNC SLICERS
+              ✔️ รองรับ SolidWorks 2018-2026+ • Autodesk Inventor • Fusion 360 • 3D Printing &amp; CNC Slicers
             </div>
           </div>
 
@@ -751,13 +748,13 @@
 <div class="modal-overlay" id="apiKeyModal">
   <div class="nasa-modal-card" style="max-width: 540px;">
     <div class="nasa-modal-header">
-      <div class="nasa-modal-title">🔑 GOOGLE GEMINI VISION // FLIGHT CREDENTIALS</div>
+      <div class="nasa-modal-title">🔑 GOOGLE GEMINI 3.8 FLASH &amp; 3.1 PRO // FLIGHT CREDENTIALS</div>
       <button class="nasa-modal-close" onclick="closeApiKeyModal()" title="ปิด">✕</button>
     </div>
     <div class="nasa-modal-body">
       <div class="nasa-guide-card">
         <p style="margin-bottom:10px; font-size:0.88rem; color:var(--text-secondary); line-height:1.5;">
-          ระบบจะเชื่อมต่อ Google Gemini 1.5 Flash Vision API โดยตรงจากเบราว์เซอร์ของคุณ เพื่อวิเคราะห์คำอธิบายภาษาธรรมชาติและรูปภาพสเก็ตช์อ้างอิง แล้วสกัดเป็นพารามิเตอร์ 3D CAD
+          ระบบจะเชื่อมต่อ Google Gemini Multimodal Vision API โดยตรงจากเบราว์เซอร์ของคุณ เพื่อวิเคราะห์รูปภาพแบบ Drawing / ชิ้นงานจริง พร้อมระบบคิดเชิงลึก (Reasoning Level: HIGH) และสกัดเป็นพารามิเตอร์ 3D CAD
         </p>
         <div class="nasa-security-alert">
           🔒 <b>CLIENT-SIDE SECURITY 100%:</b> API Key ของคุณจะถูกบันทึกไว้ใน LocalStorage บนเบราว์เซอร์เครื่องของคุณเท่านั้น ไม่มีการส่งไปเก็บไว้บนเซิร์ฟเวอร์ภายนอกใด ๆ ทั้งสิ้น
@@ -766,6 +763,19 @@
           <label style="display:block; font-weight:700; font-size:0.8rem; margin-bottom:6px; color:#ffffff; font-family:'DM Mono', monospace;">GEMINI_API_KEY:</label>
           <input type="password" id="inputApiKey" placeholder="AIzaSy..." class="nasa-input-meta" style="font-family:'DM Mono', monospace;">
         </div>
+
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-weight:700; font-size:0.8rem; margin-bottom:6px; color:#93c5fd; font-family:'DM Mono', monospace;">AI VISION MODEL (เลือกรุ่นปัญญาประดิษฐ์):</label>
+          <select id="selectGeminiModel" class="nasa-input-meta" style="width:100%; height:38px; background:#0b192c; color:#38bdf8; font-weight:700; border:1px solid #1e3a8a; border-radius:4px; font-family:'DM Mono', monospace; cursor:pointer;" onchange="onModelSelectionChange(this.value)">
+            <option value="gemini-3.8-flash">⚡ GEMINI 3.8 FLASH (HIGH) — เร็ว &amp; คิดวิเคราะห์ขั้นสูง (แนะนำ)</option>
+            <option value="gemini-3.1-pro-preview">🧠 GEMINI 3.1 PRO (HIGH) — คิดวิเคราะห์เชิงลึก แม่นยำสูงสุดระดับ Pro</option>
+            <option value="gemini-2.5-pro">🛡️ GEMINI 2.5 PRO — รุ่นเสถียรมาตรฐาน</option>
+          </select>
+          <div style="font-size:0.75rem; color:#94a3b8; margin-top:5px; font-family:var(--font-mono);">
+            * Gemini 3.8 Flash และ 3.1 Pro ทำงานด้วย Thinking Level: HIGH เพื่อความแม่นยำทางวิศวกรรมสูงสุด
+          </div>
+        </div>
+
         <div style="font-size:0.82rem; color:var(--text-telemetry); line-height:1.5;">
           📌 <b>ต้องการรับ API Key ฟรี?</b><br>
           สามารถกดรับฟรีได้ใน 1 นาทีที่ <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" style="color:#288bff; font-weight:700; text-decoration:underline;">Google AI Studio (Get API Key)</a><br>
