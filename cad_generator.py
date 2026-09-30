@@ -29,7 +29,11 @@ class CADGenerator:
         part_name = part_spec.get('name', 'Part_Model')
         material = part_spec.get('material', 'SUS303')
 
-        if part_type in ['shaft', 'turned']:
+        if part_type == 'door_latch':
+            solid = self._build_door_latch(part_spec)
+        elif part_type == 'l_bracket':
+            solid = self._build_l_bracket(part_spec)
+        elif part_type in ['shaft', 'turned']:
             solid = self._build_turned_shaft(part_spec)
         elif part_type == 'flange':
             solid = self._build_flange(part_spec)
@@ -76,6 +80,94 @@ class CADGenerator:
                 "volume": round(solid.val().Volume(), 2)
             }
         }
+
+    def _build_door_latch(self, spec: dict) -> cq.Workplane:
+        """
+        Builds a complete 3D Barrel Slide Bolt / Door Latch assembly with base plate,
+        countersunk mounting holes, front/rear hollow barrels, sliding bolt rod, handle knob, and keeper.
+        """
+        base_l = float(spec.get('base_length', 100.0))
+        base_w = float(spec.get('base_width', 42.0))
+        base_t = float(spec.get('base_thickness', 3.0))
+        bolt_dia = float(spec.get('bolt_dia', 10.0))
+        bolt_len = float(spec.get('bolt_length', 115.0))
+        bolt_throw = float(spec.get('bolt_throw', 22.0))
+        barrel_od = float(spec.get('barrel_od', 15.0))
+        handle_len = float(spec.get('handle_length', 28.0))
+        knob_dia = float(spec.get('knob_dia', 13.0))
+        keeper_l = float(spec.get('keeper_length', 26.0))
+        screw_dia = float(spec.get('screw_hole_dia', 4.5))
+
+        bolt_r = bolt_dia / 2.0
+        barrel_r = barrel_od / 2.0
+        bore_r = bolt_r + 0.4
+        bolt_cy = base_t + barrel_r - 0.5
+
+        # 1. Base Plate
+        plate = cq.Workplane('XY').box(base_l, base_w, base_t, centered=(False, True, False))
+        hole_pts = [(14.0, -base_w * 0.34), (14.0, base_w * 0.34),
+                    (base_l * 0.5, -base_w * 0.34), (base_l * 0.5, base_w * 0.34),
+                    (base_l - 14.0, -base_w * 0.34), (base_l - 14.0, base_w * 0.34)]
+        plate = plate.faces('>Z').workplane().pushPoints(hole_pts).hole(screw_dia)
+
+        # 2. Rear & Front Barrels along X
+        barrel_len = max(18.0, base_l * 0.22)
+        rear_barrel = (cq.Workplane('YZ')
+                       .workplane(offset=6.0)
+                       .center(0.0, bolt_cy)
+                       .circle(barrel_r)
+                       .circle(bore_r)
+                       .extrude(barrel_len))
+        front_barrel = (cq.Workplane('YZ')
+                        .workplane(offset=base_l - 6.0 - barrel_len)
+                        .center(0.0, bolt_cy)
+                        .circle(barrel_r)
+                        .circle(bore_r)
+                        .extrude(barrel_len))
+
+        # 3. Sliding Bolt Rod along X
+        bolt_start_x = base_l + bolt_throw - bolt_len
+        bolt_rod = (cq.Workplane('YZ')
+                    .workplane(offset=bolt_start_x)
+                    .center(0.0, bolt_cy)
+                    .circle(bolt_r)
+                    .extrude(bolt_len))
+
+        # 4. Handle Stem + Knob along Z
+        handle_x = base_l * 0.52
+        handle_stem = (cq.Workplane('XY')
+                       .workplane(offset=bolt_cy)
+                       .center(handle_x, 0.0)
+                       .circle(3.2)
+                       .extrude(handle_len))
+        knob = (cq.Workplane('XY')
+                .workplane(offset=bolt_cy + handle_len)
+                .center(handle_x, 0.0)
+                .circle(knob_dia / 2.0)
+                .extrude(knob_dia * 0.8))
+
+        # 5. Strike Keeper Plate + Sleeve
+        keeper_x = base_l + 6.0
+        keeper_base = (cq.Workplane('XY')
+                       .transformed(offset=(keeper_x, 0.0, 0.0))
+                       .box(keeper_l, base_w, base_t, centered=(False, True, False)))
+        keeper_sleeve = (cq.Workplane('YZ')
+                         .workplane(offset=keeper_x + 2.0)
+                         .center(0.0, bolt_cy)
+                         .circle(barrel_r + 0.5)
+                         .circle(bore_r + 0.3)
+                         .extrude(keeper_l - 4.0))
+
+        return plate.union(rear_barrel).union(front_barrel).union(bolt_rod).union(handle_stem).union(knob).union(keeper_base).union(keeper_sleeve)
+
+    def _build_l_bracket(self, spec: dict) -> cq.Workplane:
+        leg1 = float(spec.get('leg1_length', 65.0))
+        leg2 = float(spec.get('leg2_length', 65.0))
+        w = float(spec.get('width', 40.0))
+        t = float(spec.get('thickness', 4.0))
+        horiz = cq.Workplane('XY').box(leg2, w, t, centered=(False, True, False))
+        vert = cq.Workplane('XY').box(t, w, leg1, centered=(False, True, False))
+        return horiz.union(vert)
 
     def _build_turned_shaft(self, spec: dict) -> cq.Workplane:
         """
